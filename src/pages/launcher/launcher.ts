@@ -27,6 +27,7 @@ export class LauncherPage implements OnInit{
     this.logoUrl = 'assets/img/logo-2.png';
     this.user.getCurrentUser().then((user : any)=>{
       if(user && user.isLogin){
+        this.menuCtrl.enable(true);
         this.navCtrl.setRoot(DashBoardHomePage);
       }else{
         this.navCtrl.setRoot(LoginPage);

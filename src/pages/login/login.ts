@@ -238,6 +238,7 @@ export class LoginPage implements OnInit{
     this.loginData.isLogin = true;
     this.loginData.password = "";
     this.user.setCurrentUser(this.loginData).then(()=>{
+      this.menuCtrl.enable(true);
       this.navCtrl.setRoot(DashBoardHomePage);
       this.loadingData = false;
       this.isLoginProcessActive = false;
