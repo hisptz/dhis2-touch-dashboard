@@ -7,6 +7,8 @@ import {LauncherPage} from "../pages/launcher/launcher";
 import {DashBoardHomePage} from "../pages/dash-board-home/dash-board-home";
 import {LoginPage} from "../pages/login/login";
 import {User} from "../providers/user";
+import {AboutPage} from "../pages/about/about";
+import {ProfilePage} from "../pages/profile/profile";
 
 
 @Component({
@@ -17,14 +19,14 @@ export class MyApp {
 
   rootPage: any = LauncherPage;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{title: string, component: any,icon :string}>;
 
   constructor(public platform: Platform,public user : User, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
-
-    // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Dashboards', component: DashBoardHomePage }
+      { title: 'Dashboards', component: DashBoardHomePage ,icon : "pie"},
+      { title: 'Profile', component: ProfilePage, icon : "person"},
+      { title: 'About', component: AboutPage, icon : "information-circle"}
     ];
 
   }

@@ -25,13 +25,15 @@ import {ProgressBarPage} from "../pages/progress-bar/progress-bar";
 import {VisualizationCardPage} from "../pages/visualization-card/visualization-card";
 import {LoginPage} from "../pages/login/login";
 import {DashBoardHomePage} from "../pages/dash-board-home/dash-board-home";
+import {AboutPage} from "../pages/about/about";
+import {ProfilePage} from "../pages/profile/profile";
 
 
 @NgModule({
   declarations: [
     MyApp,
     LauncherPage,LoadingPage,MetadataDictionary,ProgressBarPage,VisualizationCardPage,
-    LoginPage,DashBoardHomePage
+    LoginPage,DashBoardHomePage,AboutPage,ProfilePage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -42,7 +44,7 @@ import {DashBoardHomePage} from "../pages/dash-board-home/dash-board-home";
   entryComponents: [
     MyApp,
     LauncherPage,LoadingPage,MetadataDictionary,ProgressBarPage,VisualizationCardPage,
-    LoginPage,DashBoardHomePage
+    LoginPage,DashBoardHomePage,AboutPage,ProfilePage
   ],
   providers: [
     StatusBar,
