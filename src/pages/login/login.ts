@@ -62,11 +62,13 @@ export class LoginPage implements OnInit{
   resetPassSteps(){
     let dataBaseStructure =  this.sqlLite.getDataBaseStructure();
     this.progressTracker["communication"].passStepCount = 0;
+    this.progressTracker["communication"].message = "";
     Object.keys(dataBaseStructure).forEach(key=>{
       let table = dataBaseStructure[key];
       if(table.canBeUpdated && table.resourceType){
         if(this.progressTracker[table.resourceType]){
           this.progressTracker[table.resourceType].passStepCount = 0;
+          this.progressTracker[table.resourceType].message = "";
           this.progressTracker[table.resourceType].passStep.forEach((passStep : any)=>{
             passStep.hasPassed = false;
           })
@@ -82,18 +84,18 @@ export class LoginPage implements OnInit{
       let table = dataBaseStructure[key];
       if(table.canBeUpdated && table.resourceType){
         if(!progressTracker[table.resourceType]){
-          progressTracker[table.resourceType] = {count : 1,passStep :[],passStepCount : 0};
+          progressTracker[table.resourceType] = {count : 1,passStep :[],passStepCount : 0,message :""};
         }else{
           progressTracker[table.resourceType].count += 1;
         }
       }
     });
-    progressTracker["communication"] = {count : 3,passStep :[],passStepCount : 0};
-    progressTracker["finalization"] = {count :0.5,passStep :[],passStepCount : 0};
+    progressTracker["communication"] = {count : 3,passStep :[],passStepCount : 0, message : ""};
+    progressTracker["finalization"] = {count :0.5,passStep :[],passStepCount : 0, message : ""};
     return progressTracker;
   }
 
-  updateProgressTracker(resourceName){
+  updateProgressTracker(resourceName,message){
     let dataBaseStructure =  this.sqlLite.getDataBaseStructure();
     let resourceType = "communication";
     if(dataBaseStructure[resourceName]){
@@ -112,7 +114,10 @@ export class LoginPage implements OnInit{
     }else{
       this.progressTracker[resourceType].passStep.push({name : resourceName,hasDownloaded : true,hasPassed : true});
     }
+    this.progressTracker[resourceType].message = message;
     this.progressTracker[resourceType].passStepCount = this.progressTracker[resourceType].passStepCount + 1;
+    //upate message
+
     this.loginData["progressTracker"][this.loginData.currentDatabase] = this.progressTracker;
     this.user.setCurrentUser(this.loginData).then(()=>{});
     this.completedTrackedProcess = this.getCompletedTrackedProcess();
@@ -160,6 +165,7 @@ export class LoginPage implements OnInit{
         this.progress = "0";
         //empty communication as well as organisation unit
         this.progressTracker.communication.passStep = [];
+        this.progressTracker.communication.message = "Establish connection to server";
         this.currentResourceType = "communication";
         this.loadingData = true;
         this.isLoginProcessActive = true;
@@ -177,18 +183,17 @@ export class LoginPage implements OnInit{
                   //update authenticate  process
                   this.loginData.currentDatabase = databaseName;
                   this.reInitiateProgressTrackerObject(this.loginData);
-                  this.updateProgressTracker(resource);
+                  this.updateProgressTracker(resource,"Opening local storage");
 
                   resource = 'Opening database';
                   this.currentResourceType = "communication";
                   this.sqlLite.generateTables(databaseName).then(()=>{
-                    this.updateProgressTracker(resource);
+                    this.updateProgressTracker(resource,"Loading system information");
                     resource = 'Loading system information';
                     this.currentResourceType = "communication";
                     this.httpClient.get('/api/system/info',this.loginData).subscribe(
                       data => {
                         data = data.json();
-                        this.updateProgressTracker(resource);
                         this.user.setCurrentUserSystemInformation(data).then(()=>{
                           this.setLandingPage();
                         },error=>{
@@ -203,7 +208,7 @@ export class LoginPage implements OnInit{
                       });
 
                   },error=>{
-                    this.setToasterMessage('Fail to open database.');
+                    this.setToasterMessage('Fail to open local storage.');
                   })
                 })
               });
