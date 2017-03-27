@@ -121,7 +121,11 @@ export class DashBoardHomePage implements OnInit{
         this.initiateSelectedDashBoardItem();
       },error=>{
         this.dashBoardProgressTracker.isDashBoardItemObjectsAndDataLoaded = true;
-        this.setToasterMessage("Fail to load dashboard items metadata from server " );
+        if(error.errorMessage){
+          this.setToasterMessage(error.errorMessage);
+        }else{
+          this.setToasterMessage("Fail to load dashboard items metadata from server " );
+        }
         console.log(JSON.stringify(error));
       });
     }

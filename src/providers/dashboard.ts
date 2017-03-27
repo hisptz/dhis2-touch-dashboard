@@ -60,6 +60,8 @@ export class Dashboard {
   getDashBoardItemObjects(dashboardItems,currentUser){
     let dashBoardObjects = [];let self= this;
     let promises = [];
+    let rejectedDashboardItems = 0;
+    let rejectedDashboardsType = "";
     let allowedDashboardItems = ["CHART","EVENT_CHART","TABLE","REPORT_TABLE","EVENT_REPORT"];
     return new Promise(function(resolve, reject) {
       dashboardItems.forEach(dashboardItem=>{
@@ -69,6 +71,15 @@ export class Dashboard {
               dashBoardObjects.push(dashBoardObject);
             },error=>{})
           )
+        }else{
+          rejectedDashboardItems ++;
+          if(rejectedDashboardItems == dashboardItems.length){
+            if(rejectedDashboardsType.indexOf(dashboardItem.type.toLowerCase()) == -1){
+              rejectedDashboardsType = rejectedDashboardsType + dashboardItem.type.toLowerCase() + ", ";
+            }
+            console.log("Here we are : " + rejectedDashboardsType);
+            reject({errorMessage : "Selected dashboard has dashboard items of type " + rejectedDashboardsType + " which are not supported at the moment"});
+          }
         }
       });
       Observable.forkJoin(promises).subscribe(() => {
