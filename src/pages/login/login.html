@@ -34,7 +34,7 @@
               </div>
             </div>
           <span ion-text [color]="(currentResourceType == 'communication')?'current' : 'font-color'" >
-            {{ progressTracker[currentResourceType].message }}
+            {{ progressTracker.communication.message }}
           </span>
             <div style="text-align: center" item-right >
               {{ progressTracker.communication.passStepCount}}/{{ progressTracker.communication.count}}

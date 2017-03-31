@@ -95,7 +95,7 @@ export class LoginPage implements OnInit{
     return progressTracker;
   }
 
-  updateProgressTracker(resourceName,message){
+  updateProgressTracker(resourceName){
     let dataBaseStructure =  this.sqlLite.getDataBaseStructure();
     let resourceType = "communication";
     if(dataBaseStructure[resourceName]){
@@ -114,10 +114,7 @@ export class LoginPage implements OnInit{
     }else{
       this.progressTracker[resourceType].passStep.push({name : resourceName,hasDownloaded : true,hasPassed : true});
     }
-    this.progressTracker[resourceType].message = message;
     this.progressTracker[resourceType].passStepCount = this.progressTracker[resourceType].passStepCount + 1;
-    //upate message
-
     this.loginData["progressTracker"][this.loginData.currentDatabase] = this.progressTracker;
     this.user.setCurrentUser(this.loginData).then(()=>{});
     this.completedTrackedProcess = this.getCompletedTrackedProcess();
@@ -183,14 +180,15 @@ export class LoginPage implements OnInit{
                   //update authenticate  process
                   this.loginData.currentDatabase = databaseName;
                   this.reInitiateProgressTrackerObject(this.loginData);
-                  this.updateProgressTracker(resource,"Opening local storage");
-
+                  this.currentResourceType = "communication";
+                  this.updateProgressTracker(resource);
+                  this.progressTracker[this.currentResourceType].message = "Opening local storage";
                   resource = 'Opening database';
                   this.currentResourceType = "communication";
                   this.sqlLite.generateTables(databaseName).then(()=>{
-                    this.updateProgressTracker(resource,"Loading system information");
                     resource = 'Loading system information';
                     this.currentResourceType = "communication";
+                    this.progressTracker[this.currentResourceType].message = "Loading system information";
                     this.httpClient.get('/api/system/info',this.loginData).subscribe(
                       data => {
                         data = data.json();
