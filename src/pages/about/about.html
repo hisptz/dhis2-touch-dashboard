@@ -29,6 +29,16 @@
   </div>
 
   <div *ngIf="!loadingData" >
+
+    <ion-refresher (ionRefresh)="reLoadContents($event)">
+      <ion-refresher-content
+        pullingIcon="arrow-dropdown"
+        pullingText="Pull to refresh"
+        refreshingSpinner="circles"
+        refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
+
     <ion-grid>
       <ion-row>
         <ion-col >
@@ -52,18 +62,26 @@
                 <p>{{ entry.value }}</p>
               </ion-item>
             </div>
-            <ion-item *ngIf="hideAndShowObject.systemInformation.count <= systemInformation.length " >
-              <div item-right>
-                <button class="normalButton" ion-button clear  text-capitalize (tap)="hideAndShowDetails('systemInformation',systemInformation.length)">
-                  <div *ngIf="hideAndShowObject.systemInformation.status">
-                    Show less
-                  </div>
-                  <div *ngIf="!hideAndShowObject.systemInformation.status">
-                    Show more
-                  </div>
-                </button>
-              </div>
-            </ion-item>
+
+            <ion-infinite-scroll (ionInfinite)="loadingMoreInformation($event,'systemInformation',systemInformation.length)">
+              <ion-infinite-scroll-content
+                loadingSpinner="bubbles"
+                loadingText="Loading more..">
+              </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+
+            <!--<ion-item *ngIf="hideAndShowObject.systemInformation.count <= systemInformation.length " >-->
+              <!--<div item-right>-->
+                <!--<button class="normalButton" ion-button clear  text-capitalize (tap)="hideAndShowDetails('systemInformation',systemInformation.length)">-->
+                  <!--<div *ngIf="hideAndShowObject.systemInformation.status">-->
+                    <!--Show less-->
+                  <!--</div>-->
+                  <!--<div *ngIf="!hideAndShowObject.systemInformation.status">-->
+                    <!--Show more-->
+                  <!--</div>-->
+                <!--</button>-->
+              <!--</div>-->
+            <!--</ion-item>-->
 
           </ion-item-group>
         </ion-col>

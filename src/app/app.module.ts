@@ -17,6 +17,7 @@ import {MetadataDictionaryService} from "../providers/metadata-dictionary-servic
 import {NetworkAvailability} from "../providers/network-availability";
 import {User} from "../providers/user";
 import {SqlLite} from "../providers/sql-lite";
+import {DashboardService} from "../providers/dashboard-service";
 
 import {LauncherPage} from "../pages/launcher/launcher";
 import {LoadingPage} from "../pages/loading/loading";
@@ -25,14 +26,19 @@ import {ProgressBarPage} from "../pages/progress-bar/progress-bar";
 import {VisualizationCardPage} from "../pages/visualization-card/visualization-card";
 import {LoginPage} from "../pages/login/login";
 import {DashBoardHomePage} from "../pages/dash-board-home/dash-board-home";
+import {DashboardPage} from "../pages/dashboard/dashboard";
 import {AboutPage} from "../pages/about/about";
 import {ProfilePage} from "../pages/profile/profile";
+import {DashboardSearchPage} from "../pages/dashboard-search/dashboard-search";
+
+
 
 
 @NgModule({
   declarations: [
     MyApp,
     LauncherPage,LoadingPage,MetadataDictionary,ProgressBarPage,VisualizationCardPage,
+    DashboardPage,DashboardSearchPage,
     LoginPage,DashBoardHomePage,AboutPage,ProfilePage
   ],
   imports: [
@@ -44,13 +50,14 @@ import {ProfilePage} from "../pages/profile/profile";
   entryComponents: [
     MyApp,
     LauncherPage,LoadingPage,MetadataDictionary,ProgressBarPage,VisualizationCardPage,
+    DashboardPage,DashboardSearchPage,
     LoginPage,DashBoardHomePage,AboutPage,ProfilePage
   ],
   providers: [
     StatusBar,
     SplashScreen,SQLite,HTTP,AppVersion,
     AppProvider,Dashboard,HttpClient,MetadataDictionaryService,NetworkAvailability,User,VisualizerService,
-    SqlLite,
+    SqlLite,DashboardService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

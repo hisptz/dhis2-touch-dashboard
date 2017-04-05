@@ -4,7 +4,7 @@ import {User} from "../../providers/user";
 import {HttpClient} from "../../providers/http-client";
 import {AppProvider} from "../../providers/app-provider";
 import {SqlLite} from "../../providers/sql-lite";
-import {DashBoardHomePage} from "../dash-board-home/dash-board-home";
+import {DashboardPage} from "../dashboard/dashboard";
 
 /*
  Generated class for the Login page.
@@ -172,6 +172,7 @@ export class LoginPage implements OnInit{
             this.user.authenticateUser(this.loginData).then((response:any)=> {
               response = this.getResponseData(response);
               this.loginData = response.user;
+              this.setNotificationToasterMessage("You have been logged in into " + this.loginData.serverUrl);
               //set authorization key and reset password
               this.loginData.authorizationKey = btoa(this.loginData.username + ':' + this.loginData.password);
 
@@ -242,7 +243,7 @@ export class LoginPage implements OnInit{
     this.loginData.password = "";
     this.user.setCurrentUser(this.loginData).then(()=>{
       this.menuCtrl.enable(true);
-      this.navCtrl.setRoot(DashBoardHomePage);
+      this.navCtrl.setRoot(DashboardPage);
       this.loadingData = false;
       this.isLoginProcessActive = false;
     });

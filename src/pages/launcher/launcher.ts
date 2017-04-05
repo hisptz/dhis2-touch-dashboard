@@ -1,8 +1,8 @@
 import { Component,OnInit } from '@angular/core';
 import { NavController,MenuController } from 'ionic-angular';
 import {User} from "../../providers/user";
-import {DashBoardHomePage} from "../dash-board-home/dash-board-home";
 import {LoginPage} from "../login/login";
+import {DashboardPage} from "../dashboard/dashboard";
 
 /*
   Generated class for the Launcher page.
@@ -28,7 +28,7 @@ export class LauncherPage implements OnInit{
     this.user.getCurrentUser().then((user : any)=>{
       if(user && user.isLogin){
         this.menuCtrl.enable(true);
-        this.navCtrl.setRoot(DashBoardHomePage);
+        this.navCtrl.setRoot(DashboardPage);
       }else{
         this.navCtrl.setRoot(LoginPage);
       }

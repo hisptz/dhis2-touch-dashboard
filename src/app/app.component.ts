@@ -4,8 +4,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import {LauncherPage} from "../pages/launcher/launcher";
-import {DashBoardHomePage} from "../pages/dash-board-home/dash-board-home";
 import {LoginPage} from "../pages/login/login";
+import {DashboardPage} from "../pages/dashboard/dashboard";
 import {User} from "../providers/user";
 import {AboutPage} from "../pages/about/about";
 import {ProfilePage} from "../pages/profile/profile";
@@ -24,7 +24,7 @@ export class MyApp {
   constructor(public platform: Platform,public user : User, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
     this.pages = [
-      { title: 'Dashboards', component: DashBoardHomePage ,icon : "pie"},
+      { title: 'Dashboards', component: DashboardPage ,icon : "pie"},
       { title: 'Profile', component: ProfilePage, icon : "person"},
       { title: 'About', component: AboutPage, icon : "information-circle"}
     ];

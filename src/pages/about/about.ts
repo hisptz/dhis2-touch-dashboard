@@ -34,26 +34,47 @@ export class AboutPage implements OnInit{
     });
   }
 
-  loadingSystemInformation(){
+  loadingSystemInformation(ionRefresher?){
     this.loadingData = true;
     this.loadingMessages = [];
-
+    this.hideAndShowObject = {
+      systemInformation : {
+        status : false,count : 4
+      }
+    };
     this.setLoadingMessages('Loading system information');
     this.user.getCurrentUserSystemInformation().then(systemInformation=>{
       this.systemInformation = this.getArrayFromObject(systemInformation);
-      this.loadAppInformation();
+      this.loadAppInformation(ionRefresher);
     });
   }
 
-  loadAppInformation(){
+  loadAppInformation(ionRefresher?){
     this.setLoadingMessages('Loading app information');
     this.appProvider.getAppInformation().then(appInformation=>{
       this.appInformation = this.getArrayFromObject(appInformation);
+      if(ionRefresher){
+        ionRefresher.complete();
+      }
       this.loadingData = false;
     })
   }
 
+  reLoadContents(ionRefresher){
+    this.loadingSystemInformation(ionRefresher);
+  }
 
+  loadingMoreInformation(infiniteScroll,key,totalCount){
+    if(this.hideAndShowObject[key].count != totalCount){
+      setTimeout(() => {
+        this.hideAndShowObject[key].count = totalCount;
+        this.hideAndShowObject[key].status = !this.hideAndShowObject[key].status;
+        infiniteScroll.complete();
+      }, 500);
+    }else{
+      infiniteScroll.complete();
+    }
+  }
 
   getArrayFromObject(object){
     let array = [];
