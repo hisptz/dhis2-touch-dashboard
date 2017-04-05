@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
+import {Observable} from 'rxjs/Rx';
 import {HttpClient} from "./http-client";
 
 /*
@@ -21,6 +21,10 @@ export class DashboardService {
   dashboards:Dashboard[];
 
   constructor(private httpClient:HttpClient) {
+  }
+
+  resetDashboards(){
+    this.dashboards = [];
   }
 
   /**
@@ -76,13 +80,13 @@ export class DashboardService {
 
 
   /**
-   * getDashBoardItemObjects
+   * getDashboardItemObjects
    * @param dashboardItems
    * @param currentUser
    * @returns {Promise<T>}
    */
-  getDashBoardItemObjects(dashboardItems, currentUser) {
-    let dashBoardObjects = [];
+  getDashboardItemObjects(dashboardItems, currentUser) {
+    let dashboardObjects = [];
     let self = this;
     let promises = [];
     let rejectedDashboardItems = 0;
@@ -92,8 +96,8 @@ export class DashboardService {
       dashboardItems.forEach(dashboardItem=> {
         if (allowedDashboardItems.indexOf(dashboardItem.type) > -1) {
           promises.push(
-            self.getDashBoardItemObject(dashboardItem, currentUser).then(dashBoardObject=> {
-              dashBoardObjects.push(dashBoardObject);
+            self.getDashboardItemObject(dashboardItem, currentUser).then(dashboardObject=> {
+              dashboardObjects.push(dashboardObject);
             }, error=> {
             })
           )
@@ -112,7 +116,7 @@ export class DashboardService {
         }
       });
       Observable.forkJoin(promises).subscribe(() => {
-          resolve(dashBoardObjects);
+          resolve(dashboardObjects);
         },
         (error) => {
           reject(error);
@@ -126,16 +130,16 @@ export class DashboardService {
    * @param currentUser
    * @returns {Promise<T>}
    */
-  getDashBoardItemObject(dashboardItem, currentUser) {
+  getDashboardItemObject(dashboardItem, currentUser) {
     let self = this;
     let url = "/api/25/" + self.formatEnumString(dashboardItem.type) + "s/" + dashboardItem[self.formatEnumString(dashboardItem.type)].id + ".json?fields=:all,program[id,name],programStage[id,name],columns[dimension,filter,items[id,name],legendSet[id,name]],rows[dimension,filter,items[id,name],legendSet[id,name]],filters[dimension,filter,items[id,name],legendSet[id,name]],!lastUpdated,!href,!created,!publicAccess,!rewindRelativePeriods,!userOrganisationUnit,!userOrganisationUnitChildren,!userOrganisationUnitGrandChildren,!externalAccess,!access,!relativePeriods,!columnDimensions,!rowDimensions,!filterDimensions,!user,!organisationUnitGroups,!itemOrganisationUnitGroups,!userGroupAccesses,!indicators,!dataElements,!dataElementOperands,!dataElementGroups,!dataSets,!periods,!organisationUnitLevels,!organisationUnits,attributeDimensions[id,name,attribute[id,name,optionSet[id,name,options[id,name]]]],dataElementDimensions[id,name,dataElement[id,name,optionSet[id,name,options[id,name]]]],categoryDimensions[id,name,category[id,name,categoryOptions[id,name,options[id,name]]]]";
     return new Promise(function (resolve, reject) {
       self.httpClient.get(url, currentUser).subscribe(response=> {
-        let dashBoardObject = self.getDashBoardItemObjectWithAnalyticsUrl(response.json());
-        dashBoardObject.interpretationLikeCount = dashboardItem.interpretationLikeCount;
-        dashBoardObject.interpretationCount = dashboardItem.interpretationCount;
-        dashBoardObject.visualizationType = dashboardItem.type;
-        resolve(dashBoardObject);
+        let dashboardObject = self.getDashboardItemObjectWithAnalyticsUrl(response.json());
+        dashboardObject.interpretationLikeCount = dashboardItem.interpretationLikeCount;
+        dashboardObject.interpretationCount = dashboardItem.interpretationCount;
+        dashboardObject.visualizationType = dashboardItem.type;
+        resolve(dashboardObject);
       }, error=> {
         reject(error.json());
       });
@@ -148,14 +152,14 @@ export class DashboardService {
    * @param currentUser
    * @returns {Promise<T>}
    */
-  getAnalyticDataForDashBoardItems(dashboardObjects, currentUser) {
+  getAnalyticDataForDashboardItems(dashboardObjects, currentUser) {
     let data = {};
     let self = this;
     let promises = [];
     return new Promise(function (resolve, reject) {
       dashboardObjects.forEach((dashboardObject:any)=> {
         promises.push(
-          self.getAnalyticDataForDashBoardItem(dashboardObject.analyticsUrl, currentUser).then(analyticData=> {
+          self.getAnalyticDataForDashboardItem(dashboardObject.analyticsUrl, currentUser).then(analyticData=> {
             data[dashboardObject.id] = analyticData;
           }, error=> {
           })
@@ -176,7 +180,7 @@ export class DashboardService {
    * @param currentUser
    * @returns {Promise<T>}
    */
-  getAnalyticDataForDashBoardItem(analyticsUrl, currentUser) {
+  getAnalyticDataForDashboardItem(analyticsUrl, currentUser) {
     let self = this;
     return new Promise(function (resolve, reject) {
       self.httpClient.get(analyticsUrl, currentUser).subscribe(response=> {
@@ -189,62 +193,100 @@ export class DashboardService {
 
   /**
    * set analytic url on dashboard object
-   * @param dashBoardObject
+   * @param dashboardObject
    * @returns {any}
    */
-  getDashBoardItemObjectWithAnalyticsUrl(dashBoardObject) {
-    let analyticsUrl = this.getDashBoardItemAnalyticsUrl(dashBoardObject);
-    dashBoardObject.analyticsUrl = analyticsUrl;
-    return dashBoardObject;
+  getDashboardItemObjectWithAnalyticsUrl(dashboardObject) {
+    let analyticsUrl = this.getDashboardItemAnalyticsUrl(dashboardObject,false);
+    dashboardObject.analyticsUrl = analyticsUrl;
+    return dashboardObject;
   }
 
   /**
    * get analytic url
-   * @param dashBoardObject
+   * @param dashboardObject
    * @returns {string}
    */
-  getDashBoardItemAnalyticsUrl(dashBoardObject, useCustomDimension? = false) {
-    let url = "/api/25/analytics";
+  getDashboardItemAnalyticsUrl(dashboardObject, useCustomDimension) {
+    let url = "/api/25/";
     let column = "";
     let row = "";
     let filter = "";
-    if (dashboardType == 'MAP' && dashBoardObject.layer == 'boundary') {
+    let dashboardType = dashboardObject.type;
+
+    if (dashboardType == 'MAP' && dashboardObject.layer == 'boundary') {
       url += 'geoFeatures';
     } else {
       url += "analytics";
     }
 
-    let column = "";
-    let row = "";
-    let filter = "";
-    //checking for columns
-    column = this.getDashboardObjectDimension('columns', dashBoardObject, useCustomDimension);
-    row = this.getDashboardObjectDimension('rows', dashBoardObject, useCustomDimension);
-    filter = this.getDashboardObjectDimension('filters', dashBoardObject, useCustomDimension);
+    dashboardObject.columns.forEach((dashboardObjectColumn : any,index : any)=>{
+      let items = "";
+      if(dashboardObjectColumn.dimension!="dy"){
+        (index == 0)? items = "dimension="+dashboardObjectColumn.dimension: items += "&dimension="+dashboardObjectColumn.dimension;
+
+        items += dashboardObjectColumn.hasOwnProperty('legendSet') ? '-' + dashboardObjectColumn.legendSet.id : "";
+        items += ':';
+        items += dashboardObjectColumn.hasOwnProperty('filter') ? dashboardObjectColumn.filter : "";
+
+        dashboardObjectColumn.items.forEach((dashboardObjectColumnItem : any)=>{
+          items += dashboardObjectColumnItem.id + ";"
+        });
+        column += items.slice(0, -1);
+      }
+    });
+    //checking for rows
+    dashboardObject.rows.forEach((dashboardObjectRow : any)=>{
+      let items = "";
+      if(dashboardObjectRow.dimension!="dy"){
+        items += "&dimension="+dashboardObjectRow.dimension;
+        items += dashboardObjectRow.hasOwnProperty('legendSet') ? '-' + dashboardObjectRow.legendSet.id : "";
+        items += ':';
+        items += dashboardObjectRow.hasOwnProperty('filter') ? dashboardObjectRow.filter : "";
+        dashboardObjectRow.items.forEach((dashboardObjectRowItem : any)=>{
+          items += dashboardObjectRowItem.id + ";"
+        });
+        row += items.slice(0, -1);
+      }
+    });
+    //checking for filters
+    dashboardObject.filters.forEach((dashboardObjectFilter : any)=>{
+      let items = "";
+      if(dashboardObjectFilter.dimension!="dy"){
+        items += "&filter="+dashboardObjectFilter.dimension;
+        items += dashboardObjectFilter.hasOwnProperty('legendSet') ? '-' + dashboardObjectFilter.legendSet.id : "";
+        items += ':';
+        items += dashboardObjectFilter.hasOwnProperty('filter') ? dashboardObjectFilter.filter : "";
+        dashboardObjectFilter.items.forEach((dashboardObjectFilterItem : any)=>{
+          items += dashboardObjectFilterItem.id + ";"
+        });
+        filter += items.slice(0, -1);
+      }
+    });
 
     //set url base on type
     if (dashboardType == "EVENT_CHART") {
-      url += "/events/aggregate/" + dashBoardObject.program.id + ".json?stage=" + dashBoardObject.programStage.id + "&";
+      url += "/events/aggregate/" + dashboardObject.program.id + ".json?stage=" + dashboardObject.programStage.id + "&";
     } else if (dashboardType == "EVENT_REPORT") {
-      if (dashBoardObject.dataType == "AGGREGATED_VALUES") {
-        url += "/events/aggregate/" + dashBoardObject.program.id + ".json?stage=" + dashBoardObject.programStage.id + "&";
+      if (dashboardObject.dataType == "AGGREGATED_VALUES") {
+        url += "/events/aggregate/" + dashboardObject.program.id + ".json?stage=" + dashboardObject.programStage.id + "&";
       } else {
-        url += "/events/query/" + dashBoardObject.program.id + ".json?stage=" + dashBoardObject.programStage.id + "&pageSize=50&";
+        url += "/events/query/" + dashboardObject.program.id + ".json?stage=" + dashboardObject.programStage.id + "&pageSize=50&";
       }
 
     } else if (dashboardType == "EVENT_MAP") {
-      url += "/events/aggregate/" + dashBoardObject.program.id + ".json?stage=" + dashBoardObject.programStage.id + "&";
-    } else if (dashboardType = 'MAP' && dashBoardObject.layer == 'event') {
-      url += "/events/query/" + dashBoardObject.program.id + ".json?stage=" + dashBoardObject.programStage.id + "&";
+      url += "/events/aggregate/" + dashboardObject.program.id + ".json?stage=" + dashboardObject.programStage.id + "&";
+    } else if (dashboardType = 'MAP' && dashboardObject.layer == 'event') {
+      url += "/events/query/" + dashboardObject.program.id + ".json?stage=" + dashboardObject.programStage.id + "&";
       //@todo consider start and end date
-      url += 'startDate=' + dashBoardObject.startDate + '&' + 'endDate=' + dashBoardObject.endDate + '&';
+      url += 'startDate=' + dashboardObject.startDate + '&' + 'endDate=' + dashboardObject.endDate + '&';
     } else {
       url += ".json?";
     }
 
     //@todo find best way to structure geoFeatures
-    if (dashBoardObject.layer == 'boundary') {
-      url += this.getGeoFeatureParameters(dashBoardObject);
+    if (dashboardObject.layer == 'boundary') {
+      url += this.getGeoFeatureParameters(dashboardObject);
     } else {
       url += column + '&' + row;
       url += filter == "" ? "" : '&' + filter;
@@ -258,61 +300,37 @@ export class DashboardService {
       : dashboardType == "EVENT_MAP" ?
       "&outputType=EVENT&displayProperty=NAME"
       : "&displayProperty=NAME";
-    if (dashBoardObject.layer == 'event') {
+    if (dashboardObject.layer == 'event') {
       url += "&coordinatesOnly=true";
     }
     return url;
   }
 
+
   /**
    *
-   * @param dimension
    * @param dashboardObject
-   * @param custom
-   * @returns {string}
-   */
-  getDashboardObjectDimension(dimension, dashboardObject, custom = false):string {
-    let items:string = "";
-    dashboardObject[dimension].forEach((dimensionValue:any) => {
-      items += items != "" ? '&' : "";
-      if (dimensionValue.dimension != 'dy') {
-        items += dimension == 'filters' ? 'filter=' : 'dimension=';
-        items += dimensionValue.dimension;
-        items += dimensionValue.hasOwnProperty('legendSet') ? '-' + dimensionValue.legendSet.id : "";
-        items += ':';
-        items += dimensionValue.hasOwnProperty('filter') ? dimensionValue.filter : "";
-        if (custom && dashboardObject.hasOwnProperty('custom_' + dimensionValue.dimension)) {
-          items += dashboardObject['custom_' + dimensionValue.dimension] + ';';
-        } else {
-          dimensionValue.items.forEach((itemValue, itemIndex) => {
-            items += itemValue.dimensionItem;
-            items += itemIndex == dimensionValue.items.length - 1 ? "" : ";";
-          })
-        }
-      }
-    });
-    return items
-  }
-
-  getDashboardItemMetadataIdentifiers(dashBoardObject) {
+   * @returns {any}
+     */
+  getDashboardItemMetadataIdentifiers(dashboardObject) {
     let items = "";
-    dashBoardObject.rows.forEach((dashBoardObjectRow:any)=> {
-      if (dashBoardObjectRow.dimension === "dx") {
-        dashBoardObjectRow.items.forEach((dashBoardObjectRowItem:any)=> {
-          items += dashBoardObjectRowItem.id + ";"
+    dashboardObject.rows.forEach((dashboardObjectRow:any)=> {
+      if (dashboardObjectRow.dimension === "dx") {
+        dashboardObjectRow.items.forEach((dashboardObjectRowItem:any)=> {
+          items += dashboardObjectRowItem.id + ";"
         });
       } else {
         //find identifiers in the column if not in row
-        dashBoardObject.columns.forEach((dashBoardObjectColumn:any) => {
-          if (dashBoardObjectColumn.dimension === "dx") {
-            dashBoardObjectColumn.items.forEach((dashBoardObjectColumnItem:any)=> {
-              items += dashBoardObjectColumnItem.id + ";"
+        dashboardObject.columns.forEach((dashboardObjectColumn:any) => {
+          if (dashboardObjectColumn.dimension === "dx") {
+            dashboardObjectColumn.items.forEach((dashboardObjectColumnItem:any)=> {
+              items += dashboardObjectColumnItem.id + ";"
             });
           } else {
-            dashBoardObject.filters.forEach((dashBoardObjectFilters:any) => {
-              if (dashBoardObjectFilters.dimension === "dx") {
-                dashBoardObjectFilters.items.forEach((dashBoardObjectFilterItem:any)=> {
-                  items += dashBoardObjectFilterItem.id + ";"
+            dashboardObject.filters.forEach((dashboardObjectFilters:any) => {
+              if (dashboardObjectFilters.dimension === "dx") {
+                dashboardObjectFilters.items.forEach((dashboardObjectFilterItem:any)=> {
+                  items += dashboardObjectFilterItem.id + ";"
                 });
               }
             });
@@ -321,6 +339,54 @@ export class DashboardService {
       }
     });
     return items.slice(0, -1);
+  }
+
+
+  /**
+   *
+   * @param dashboardObject
+   * @returns {string}
+     */
+  getGeoFeatureParameters(dashboardObject): string {
+    let dimensionItems: any;
+    let params: string = 'ou=ou:';
+    let columnItems = this.findDimensionItems(dashboardObject.columns, 'ou');
+    let rowItems = this.findDimensionItems(dashboardObject.rows, 'ou');
+    let filterItems = this.findDimensionItems(dashboardObject.filters, 'ou');
+    if (columnItems != null) {
+      dimensionItems = columnItems;
+    } else if (rowItems != null) {
+      dimensionItems = rowItems;
+    } else if (filterItems != null) {
+      dimensionItems = filterItems;
+    }
+
+    if (dimensionItems.length > 0) {
+      dimensionItems.forEach(item => {
+        params += item.dimensionItem + ";";
+
+      })
+    }
+    return params;
+  }
+
+  /**
+   *
+   * @param dimensionHolder
+   * @param dimension
+   * @returns {any}
+     */
+  findDimensionItems(dimensionHolder, dimension): any {
+    let items: any = null;
+    if (dimensionHolder.length > 0) {
+      for (let holder of dimensionHolder) {
+        if (holder.dimension == dimension) {
+          items = holder.items;
+          break;
+        }
+      }
+    }
+    return items;
   }
 
 }

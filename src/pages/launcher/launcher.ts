@@ -3,6 +3,7 @@ import { NavController,MenuController } from 'ionic-angular';
 import {User} from "../../providers/user";
 import {LoginPage} from "../login/login";
 import {DashboardPage} from "../dashboard/dashboard";
+import {DashboardService} from "../../providers/dashboard-service";
 
 /*
   Generated class for the Launcher page.
@@ -20,6 +21,7 @@ export class LauncherPage implements OnInit{
 
   constructor(public navCtrl: NavController,
               public menuCtrl: MenuController,
+              public DashboardService : DashboardService,
               public user : User) {}
 
   ngOnInit() {
@@ -28,6 +30,7 @@ export class LauncherPage implements OnInit{
     this.user.getCurrentUser().then((user : any)=>{
       if(user && user.isLogin){
         this.menuCtrl.enable(true);
+        this.DashboardService.resetDashboards();
         this.navCtrl.setRoot(DashboardPage);
       }else{
         this.navCtrl.setRoot(LoginPage);

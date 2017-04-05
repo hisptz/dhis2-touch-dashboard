@@ -16,20 +16,95 @@
 </ion-header>
 
 
-<ion-content >
+<ion-content class="dashboard slide-in-from-right">
+  <ion-grid>
 
-  <ion-row *ngIf="isLoading">
-    <ion-col >
-      <page-loading loadingSize="large" loadingMessage="loadingMessage"></page-loading>
-    </ion-col>
-  </ion-row>
-
-  <div *ngIf="!isLoading">
-    <ion-row *ngFor="let dashboard of dashboards">
-      <ion-col>
-        {{ dashboard.name }}
+    <ion-row>
+      <ion-col >
+        <div *ngIf="!dashBoardProgressTracker.isDashboardsLoaded" >
+          <ion-item >
+            <div style="text-align: center" item-left >
+              <page-loading loadingSize="small"></page-loading>
+            </div>
+            Loading Dashboards
+          </ion-item>
+        </div>
+        <div *ngIf="dashBoardProgressTracker.isDashboardsLoaded">
+          <ion-item (tap)="openDashboardList()">
+            {{ selectedDashboardName }}
+            <div style="text-align: center"item-right >
+              <button ion-button color="dark" clear>
+                <img src="assets/dashboard/menu.png" width="20" height="20">
+              </button>
+            </div>
+          </ion-item>
+        </div>
       </ion-col>
     </ion-row>
+
+
+
+    <ion-row *ngIf="!dashBoardProgressTracker.isDashboardItemObjectsAndDataLoaded && dashBoardProgressTracker.isDashboardsLoaded">
+      <ion-col width="100">
+        <page-loading loadingSize="large" loadingMessage="Loading dashboard items"></page-loading>
+      </ion-col>
+    </ion-row>
+
+    <div *ngIf="dashBoardProgressTracker.isDashboardItemObjectsAndDataLoaded && dashBoardProgressTracker.isDashboardsLoaded">
+      <div *ngFor="let dashBoard of dashboards">
+        <div *ngIf="dashBoard.id == selectedDashboardId && dashBoardProgressTracker.dashBoardItemObjectsAndData[selectedDashboardId]">
+          <div *ngFor="let dashboardItem of dashBoardProgressTracker.dashBoardItemObjectsAndData[selectedDashboardId]">
+            <ion-row >
+              <ion-col>
+                <div class="visualizationHeader" >
+                  <ion-item (tap)="hideAndShowVisualizationCard(dashboardItem.id)" >
+                    <span ion-text [color]="(selectedDashboardItemId == dashboardItem.id) ?'current' : 'font-color'">
+                      <span *ngIf="dashboardItem.title" >{{ dashboardItem.title }}</span>
+                      <span *ngIf="!dashboardItem.title">{{ dashboardItem.name }}</span>
+                     </span>
+                    <ion-icon [color]="(selectedDashboardItemId == dashboardItem.id) ?'current' : 'font-color'"  name="ios-arrow-down" *ngIf="selectedDashboardItemId != dashboardItem.id" item-right></ion-icon>
+                    <ion-icon [color]="(selectedDashboardItemId == dashboardItem.id) ?'current' : 'font-color'"  name="ios-arrow-up" *ngIf="selectedDashboardItemId == dashboardItem.id" item-right></ion-icon>
+                  </ion-item>
+                  <div *ngIf="selectedDashboardItemId == dashboardItem.id">
+                    <div class="list-separator"></div>
+                    <page-visualization-card [dashboardItem]="dashboardItem"
+                                             (dashboardItemAnalyticData)="updateDashboardVisualizationData($event,dashboardItem.id)"
+                                             [dashboardItemData]="dashBoardProgressTracker.dashBoardVisualizationData[dashboardItem.id]">
+
+                    </page-visualization-card>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="dashboardsCopy.length == 0 && dashBoardProgressTracker.isDashboardsLoaded">
+      <div class="refreshPanel" text-center>
+        <button (tap)="reloadDashboards()" ion-button clear large text-capitalize class="normalButton">
+          <ion-icon name="refresh"></ion-icon>
+        </button>
+      </div>
+    </div>
+
+  </ion-grid>
+
+
+
+  <div *ngIf="!isLoading">
+    <!--<ion-row>-->
+      <!--<ion-col >-->
+        <!--<ion-slides (ionSlideDidChange)="slideChanged()" pager paginationType="progress" zoom="true">-->
+          <!--<ion-slide *ngFor="let dashboard of dashboards" >-->
+            <!--<h1>Dashboard name : {{ dashboard.name }}</h1>-->
+            <!--<p>Dashboard id : {{ dashboard.id }}</p>-->
+            <!--<p>Number of dashboard items : {{ dashboard.dashboardItems.length }}</p>-->
+          <!--</ion-slide>-->
+        <!--</ion-slides>-->
+      <!--</ion-col>-->
+    <!--</ion-row>-->
   </div>
 
 

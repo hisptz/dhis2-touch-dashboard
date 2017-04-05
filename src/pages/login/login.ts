@@ -5,6 +5,7 @@ import {HttpClient} from "../../providers/http-client";
 import {AppProvider} from "../../providers/app-provider";
 import {SqlLite} from "../../providers/sql-lite";
 import {DashboardPage} from "../dashboard/dashboard";
+import {DashboardService} from "../../providers/dashboard-service";
 
 /*
  Generated class for the Login page.
@@ -32,7 +33,7 @@ export class LoginPage implements OnInit{
 
   constructor(public navCtrl: NavController,public menuCtrl: MenuController,
               public toastCtrl: ToastController,public app : AppProvider,
-              public httpClient : HttpClient,
+              public httpClient : HttpClient,public DashboardService : DashboardService,
               public user : User,public sqlLite : SqlLite) {}
 
   ngOnInit() {
@@ -243,6 +244,7 @@ export class LoginPage implements OnInit{
     this.loginData.password = "";
     this.user.setCurrentUser(this.loginData).then(()=>{
       this.menuCtrl.enable(true);
+      this.DashboardService.resetDashboards();
       this.navCtrl.setRoot(DashboardPage);
       this.loadingData = false;
       this.isLoginProcessActive = false;

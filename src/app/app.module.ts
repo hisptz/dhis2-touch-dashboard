@@ -11,7 +11,6 @@ import { AppVersion } from '@ionic-native/app-version';
 import { ChartModule } from 'angular2-highcharts';
 import {VisualizerService} from "../providers/visualizer-service";
 import {AppProvider} from "../providers/app-provider";
-import {Dashboard} from "../providers/dashboard";
 import {HttpClient} from "../providers/http-client";
 import {MetadataDictionaryService} from "../providers/metadata-dictionary-service";
 import {NetworkAvailability} from "../providers/network-availability";
@@ -25,7 +24,6 @@ import {MetadataDictionary} from "../pages/metadata-dictionary/metadata-dictiona
 import {ProgressBarPage} from "../pages/progress-bar/progress-bar";
 import {VisualizationCardPage} from "../pages/visualization-card/visualization-card";
 import {LoginPage} from "../pages/login/login";
-import {DashBoardHomePage} from "../pages/dash-board-home/dash-board-home";
 import {DashboardPage} from "../pages/dashboard/dashboard";
 import {AboutPage} from "../pages/about/about";
 import {ProfilePage} from "../pages/profile/profile";
@@ -39,7 +37,7 @@ import {DashboardSearchPage} from "../pages/dashboard-search/dashboard-search";
     MyApp,
     LauncherPage,LoadingPage,MetadataDictionary,ProgressBarPage,VisualizationCardPage,
     DashboardPage,DashboardSearchPage,
-    LoginPage,DashBoardHomePage,AboutPage,ProfilePage
+    LoginPage,AboutPage,ProfilePage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -51,12 +49,12 @@ import {DashboardSearchPage} from "../pages/dashboard-search/dashboard-search";
     MyApp,
     LauncherPage,LoadingPage,MetadataDictionary,ProgressBarPage,VisualizationCardPage,
     DashboardPage,DashboardSearchPage,
-    LoginPage,DashBoardHomePage,AboutPage,ProfilePage
+    LoginPage,AboutPage,ProfilePage
   ],
   providers: [
     StatusBar,
     SplashScreen,SQLite,HTTP,AppVersion,
-    AppProvider,Dashboard,HttpClient,MetadataDictionaryService,NetworkAvailability,User,VisualizerService,
+    AppProvider,HttpClient,MetadataDictionaryService,NetworkAvailability,User,VisualizerService,
     SqlLite,DashboardService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

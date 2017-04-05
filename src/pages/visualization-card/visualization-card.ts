@@ -1,8 +1,8 @@
 import { Component ,Input,Output, EventEmitter,OnInit} from '@angular/core';
 import { ToastController } from 'ionic-angular';
-import {Dashboard} from "../../providers/dashboard";
 import {User} from "../../providers/user";
 import {VisualizerService} from "../../providers/visualizer-service";
+import {DashboardService} from "../../providers/dashboard-service";
 /*
   Generated class for the VisualizationCard page.
 
@@ -53,7 +53,7 @@ export class VisualizationCardPage implements OnInit{
 
   //visualizationType
 
-  constructor(public Dashboard : Dashboard,public User : User,
+  constructor(public DashboardService : DashboardService,public User : User,
               public toastCtrl:ToastController,
               public visualizationService : VisualizerService) {
   }
@@ -65,7 +65,7 @@ export class VisualizationCardPage implements OnInit{
         this.analyticData = this.dashboardItemData;
         this.initiateVisualization();
       }else{
-        this.Dashboard.getAnalyticDataForDashBoardItem(this.dashboardItem.analyticsUrl,user).then((analyticData:any)=>{
+        this.DashboardService.getAnalyticDataForDashboardItem(this.dashboardItem.analyticsUrl,user).then((analyticData:any)=>{
           this.analyticData = analyticData;
           this.dashboardItemAnalyticData.emit(analyticData);
           this.initiateVisualization();
@@ -133,7 +133,7 @@ export class VisualizationCardPage implements OnInit{
     }else if(visualizationType == "charts"){
       this.drawChart();
     }else if(visualizationType == "dictionary"){
-      this.metadataIdentifiers = this.Dashboard.getDashboardItemMetadataIdentifiers(this.dashboardItem)
+      this.metadataIdentifiers = this.DashboardService.getDashboardItemMetadataIdentifiers(this.dashboardItem)
     }
     this.visualizationSelection.bottom = visualizationType;
   }
