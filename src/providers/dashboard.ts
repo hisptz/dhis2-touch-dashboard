@@ -260,6 +260,14 @@ export class Dashboard {
             dashBoardObjectColumn.items.forEach((dashBoardObjectColumnItem: any)=> {
               items += dashBoardObjectColumnItem.id + ";"
             });
+          }else{
+            dashBoardObject.filters.forEach((dashBoardObjectFilters : any) => {
+              if(dashBoardObjectFilters.dimension === "dx") {
+                dashBoardObjectFilters.items.forEach((dashBoardObjectFilterItem: any)=> {
+                  items += dashBoardObjectFilterItem.id + ";"
+                });
+              }
+            });
           }
         });
       }
