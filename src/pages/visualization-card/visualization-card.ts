@@ -105,6 +105,7 @@ export class VisualizationCardPage implements OnInit{
     };
     this.visualizationSelection.right = chartConfiguration.type;
     this.chartObject = this.visualizationService.drawChart(this.analyticData, chartConfiguration);
+    this.chartObject.chart["zoomType"] ="xy";
     this.chartObject["credits"] =  {enabled: false};
     this.isVisualizationDataLoaded = true;
   }
