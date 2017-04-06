@@ -62,7 +62,7 @@ export class DashboardPage implements OnInit{
     if(this.dashboards.length > 0){
       let modal = this.modalCtrl.create(DashboardSearchPage,{selectedDashboardName:this.selectedDashboardName,currentUser : this.currentUser});
       modal.onDidDismiss((dashboard:any)=>{
-        if(dashboard){
+        if(dashboard && dashboard.name){
           if(dashboard.name != this.selectedDashboardName){
             this.dashBoardProgressTracker.isDashboardItemObjectsAndDataLoaded = false;
             this.selectedDashboardId = dashboard.id;

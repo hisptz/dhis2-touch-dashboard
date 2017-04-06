@@ -45,7 +45,6 @@ export class DashboardSearchPage implements OnInit{
   }
 
   dismiss() {
-    var parameter = {};
-    this.viewCtrl.dismiss(parameter);
+    this.viewCtrl.dismiss();
   }
 }
