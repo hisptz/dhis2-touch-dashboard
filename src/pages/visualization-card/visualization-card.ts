@@ -105,8 +105,15 @@ export class VisualizationCardPage implements OnInit{
 
   drawTable() {
     this.isVisualizationDataLoaded = false;
+
     let dashboardObject = this.dashboardItem;
-    let tableConfiguration = {rows: [], columns: []};
+    let display_list: boolean = false;
+    if(this.dashboardItem.visualizationType == 'EVENT_REPORT'){
+      if (dashboardObject.dataType == 'EVENTS') {
+        display_list = true;
+      }
+    }
+    let tableConfiguration = {rows: [], columns: [],hide_zeros: true,display_list:display_list};
     //get columns
     if(dashboardObject.hasOwnProperty('columns')) {
       dashboardObject.columns.forEach(colValue => {
