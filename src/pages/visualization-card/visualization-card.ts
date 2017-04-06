@@ -91,11 +91,17 @@ export class VisualizationCardPage implements OnInit{
   drawChart(chartType?:string) {
     this.isVisualizationDataLoaded = false;
     let itemChartType = (this.dashboardItem.type) ? this.dashboardItem.type.toLowerCase() : 'bar';
+    let layout: any = {};
+    layout['series'] = this.dashboardItem.series ? this.dashboardItem.series : (this.dashboardItem.columns.length > 0) ?this.dashboardItem.columns[0].dimension :  'pe';
+    layout['category'] = this.dashboardItem.category ? this.dashboardItem.category :(this.dashboardItem.rows.length > 0)? this.dashboardItem.rows[0].dimension : 'dx';
+
+
     let chartConfiguration = {
       'type': chartType ? chartType : itemChartType,
       'title': "",
-      'xAxisType': this.dashboardItem.category ? this.dashboardItem.category : 'pe',
-      'yAxisType': this.dashboardItem.series ? this.dashboardItem.series : 'dx'
+      'show_labels': true,
+      'xAxisType': layout.category,
+      'yAxisType': layout.series
     };
     this.visualizationSelection.right = chartConfiguration.type;
     this.chartObject = this.visualizationService.drawChart(this.analyticData, chartConfiguration);
