@@ -6,6 +6,7 @@ import {AppProvider} from "../../providers/app-provider";
 import {SqlLite} from "../../providers/sql-lite";
 import {DashboardPage} from "../dashboard/dashboard";
 import {DashboardService} from "../../providers/dashboard-service";
+import {NetworkAvailability} from "../../providers/network-availability";
 
 /*
  Generated class for the Login page.
@@ -24,6 +25,8 @@ export class LoginPage implements OnInit{
   public isLoginProcessActive :boolean = false;
   public loadingMessages : any = [];
   public logoUrl : string;
+  public loggedInInInstance : string = "";
+  public isLoginProcessCancelled : boolean = false;
 
   //progress tracker object
   public progress : string = "0";
@@ -33,6 +36,7 @@ export class LoginPage implements OnInit{
 
   constructor(public navCtrl: NavController,public menuCtrl: MenuController,
               public toastCtrl: ToastController,public app : AppProvider,
+              public NetworkAvailability : NetworkAvailability,
               public httpClient : HttpClient,public DashboardService : DashboardService,
               public user : User,public sqlLite : SqlLite) {}
 
@@ -152,6 +156,12 @@ export class LoginPage implements OnInit{
     return completedTrackedProcess;
   };
 
+  cancelLoginProcess(){
+    this.isLoginProcessCancelled = true;
+    this.loadingData = false;
+    this.isLoginProcessActive = false;
+  }
+
   login() {
     if (this.loginData.serverUrl) {
       if (!this.loginData.username) {
@@ -159,10 +169,13 @@ export class LoginPage implements OnInit{
       } else if (!this.loginData.password) {
         this.setToasterMessage('Please Enter password');
       } else {
+        this.isLoginProcessCancelled = false;
+        this.loggedInInInstance = "";
         let resource = "Authenticating user";
         this.progress = "0";
         //empty communication as well as organisation unit
         this.progressTracker.communication.passStep = [];
+        this.progressTracker.communication.passStepCount = 0;
         this.progressTracker.communication.message = "Establish connection to server";
         this.currentResourceType = "communication";
         this.loadingData = true;
@@ -173,53 +186,68 @@ export class LoginPage implements OnInit{
             this.user.authenticateUser(this.loginData).then((response:any)=> {
               response = this.getResponseData(response);
               this.loginData = response.user;
-              this.setNotificationToasterMessage("You have been logged in into " + this.loginData.serverUrl);
+              this.loggedInInInstance = this.loginData.serverUrl;
               //set authorization key and reset password
               this.loginData.authorizationKey = btoa(this.loginData.username + ':' + this.loginData.password);
-
-              this.user.setUserData(JSON.parse(response.data)).then(userData=>{
-                this.app.getDataBaseName(this.loginData.serverUrl).then(databaseName=>{
-                  //update authenticate  process
-                  this.loginData.currentDatabase = databaseName;
-                  this.reInitiateProgressTrackerObject(this.loginData);
-                  this.currentResourceType = "communication";
-                  this.updateProgressTracker(resource);
-                  this.progressTracker[this.currentResourceType].message = "Opening local storage";
-                  resource = 'Opening database';
-                  this.currentResourceType = "communication";
-                  this.sqlLite.generateTables(databaseName).then(()=>{
-                    resource = 'Loading system information';
+              if(!this.isLoginProcessCancelled){
+                this.user.setUserData(JSON.parse(response.data)).then(userData=>{
+                  this.app.getDataBaseName(this.loginData.serverUrl).then(databaseName=>{
+                    //update authenticate  process
+                    this.loginData.currentDatabase = databaseName;
+                    this.reInitiateProgressTrackerObject(this.loginData);
                     this.currentResourceType = "communication";
-                    this.progressTracker[this.currentResourceType].message = "Loading system information";
-                    this.httpClient.get('/api/system/info',this.loginData).subscribe(
-                      data => {
-                        data = data.json();
-                        this.user.setCurrentUserSystemInformation(data).then(()=>{
-                          this.setLandingPage();
-                        },error=>{
-                          this.loadingData = false;
-                          this.isLoginProcessActive = false;
-                          this.setLoadingMessages('Fail to set system information');
-                        });
-                      },error=>{
-                        this.loadingData = false;
-                        this.isLoginProcessActive = false;
-                        this.setLoadingMessages('Fail to load system information');
-                      });
-
-                  },error=>{
-                    this.setToasterMessage('Fail to open local storage.');
+                    this.updateProgressTracker(resource);
+                    this.progressTracker[this.currentResourceType].message = "Establish connection to server";
+                    resource = 'Opening database';
+                    this.sqlLite.generateTables(databaseName).then(()=>{
+                      //Establish connection to server
+                      this.updateProgressTracker(resource);
+                      resource = 'Loading system information';
+                      this.currentResourceType = "communication";
+                      this.progressTracker[this.currentResourceType].message = "Opening local storage";
+                      if(!this.isLoginProcessCancelled){
+                        this.httpClient.get('/api/system/info',this.loginData).subscribe(
+                          data => {
+                            data = data.json();
+                            this.updateProgressTracker(resource);
+                            this.progressTracker[this.currentResourceType].message = "Loading system information";
+                            if(!this.isLoginProcessCancelled){
+                              this.user.setCurrentUserSystemInformation(data).then(()=>{
+                                if(!this.isLoginProcessCancelled){
+                                  this.setLandingPage();
+                                }
+                              },error=>{
+                                this.loadingData = false;
+                                this.isLoginProcessActive = false;
+                                if(!this.isLoginProcessCancelled){
+                                  this.setLoadingMessages('Fail to set system information');
+                                }
+                              });
+                            }
+                          },error=>{
+                            this.loadingData = false;
+                            this.isLoginProcessActive = false;
+                            if(!this.isLoginProcessCancelled){
+                              this.setLoadingMessages('Fail to load system information');
+                            }
+                          });
+                      }
+                    },error=>{
+                      this.setToasterMessage('Fail to open database.');
+                    })
                   })
-                })
-              });
+                });
+              }
             }, error=> {
               this.loadingData = false;
               this.isLoginProcessActive = false;
-              if (error.status == 0) {
-                this.setToasterMessage("Please check your network connection");
+              let networkAvailability = this.NetworkAvailability.getNetWorkStatus();
+              if (error.status == 0 || !networkAvailability.isAvailable) {
+                this.setToasterMessage(networkAvailability.message);
               } else if (error.status == 401) {
                 this.setToasterMessage('You have enter wrong username or password');
               } else {
+                console.log(JSON.stringify(error));
                 this.setToasterMessage('Please check server url');
               }
             });
@@ -237,6 +265,7 @@ export class LoginPage implements OnInit{
       return response;
     }
   }
+
 
 
   setLandingPage(){

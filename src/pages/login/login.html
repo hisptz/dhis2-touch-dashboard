@@ -11,13 +11,20 @@
         <div class="logo">
           <img [src]="logoUrl" >
         </div>
-        <p >Analysis at your finger tips</p>
+        <p >Routine and survey data on your pocket</p>
       </ion-col>
     </ion-row>
 
-
     <!-- progress tracker on the app -->
     <div *ngIf="isLoginProcessActive">
+      <ion-list *ngIf="loggedInInInstance != ''">
+        <ion-item (tap)="cancelLoginProcess()">
+          logged in : {{ loggedInInInstance }}
+          <div style="text-align: center" item-right >
+            <ion-icon name="md-close" color="danger"></ion-icon>
+          </div>
+        </ion-item>
+      </ion-list>
       <page-progress-bar [progress] = "progress"></page-progress-bar>
       <br>
       <div *ngIf="loadingData">
@@ -34,13 +41,17 @@
               </div>
             </div>
           <span ion-text [color]="(currentResourceType == 'communication')?'current' : 'font-color'" >
-            {{ progressTracker.communication.message }}
+            <span *ngIf="progressTracker.communication.message != '' ">
+              {{ progressTracker.communication.message }}
+            </span>
+            <span *ngIf="progressTracker.communication.message == '' ">
+              Establish connection to server
+            </span>
           </span>
             <div style="text-align: center" item-right >
               {{ progressTracker.communication.passStepCount}}/{{ progressTracker.communication.count}}
             </div>
           </ion-item>
-
         </ion-list>
       </div>
     </div>

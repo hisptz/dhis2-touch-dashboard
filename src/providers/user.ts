@@ -22,17 +22,18 @@ export class User {
    *
    * @param user
    * @returns {Promise<T>}
-     */
+   */
   getUserDataFromServer(user){
     let self = this;
     self.http.useBasicAuth(user.username, user.password);
     let fields = "fields=[:all],userCredentials[userRoles[name,dataSets[id,name],programs[id,name]]";
     let url = user.serverUrl.split("/dhis-web-commons")[0];
     url = url.split("/dhis-web-dashboard-integration")[0];
+    url = url.split("/api/apps")[0];
     user.serverUrl = url;
     url += "/api/25/me.json?" + fields;
-
     return new Promise(function(resolve, reject) {
+      console.log("url : " + url);
       self.http.get(url, {}, {})
         .then((data:any)  => {
           resolve(data);
@@ -47,7 +48,7 @@ export class User {
    *
    * @param user
    * @returns {Promise<T>}
-     */
+   */
   authenticateUser(user){
     let self = this;
     self.http.useBasicAuth(user.username, user.password);
@@ -109,7 +110,7 @@ export class User {
    *
    * @param user
    * @returns {Promise<T>}
-     */
+   */
   setCurrentUser(user : any){
     let self = this;
     user = JSON.stringify(user);
@@ -127,7 +128,7 @@ export class User {
    *
    * @param systemInformation
    * @returns {Promise<T>}
-     */
+   */
   setCurrentUserSystemInformation(systemInformation : any){
     let self = this;
     return  new Promise(function(resolve,reject){
@@ -144,7 +145,7 @@ export class User {
    *
    * @param userDataResponse
    * @returns {Promise<T>}
-     */
+   */
   setUserData(userDataResponse){
     this.userData = {};
     this.userData ={
@@ -157,7 +158,10 @@ export class User {
       "Nationality": userDataResponse.nationality,
       "Interests": userDataResponse.interests,
       "userRoles": userDataResponse.userCredentials.userRoles,
-      "organisationUnits": userDataResponse.organisationUnits
+      "organisationUnits": userDataResponse.organisationUnits,
+      "settings" : userDataResponse.settings,
+      "authorities" : userDataResponse.authorities,
+      "dataViewOrganisationUnits" : userDataResponse.dataViewOrganisationUnits
     };
     let userData = JSON.stringify(this.userData);
     let self = this;
@@ -173,7 +177,7 @@ export class User {
   /**
    *
    * @returns {Promise<T>}
-     */
+   */
   getUserData(){
     let self = this;
     return  new Promise(function(resolve,reject){
@@ -191,7 +195,7 @@ export class User {
   /**
    *
    * @returns {Promise<T>}
-     */
+   */
   getCurrentUserSystemInformation(){
     let self = this;
     return  new Promise(function(resolve,reject){
@@ -209,7 +213,7 @@ export class User {
   /**
    *
    * @returns {Promise<T>}
-     */
+   */
   getCurrentUser(){
     let self = this;
     return  new Promise(function(resolve,reject){

@@ -16,15 +16,17 @@ export class SqlLite {
       columns: [
         {value: 'id', type: 'TEXT'},
         {value: 'name', type: 'TEXT'},
+        {value: 'level', type: 'TEXT'},
+        {value: 'path', type: 'TEXT'},
         {value: 'ancestors', type: 'LONGTEXT'},
         {value: 'programs', type: 'LONGTEXT'},
         {value: 'dataSets', type: 'LONGTEXT'},
-        {value: 'level', type: 'TEXT'},
+        {value: 'parent', type: 'TEXT'},
         {value: 'children', type: 'LONGTEXT'}
       ],
-      fields : "id,name,ancestors[id,name],dataSets[id],programs[id],level,children[id,name,ancestors[id,name],dataSets[id],programs[id],level,children[id,name,ancestors[id,name],dataSets[id],programs[id],level,children[id,name,ancestors[id,name],dataSets[id],programs[id],level,children[id,name,ancestors[id,name],dataSets[id],programs[id],level,children[id,name,ancestors[id,name]]]]]]",
+      fields : "",
       canBeUpdated : true,
-      //resourceType : "organisationUnit"
+      resourceType : "organisationUnit"
     },
     dataSets: {
       columns: [
@@ -44,7 +46,7 @@ export class SqlLite {
       ],
       fields : "id,name,timelyDays,formType,version,periodType,openFuturePeriods,expiryDays,dataSetElements[dataElement[id,name,displayName,description,formName,attributeValues[value,attribute[name]],valueType,optionSet[name,options[name,id,code]],categoryCombo[id,name,categoryOptionCombos[id,name]]]],dataElements[id,name,displayName,description,formName,attributeValues[value,attribute[name]],valueType,optionSet[name,options[name,id,code]],categoryCombo[id,name,categoryOptionCombos[id,name]]]organisationUnits[id,name],sections[id],indicators[id,name,indicatorType[factor],denominatorDescription,numeratorDescription,numerator,denominator],categoryCombo[id,name,categoryOptionCombos[id,name,categoryOptions[id]],categories[id,name,categoryOptions[id,name]]]",
       canBeUpdated : true,
-      //resourceType : "entryForm"
+      resourceType : "entryForm"
     },
     sections: {
       columns: [
@@ -55,7 +57,7 @@ export class SqlLite {
       ],
       fields : "id,name,indicators[id,name,indicatorType[factor],denominatorDescription,numeratorDescription,numerator,denominator],dataElements[id,name,formName,attributeValues[value,attribute[name]],categoryCombo[id,name,categoryOptionCombos[id,name]],displayName,description,valueType,optionSet[name,options[name,id,code]]",
       canBeUpdated : true,
-      //resourceType : "entryForm"
+      resourceType : "entryForm"
     },
     smsCommand: {
       columns: [
@@ -67,7 +69,7 @@ export class SqlLite {
       ],
       fields : "",
       canBeUpdated : true,
-      //resourceType : "entryForm"
+      resourceType : "entryForm"
     },
     indicators: {
       columns: [
@@ -81,7 +83,7 @@ export class SqlLite {
       ],
       fields : "id,name,denominatorDescription,numeratorDescription,numerator,denominator,indicatorType[:all]",
       canBeUpdated : true,
-      //resourceType : "report"
+      resourceType : "report"
     },
     reports: {
       columns: [
@@ -96,7 +98,7 @@ export class SqlLite {
       fields : "id,name,created,type,relativePeriods,reportParams,designContent",
       filter : "type:eq:HTML&filter=name:ilike:mobile",
       canBeUpdated : true,
-      //resourceType : "report"
+      resourceType : "report"
     },
     constants: {
       columns: [
@@ -105,7 +107,7 @@ export class SqlLite {
       ],
       fields : "id,value",
       canBeUpdated : true,
-      //resourceType : "report"
+      resourceType : "report"
     },
     dataValues : {
       columns: [
@@ -117,6 +119,7 @@ export class SqlLite {
         {value: 'cc', type: 'TEXT'},
         {value: 'cp', type: 'TEXT'},
         {value: 'value', type: 'TEXT'},
+        {value: 'period', type: 'TEXT'},
         {value: 'syncStatus', type: 'TEXT'},
         {value: 'dataSetId', type: 'TEXT'}
       ],
@@ -142,7 +145,7 @@ export class SqlLite {
       ],
       fields : "id,name,withoutRegistration,programType,categoryCombo[id,name,categories[id,name,categoryOptions[name,id]]],programStages[id,name,programStageDataElements[id],programStageSections[id]],organisationUnits[id],programIndicators,translations,attributeValues,validationCriterias,programRuleVariables,programTrackedEntityAttributes,programRules",
       canBeUpdated : true,
-      //resourceType : "event"
+      resourceType : "event"
     },
     programStageDataElements : {
       columns : [
@@ -155,7 +158,7 @@ export class SqlLite {
       ],
       fields : "id,displayInReports,compulsory,allowProvidedElsewhere,allowFutureDate,dataElement[id,name,formName,attributeValues[value,attribute[name]],categoryCombo[id,name,categoryOptionCombos[id,name]],displayName,description,valueType,optionSet[name,options[name,id,code]]",
       canBeUpdated : true,
-      //resourceType : "event"
+      resourceType : "event"
     },
     programStageSections : {
       columns : [
@@ -167,7 +170,7 @@ export class SqlLite {
       ],
       fields : "id,name,programIndicators,sortOrder,programStageDataElements[id]",
       canBeUpdated : true,
-      //resourceType : "event"
+      resourceType : "event"
     },
     events : {
       columns : [
@@ -194,17 +197,16 @@ export class SqlLite {
   /**
    *
    * @returns {any}
-     */
+   */
   getDataBaseStructure(){
-    //return this.dataBaseStructure;
-    return {};
+    return {}//this.dataBaseStructure;
   }
 
   /**
    *
    * @param databaseName
    * @returns {Promise<T>}
-     */
+   */
   generateTables(databaseName){
     let self = this;
     return new Promise(function(resolve, reject) {
@@ -232,7 +234,7 @@ export class SqlLite {
    * @param tableName
    * @param databaseName
    * @returns {Promise<T>}
-     */
+   */
   createTable(tableName,databaseName){
     let self = this;
     databaseName = databaseName + '.db';
@@ -272,7 +274,7 @@ export class SqlLite {
    * @param fieldsValues
    * @param databaseName
    * @returns {Promise<T>}
-     */
+   */
   insertDataOnTable(tableName, fieldsValues,databaseName){
     let self = this;
     databaseName = databaseName + '.db';
@@ -348,11 +350,35 @@ export class SqlLite {
   /**
    *
    * @param tableName
+   * @param databaseName
+   * @returns {Promise<T>}
+     */
+  dropTable(tableName,databaseName){
+    databaseName = databaseName + '.db';
+    let query = "DROP TABLE " + tableName;
+    let self = this;
+    return new Promise(function(resolve, reject) {
+      self.sqlite.create({name: databaseName,location: 'default'}).then((db: SQLiteObject)=>{
+        db.executeSql(query, []).then((success) => {
+          resolve();
+        }, (error) => {
+          reject(error);
+        });
+      }).catch(e => {
+        reject();
+        console.log(e);
+      });
+    });
+  }
+
+  /**
+   *
+   * @param tableName
    * @param attribute
    * @param attributesValuesArray
    * @param databaseName
    * @returns {Promise<T>}
-     */
+   */
   getDataFromTableByAttributes(tableName, attribute, attributesValuesArray,databaseName){
     let self = this;
     databaseName = databaseName + '.db';
@@ -387,7 +413,7 @@ export class SqlLite {
    * @param tableName
    * @param databaseName
    * @returns {Promise<T>}
-     */
+   */
   getAllDataFromTable(tableName,databaseName){
     let self = this;
     databaseName = databaseName + '.db';
@@ -408,12 +434,13 @@ export class SqlLite {
     });
   }
 
+
   /**
    *
    * @param result
    * @param columns
    * @returns {Array}
-     */
+   */
   formatQueryReturnResult(result, columns){
     let len = result.rows.length;
     let data = [];
