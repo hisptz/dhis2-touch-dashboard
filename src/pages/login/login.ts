@@ -212,7 +212,8 @@ export class LoginPage implements OnInit{
                             this.updateProgressTracker(resource);
                             this.progressTracker[this.currentResourceType].message = "Loading system information";
                             if(!this.isLoginProcessCancelled){
-                              this.user.setCurrentUserSystemInformation(data).then(()=>{
+                              this.user.setCurrentUserSystemInformation(data).then((dhisVersion)=>{
+                                this.loginData.dhisVersion = dhisVersion;
                                 if(!this.isLoginProcessCancelled){
                                   this.setLandingPage();
                                 }
