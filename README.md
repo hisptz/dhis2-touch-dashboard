@@ -1,37 +1,26 @@
-# hisptz touch - dashboard
+This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
 
-##Prerequisites
-  Make sure you have the following installed
-  
-  1. npm
-  2. ionic
-  3. cordova
-  4. Emulator (android studio etc.) or android phone for testing
-  
-## Installation
+## How to use this template
 
-  1.  `npm install`
-  
-  2. Run this script to install cordova plugins to access phone resources
-    
-     `sh installPlugins.sh`
-     
-  3. Start the emulator or open an app from the phone when connected in debug mode by running
-  
-    `ionic run android`
-    
-## troubleshoots
-  In case you encounter error "bundle failed: 'ChartModule' is not exported by node_modules/angular2-highcharts/index.js" on build app, 
-     
-  Edit "node_modules/@ionic/app-scripts/config/rollup.config.js"
-  
-      
-      replace commonjs(),  
-      
-  with 
-  
-      commonjs({
-            namedExports: { 'node_modules/angular2-highcharts/index.js':['ChartModule']}
-          }),
-      
+*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
+
+To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
+
+### With the Ionic CLI:
+
+Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
+
+```bash
+$ sudo npm install -g ionic cordova
+$ ionic start mySideMenu sidemenu
+```
+
+Then, to run it, cd into `mySideMenu` and run:
+
+```bash
+$ ionic cordova platform add ios
+$ ionic cordova run ios
+```
+
+Substitute ios for android if not on a Mac.
 

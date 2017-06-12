@@ -1,81 +1,20 @@
 <ion-header>
-  <ion-navbar color="primary" mode="md">
+  <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>
-      About
-    </ion-title>
+    <ion-title>About</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content class="about">
-  <div *ngIf="loadingData">
-    <ion-grid>
-      <ion-row>
-        <ion-col >
-          <ion-list>
-            <ion-item *ngFor="let message of loadingMessages; let currentIndex = index">
-              {{ message }}
-              <ion-icon *ngIf="(currentIndex + 1) < loadingMessages.length" name="done-all" item-right color="favorite"></ion-icon>
-              <div style="text-align: center" item-right *ngIf="(currentIndex + 1) >= loadingMessages.length">
-                <page-loading loadingSize="small"></page-loading>
-              </div>
-            </ion-item>
-          </ion-list>
-        </ion-col>
-      </ion-row>
+<ion-content >
+  <ion-grid>
+    <ion-row>
+      <ion-col class="topSLogan">
+        <div class="logo">
+          <img [src]="logoUrl" >
+        </div>
+      </ion-col>
+    </ion-row>
     </ion-grid>
-  </div>
-
-  <div *ngIf="!loadingData" >
-
-    <ion-refresher (ionRefresh)="reLoadContents($event)">
-      <ion-refresher-content
-        pullingIcon="arrow-dropdown"
-        pullingText="Pull to refresh"
-        refreshingSpinner="circles"
-        refreshingText="Refreshing...">
-      </ion-refresher-content>
-    </ion-refresher>
-
-    <ion-grid>
-      <ion-row>
-        <ion-col >
-          <ion-item-group>
-            <ion-item-divider color="whitecolor">
-              <b>App Information</b>
-            </ion-item-divider>
-            <ion-item *ngFor="let entry of appInformation;let currentAppInfoIndex = index ">
-              <h2>{{ entry.key }}</h2>
-              <p>{{ entry.value }}</p>
-            </ion-item>
-          </ion-item-group>
-          <ion-list></ion-list>
-          <ion-item-group>
-            <ion-item-divider color="whitecolor">
-              <b>System Information</b>
-            </ion-item-divider>
-            <div *ngFor="let entry of systemInformation;let currentSystemInfoIndex = index">
-              <ion-item  *ngIf="currentSystemInfoIndex < hideAndShowObject.systemInformation.count">
-                <h2>{{ entry.key }}</h2>
-                <p>{{ entry.value }}</p>
-              </ion-item>
-            </div>
-
-            <div *ngIf="!hideAndShowObject.systemInformation.status">
-              <ion-infinite-scroll (ionInfinite)="loadingMoreInformation($event,'systemInformation',systemInformation.length)">
-                <ion-infinite-scroll-content
-                  loadingSpinner="bubbles"
-                  loadingText="Loading more..">
-                </ion-infinite-scroll-content>
-              </ion-infinite-scroll>
-            </div>
-
-          </ion-item-group>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-  </div>
 </ion-content>

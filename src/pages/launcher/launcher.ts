@@ -1,41 +1,50 @@
 import { Component,OnInit } from '@angular/core';
-import { NavController,MenuController } from 'ionic-angular';
-import {User} from "../../providers/user";
-import {LoginPage} from "../login/login";
-import {DashboardPage} from "../dashboard/dashboard";
-import {DashboardService} from "../../providers/dashboard-service";
+import { IonicPage, NavController,MenuController } from 'ionic-angular';
+import { BackgroundMode } from '@ionic-native/background-mode';
+import {UserProvider} from "../../providers/user/user";
+import {NetworkAvailabilityProvider} from "../../providers/network-availability/network-availability";
+import {DashboardServiceProvider} from "../../providers/dashboard-service/dashboard-service";
 
-/*
-  Generated class for the Launcher page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+/**
+ * Generated class for the LauncherPage page.
+ *
+ * See http://ionicframework.com/docs/components/#navigation for more info
+ * on Ionic pages and navigation.
+ */
+@IonicPage()
 @Component({
   selector: 'page-launcher',
-  templateUrl: 'launcher.html'
+  templateUrl: 'launcher.html',
 })
 export class LauncherPage implements OnInit{
 
-  public logoUrl : string = "";
+  logoUrl : string;
 
   constructor(public navCtrl: NavController,
-              public menuCtrl: MenuController,
-              public DashboardService : DashboardService,
-              public user : User) {}
+              private menu : MenuController,
+              private UserProvider : UserProvider,
+              private DashboardService : DashboardServiceProvider,
+              private NetworkAvailabilityProvider : NetworkAvailabilityProvider,
+              private backgroundMode: BackgroundMode) {
+  }
 
   ngOnInit() {
-    this.menuCtrl.enable(false);
-    this.logoUrl = 'assets/img/logo-2.png';
-    this.user.getCurrentUser().then((user : any)=>{
+    this.backgroundMode.enable();
+    this.menu.enable(false);
+    this.NetworkAvailabilityProvider.setNetworkStatusDetection();
+    this.DashboardService.resetDashboards();
+    this.logoUrl = 'assets/img/logo.png';
+    this.UserProvider.getCurrentUser().then((user : any)=>{
       if(user && user.isLogin){
-        this.menuCtrl.enable(true);
-        this.DashboardService.resetDashboards();
-        this.navCtrl.setRoot(DashboardPage);
+        this.navCtrl.setRoot("DashboardPage");
       }else{
-        this.navCtrl.setRoot(LoginPage);
+        //this.navCtrl.setRoot("DashboardPage");
+        this.navCtrl.setRoot("LoginPage");
       }
+    },error=>{
     });
   }
+
+
 
 }
