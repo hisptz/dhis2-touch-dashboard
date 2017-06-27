@@ -11,6 +11,12 @@
           <chart [options]="chartObject"></chart>
         </ion-col>
         <ion-col col-2>
+          <div class="chart-icon">
+            <button [disabled]="visualizationSelection.right == 'line' " mini ion-fab
+                    color="light" (tap)="drawChart('line')">
+              <img src="assets/dashboard/line.png">
+            </button>
+          </div>
           <div *ngFor="let chart of visualizationOptions.right" class="chart-icon">
             <button [disabled]="visualizationSelection.right == chart.type|| chart.isDisabled" mini ion-fab
                     color="light" (tap)="drawChart(chart.type)">
@@ -56,13 +62,13 @@
 
     <ion-row *ngIf="tableObject || chartObject">
       <ion-col>
-        <span *ngFor="let visualization of visualizationOptions.bottom" class="chart-icon">
+        <span  class="chart-icon">
               <button [disabled]="visualizationSelection.bottom == 'table'" mini ion-fab color="light"
                       (tap)="changeVisualization('table')">
                 <img src="assets/dashboard/table.png">
               </button>
         </span>
-        <span *ngFor="let visualization of visualizationOptions.bottom" class="chart-icon">
+        <span  class="chart-icon">
               <button [disabled]="visualizationSelection.bottom == 'charts'" mini ion-fab color="light"
                       (tap)="changeVisualization('charts')">
                 <img src="assets/dashboard/combined.png">

@@ -4,11 +4,13 @@ import { ProgressBarPage } from './progress-bar/progress-bar';
 import { LoadingPage } from './loading/loading';
 import {VisualizationCardPage} from "./visualization-card/visualization-card";
 import { ChartModule } from 'angular2-highcharts';
+import {EmptyListNotificationComponent} from "./empty-list-notification/empty-list-notification";
 
 @NgModule({
   declarations: [
     LoadingPage,
     ProgressBarPage,
+    EmptyListNotificationComponent,
     VisualizationCardPage,
   ],
   imports: [
@@ -17,7 +19,8 @@ import { ChartModule } from 'angular2-highcharts';
   exports: [
     LoadingPage,
     ProgressBarPage,
-    VisualizationCardPage
+    VisualizationCardPage,
+    EmptyListNotificationComponent
   ]
 })
 

@@ -61,11 +61,11 @@
 }
 
 .logo {
-  max-width: 45%;
+  max-width: 30%;
   margin:auto;
 }
 .topSLogan{
-  margin-top:0%;
+  margin-top:10%;
   text-align: center;
   margin-bottom:0%;
 }
@@ -116,21 +116,18 @@
   animation-duration: 600ms;
 }
 
+//table styling
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
 /* Zebra striping */
-tr:nth-of-type(odd) {
-  background: #EAEFF5;
-}
-tr:nth-of-type(even) {
-  background: #FBFBFB;
-}
 th {
-  background: #FBFBFB;
-  color: #39547D;
   font-weight: bold;
 }
 td, th {
   padding: 6px;
-  border: 1px solid #ADB7C5;
+  border: 1px solid #E6E6E7;
   text-align: center;
   min-height: 2.1rem;
 }

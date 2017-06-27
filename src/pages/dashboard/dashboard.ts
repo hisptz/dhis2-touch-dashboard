@@ -31,6 +31,8 @@ export class DashboardPage implements OnInit {
   dashBoardVisualizationData:any = {};
   openedDashboardIds:any = {};
 
+  emptyListMessage : any;
+
   constructor(public modalCtrl:ModalController,
               private appProvider:AppProvider, private userProvider:UserProvider,
               private DashboardService:DashboardServiceProvider,
@@ -55,6 +57,7 @@ export class DashboardPage implements OnInit {
     let network = this.NetworkAvailability.getNetWorkStatus();
     if (network.isAvailable) {
       this.loadingMessage = "Loading dashboards from server";
+      this.dashboards = [];
       this.DashboardService.allDashboards(currentUser).then((dashboards:any)=> {
         this.dashboards = dashboards;
         if (dashboards.length > 0) {
@@ -65,13 +68,15 @@ export class DashboardPage implements OnInit {
           this.getDashboardItemObjectsAndData(dashboards[0].dashboardItems, dashboards[0].id);
         } else {
           this.currentDashboardName = "No dashboard found";
+          this.emptyListMessage = "No dashboard found from server";
         }
         this.isLoading = false;
       }, error=> {
         this.isLoading = false;
-        this.dashboards = [];
         this.currentDashboardName = "No dashboard found";
-        this.appProvider.setNormalNotification("Fail to load dashboards from the server");
+        let message = "Fail to load dashboards from the server";
+        this.emptyListMessage = message;
+        this.appProvider.setNormalNotification(message);
         console.error(JSON.stringify(error));
       });
     } else {
@@ -98,23 +103,29 @@ export class DashboardPage implements OnInit {
           if (error.errorMessage) {
             message = error.errorMessage + " ";
           }
-          this.appProvider.setNormalNotification(message + this.currentDashboardName);
+          message = message + "in " + this.currentDashboardName;
+          this.emptyListMessage = message;
+          this.appProvider.setNormalNotification(message);
           console.error(JSON.stringify(error));
         });
       }
     } else {
       this.initiateSelectedDashboardItem(selectedDashboardId);
       this.isDashboardItemsLoading = true;
-      this.appProvider.setNormalNotification("There are no supported dashboard item found for " + this.currentDashboardName);
+      let message = "There are no supported dashboard item found for " + this.currentDashboardName;
+      this.emptyListMessage = message;
+      this.appProvider.setNormalNotification(message);
     }
   }
 
   initiateSelectedDashboardItem(selectedDashboardId) {
     this.currentDashboardId = selectedDashboardId;
     this.isDashboardItemsLoading = false;
-    let selectedDashboardItems = this.dashBoardItemObjectsAndData[selectedDashboardId];
-    if(selectedDashboardItems.length > 0){
-      this.openedDashboardIds[selectedDashboardItems[0].id]= true;
+    if(this.dashBoardItemObjectsAndData[selectedDashboardId]){
+      let selectedDashboardItems = this.dashBoardItemObjectsAndData[selectedDashboardId];
+      if(selectedDashboardItems.length > 0){
+        this.openedDashboardIds[selectedDashboardItems[0].id]= true;
+      }
     }
   }
 

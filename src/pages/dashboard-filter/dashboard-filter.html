@@ -25,7 +25,7 @@
             <span ion-text [color]="(currentDashboardName == dashboard.name) ?'current' : 'font-color'" >{{ dashboard.name }}</span>
           </ion-item>
           <ion-item *ngIf="dashboards.length == 0">
-            There no dashboard found
+            <empty-list-notification [emptyListMessage]="'There no dashboard found'"></empty-list-notification>
           </ion-item>
         </ion-list>
       </ion-col>
