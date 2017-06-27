@@ -1,62 +1,52 @@
-import { NgModule, ErrorHandler } from '@angular/core';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { BrowserModule } from '@angular/platform-browser';
+import { ErrorHandler, NgModule } from '@angular/core';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+
 import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { IonicStorageModule } from '@ionic/storage';
-import { HTTP } from '@ionic-native/http';
-import { SQLite } from '@ionic-native/sqlite';
+import { UserProvider } from '../providers/user/user';
+import { BackgroundMode } from '@ionic-native/background-mode';
 import { AppVersion } from '@ionic-native/app-version';
+import { HTTP } from '@ionic-native/http';
+import { Network } from '@ionic-native/network';
+import { IonicStorageModule } from '@ionic/storage';
+import { HttpModule } from '@angular/http';
 import { ChartModule } from 'angular2-highcharts';
-import {VisualizerService} from "../providers/visualizer-service";
-import {AppProvider} from "../providers/app-provider";
-import {HttpClient} from "../providers/http-client";
-import {MetadataDictionaryService} from "../providers/metadata-dictionary-service";
-import {NetworkAvailability} from "../providers/network-availability";
-import {User} from "../providers/user";
-import {SqlLite} from "../providers/sql-lite";
-import {DashboardService} from "../providers/dashboard-service";
-
-import {LauncherPage} from "../pages/launcher/launcher";
-import {LoadingPage} from "../pages/loading/loading";
-import {MetadataDictionary} from "../pages/metadata-dictionary/metadata-dictionary";
-import {ProgressBarPage} from "../pages/progress-bar/progress-bar";
-import {VisualizationCardPage} from "../pages/visualization-card/visualization-card";
-import {LoginPage} from "../pages/login/login";
-import {DashboardPage} from "../pages/dashboard/dashboard";
-import {AboutPage} from "../pages/about/about";
-import {ProfilePage} from "../pages/profile/profile";
-import {DashboardSearchPage} from "../pages/dashboard-search/dashboard-search";
-
-
-
+import { SQLite } from '@ionic-native/sqlite';
+import { AppProvider } from '../providers/app/app';
+import { HttpClientProvider } from '../providers/http-client/http-client';
+import { DashboardServiceProvider } from '../providers/dashboard-service/dashboard-service';
+import { NetworkAvailabilityProvider } from '../providers/network-availability/network-availability';
+import {VisualizerService } from '../providers/visualizer-service';
 
 @NgModule({
   declarations: [
     MyApp,
-    LauncherPage,LoadingPage,MetadataDictionary,ProgressBarPage,VisualizationCardPage,
-    DashboardPage,DashboardSearchPage,
-    LoginPage,AboutPage,ProfilePage
   ],
   imports: [
-    IonicModule.forRoot(MyApp),
+    BrowserModule,
+    IonicStorageModule.forRoot(),
+    HttpModule,
     ChartModule,
-    IonicStorageModule.forRoot()
+    IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LauncherPage,LoadingPage,MetadataDictionary,ProgressBarPage,VisualizationCardPage,
-    DashboardPage,DashboardSearchPage,
-    LoginPage,AboutPage,ProfilePage
   ],
   providers: [
     StatusBar,
-    SplashScreen,SQLite,HTTP,AppVersion,
-    AppProvider,HttpClient,MetadataDictionaryService,NetworkAvailability,User,VisualizerService,
-    SqlLite,DashboardService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    SplashScreen,SQLite,Network,
+    BackgroundMode,AppVersion,HTTP,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    UserProvider,
+    AppProvider,
+    HttpClientProvider,
+    DashboardServiceProvider,
+    NetworkAvailabilityProvider,
+    VisualizerService
   ]
 })
 export class AppModule {}

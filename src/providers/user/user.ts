@@ -4,13 +4,13 @@ import 'rxjs/add/operator/map';
 import { HTTP } from '@ionic-native/http';
 
 /*
- Generated class for the User provider.
+ Generated class for the UserProvider provider.
 
  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
  for more info on providers and Angular 2 DI.
  */
 @Injectable()
-export class User {
+export class UserProvider {
 
   public userData : any;
 
@@ -22,7 +22,7 @@ export class User {
    *
    * @param user
    * @returns {Promise<T>}
-     */
+   */
   getUserDataFromServer(user){
 
     this.http.useBasicAuth(user.username, user.password);
@@ -36,7 +36,22 @@ export class User {
     return new Promise((resolve, reject)=> {
       this.http.get(url, {}, {})
         .then((data:any)  => {
-          resolve(data);
+          if(data.data.indexOf('login.action') > -1){
+            user.serverUrl = user.serverUrl.replace('http://','https://');
+            this.getUserDataFromServer(user).then((data:any) => {
+              let url = user.serverUrl.split("/dhis-web-commons")[0];
+              url = url.split("/dhis-web-dashboard-integration")[0];
+              user.serverUrl = url;
+              resolve({data : data.data,user : user});
+            })
+              .catch(error => {
+                reject(error);
+              });
+          }else{
+            resolve({data : data.data,user : user});
+          }
+        },error=>{
+          reject(error);
         })
         .catch(error => {
           reject(error);
@@ -48,7 +63,33 @@ export class User {
    *
    * @param user
    * @returns {Promise<T>}
-     */
+   */
+  getUserAuthorities(user){
+    this.http.useBasicAuth(user.username, user.password);
+    let fields = "fields=authorities";
+    let url = user.serverUrl;
+    url += "/api/me.json?" + fields;
+    if(user.dhisVersion &&(parseInt(user.dhisVersion) > 25)){
+      url = url.replace("/api","/api/" + user.dhisVersion);
+    }
+    return new Promise((resolve, reject)=> {
+      this.http.get(url, {}, {})
+        .then((response:any)  => {
+          resolve(JSON.parse(response.data));
+        },error=>{
+          reject(error);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   *
+   * @param user
+   * @returns {Promise<T>}
+   */
   authenticateUser(user){
 
     this.http.useBasicAuth(user.username, user.password);
@@ -57,26 +98,28 @@ export class User {
       this.http.get(user.serverUrl + "", {}, {})
         .then((data:any)  => {
           if(data.status == 200){
-            let setCookieArray = data.headers["Set-Cookie"].split(";");
-            let path = "";let url = "";
-            let serverUrlArray = user.serverUrl.split("/");
-            setCookieArray.forEach((value : any)=>{
-              if(value.indexOf("Path=/") > -1){
-                let pathValues = value.split("Path=/");
-                path = pathValues[pathValues.length -1].split("/")[0];
+            if(data.headers && data.headers["Set-Cookie"]){
+              let setCookieArray = data.headers["Set-Cookie"].split(";");
+              let path = "";let url = "";
+              let serverUrlArray = user.serverUrl.split("/");
+              setCookieArray.forEach((value : any)=>{
+                if(value.indexOf("Path=/") > -1){
+                  let pathValues = value.split("Path=/");
+                  path = pathValues[pathValues.length -1].split("/")[0];
+                }
+              });
+              if(serverUrlArray[serverUrlArray.length -1] != path){
+                url = (serverUrlArray[serverUrlArray.length -1] == "")? user.serverUrl + path : user.serverUrl + "/"+ path;
+              }else{
+                url = user.serverUrl;
               }
-            });
-            if(serverUrlArray[serverUrlArray.length -1] != path){
-              url = (serverUrlArray[serverUrlArray.length -1] == "")? user.serverUrl + path : user.serverUrl + "/"+ path;
-            }else{
-              url = user.serverUrl;
+              user.serverUrl = url;
             }
-            user.serverUrl = url;
             this.getUserDataFromServer(user).then((data:any) => {
                 let url = user.serverUrl.split("/dhis-web-commons")[0];
                 url = url.split("/dhis-web-dashboard-integration")[0];
                 user.serverUrl = url;
-                resolve({data : data.data,user : user});
+                resolve({data : data.data,user : data.user});
               })
               .catch(error => {
                 reject(error);
@@ -87,7 +130,7 @@ export class User {
         })
         .catch(error => {
           if(error.status == 301 || error.status == 302){
-            if(error.headers.Location){
+            if(error.headers && error.headers.Location){
               user.serverUrl = error.headers.Location;
               this.authenticateUser(user).then((data:any) => {
                   let url = user.serverUrl.split("/dhis-web-commons")[0];
@@ -98,6 +141,8 @@ export class User {
                 .catch(error => {
                   reject(error);
                 });
+            }else{
+              reject(error);
             }
           }else{
             reject(error);
@@ -110,9 +155,8 @@ export class User {
    *
    * @param user
    * @returns {Promise<T>}
-     */
+   */
   setCurrentUser(user : any){
-
     user = JSON.stringify(user);
     return  new Promise((resolve,reject) => {
       this.storage.set('user', user).then(() => {
@@ -127,7 +171,7 @@ export class User {
    *
    * @param systemInformation
    * @returns {Promise<T>}
-     */
+   */
   setCurrentUserSystemInformation(systemInformation : any){
     let dhisVersion = "22";
     if(systemInformation.version){
@@ -149,9 +193,8 @@ export class User {
    *
    * @param userDataResponse
    * @returns {Promise<T>}
-     */
+   */
   setUserData(userDataResponse){
-    this.userData = {};
     this.userData ={
       "Name": userDataResponse.name,
       "Employer": userDataResponse.employer,
@@ -164,14 +207,12 @@ export class User {
       "userRoles": userDataResponse.userCredentials.userRoles,
       "organisationUnits": userDataResponse.organisationUnits,
       "settings" : userDataResponse.settings,
-      "authorities" : userDataResponse.authorities,
       "dataViewOrganisationUnits" : userDataResponse.dataViewOrganisationUnits
     };
     let userData = JSON.stringify(this.userData);
-
     return  new Promise((resolve,reject) => {
       this.storage.set('userData', userData).then(() => {
-        resolve(this.userData);
+        resolve(userData);
       },error=>{
         reject();
       });
@@ -181,9 +222,8 @@ export class User {
   /**
    *
    * @returns {Promise<T>}
-     */
+   */
   getUserData(){
-
     return  new Promise((resolve,reject) => {
       this.storage.get('userData').then(userData=>{
         userData = JSON.parse(userData);
@@ -199,9 +239,8 @@ export class User {
   /**
    *
    * @returns {Promise<T>}
-     */
+   */
   getCurrentUserSystemInformation(){
-
     return  new Promise((resolve,reject) => {
       this.storage.get('systemInformation').then(systemInformation=>{
         systemInformation = JSON.parse(systemInformation);
@@ -217,9 +256,8 @@ export class User {
   /**
    *
    * @returns {Promise<T>}
-     */
+   */
   getCurrentUser(){
-
     return  new Promise((resolve,reject) => {
       this.storage.get('user').then(user=>{
         user = JSON.parse(user);
@@ -229,6 +267,4 @@ export class User {
       })
     })
   }
-
 }
-

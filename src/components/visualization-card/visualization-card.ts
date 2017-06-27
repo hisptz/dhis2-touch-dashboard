@@ -1,8 +1,8 @@
-import { Component ,Input,Output, EventEmitter,OnInit} from '@angular/core';
-import { ToastController } from 'ionic-angular';
-import {User} from "../../providers/user";
+import { Component,Input,Output,EventEmitter,OnInit} from '@angular/core';
+import {AppProvider} from "../../providers/app/app";
 import {VisualizerService} from "../../providers/visualizer-service";
-import {DashboardService} from "../../providers/dashboard-service";
+import {UserProvider} from "../../providers/user/user";
+import {DashboardServiceProvider} from "../../providers/dashboard-service/dashboard-service";
 /*
   Generated class for the VisualizationCard page.
 
@@ -20,12 +20,12 @@ export class VisualizationCardPage implements OnInit{
   @Output() dashboardItemAnalyticData = new EventEmitter();
 
 
-  public currentUser : any;
-  public analyticData : any;
-  public chartObject : any;
-  public tableObject : any;
-  public isVisualizationDataLoaded : boolean = false;
-  public visualizationOptions : any = {
+  currentUser : any;
+  analyticData : any;
+  chartObject : any;
+  tableObject : any;
+  isVisualizationDataLoaded : boolean = false;
+  visualizationOptions : any = {
     top : [],
     bottom :  [
       {type: "table", path: "assets/dashboard/table.png"},
@@ -44,34 +44,30 @@ export class VisualizationCardPage implements OnInit{
     ],
     left : []
   };
-  public visualizationSelection : any = {
+  visualizationSelection : any = {
     top : {},bottom : "charts",right : "",left : ""
   };
+  metadataIdentifiers: string;
 
-
-  public metadataIdentifiers: string;
-
-  //visualizationType
-
-  constructor(public DashboardService : DashboardService,public User : User,
-              public toastCtrl:ToastController,
-              public visualizationService : VisualizerService) {
+  constructor(private DashboardService : DashboardServiceProvider,private userProvider : UserProvider,
+              private appProvider : AppProvider,
+              private visualizationService : VisualizerService) {
   }
 
   ngOnInit() {
-    this.User.getCurrentUser().then((user)=>{
-      this.currentUser = user;
+    this.userProvider.getCurrentUser().then((currentUser)=>{
+      this.currentUser = currentUser;
       if(this.dashboardItemData){
         this.analyticData = this.dashboardItemData;
         this.initiateVisualization();
       }else{
-        this.DashboardService.getAnalyticDataForDashboardItem(this.dashboardItem.analyticsUrl,user).then((analyticData:any)=>{
+        this.DashboardService.getAnalyticDataForDashboardItem(this.dashboardItem.analyticsUrl,currentUser).then((analyticData:any)=>{
           this.analyticData = analyticData;
           this.dashboardItemAnalyticData.emit(analyticData);
           this.initiateVisualization();
         },error=>{
           this.isVisualizationDataLoaded = true;
-          this.setToasterMessage("fail to load data for " + (this.dashboardItem.title) ? this.dashboardItem.title : this.dashboardItem.name);
+          this.appProvider.setNormalNotification("fail to load data for " + (this.dashboardItem.title) ? this.dashboardItem.title : this.dashboardItem.name);
         });
       }
     })
@@ -94,8 +90,7 @@ export class VisualizationCardPage implements OnInit{
     let layout: any = {};
     layout['series'] = this.dashboardItem.series ? this.dashboardItem.series : (this.dashboardItem.columns.length > 0) ?this.dashboardItem.columns[0].dimension :  'pe';
     layout['category'] = this.dashboardItem.category ? this.dashboardItem.category :(this.dashboardItem.rows.length > 0)? this.dashboardItem.rows[0].dimension : 'dx';
-
-
+    this.chartObject = {};
     let chartConfiguration = {
       'type': chartType ? chartType : itemChartType,
       'title': "",
@@ -106,13 +101,13 @@ export class VisualizationCardPage implements OnInit{
     this.visualizationSelection.right = chartConfiguration.type;
     this.chartObject = this.visualizationService.drawChart(this.analyticData, chartConfiguration);
     this.chartObject.chart["zoomType"] ="xy";
+    this.chartObject.chart["backgroundColor"] = "#F4F4F4";
     this.chartObject["credits"] =  {enabled: false};
     this.isVisualizationDataLoaded = true;
   }
 
   drawTable() {
     this.isVisualizationDataLoaded = false;
-
     let dashboardObject = this.dashboardItem;
     let display_list: boolean = false;
     if(this.dashboardItem.visualizationType == 'EVENT_REPORT'){
@@ -151,16 +146,6 @@ export class VisualizationCardPage implements OnInit{
     }
     this.visualizationSelection.bottom = visualizationType;
   }
-
-
-  setToasterMessage(message){
-    let toast = this.toastCtrl.create({
-      message: message,
-      duration: 3000
-    });
-    toast.present();
-  }
-
 
 
 }

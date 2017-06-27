@@ -1,177 +1,156 @@
 import { Component,OnInit } from '@angular/core';
-import { ToastController,ModalController} from 'ionic-angular';
-import {User} from "../../providers/user";
-import {DashboardService} from "../../providers/dashboard-service";
-import {NetworkAvailability} from "../../providers/network-availability";
-import {DashboardSearchPage} from "../dashboard-search/dashboard-search";
+import { IonicPage, ModalController,MenuController } from 'ionic-angular';
+import {AppProvider} from "../../providers/app/app";
+import {UserProvider} from "../../providers/user/user";
+import {DashboardServiceProvider} from "../../providers/dashboard-service/dashboard-service";
+import {NetworkAvailabilityProvider} from "../../providers/network-availability/network-availability";
 
-/*
-  Generated class for the Dashboard page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+/**
+ * Generated class for the DashboardPage page.
+ *
+ * See http://ionicframework.com/docs/components/#navigation for more info
+ * on Ionic pages and navigation.
+ */
+@IonicPage()
 @Component({
   selector: 'page-dashboard',
-  templateUrl: 'dashboard.html'
+  templateUrl: 'dashboard.html',
 })
-export class DashboardPage implements OnInit{
+export class DashboardPage implements OnInit {
 
-  public isLoading : boolean = false;
-  public loadingMessage : string = "";
-  public currentUser : any;
-  public dashboards :any = [];
-  public dashboardsCopy :any = [];
+  currentUser:any;
+  loadingMessage:string;
+  isLoading:boolean;
+  isDashboardItemsLoading:boolean;
 
-  public selectedDashboardId : string;
-  public selectedDashboardName : string;
-  public selectedDashboardItemId : string;
-  public dashBoardToDashboardItem : any = {};
-  public dashBoardProgressTracker : any = {
-    isDashboardsLoaded : false,
-    isDashboardItemObjectsAndDataLoaded : false,
-    isisVisualizationDataLoaded : false,
-    isVisualizationSet : false,
-    dashBoardItemObjectsAndData : {},
-    dashBoardVisualizationData : {},
-    currentStep : ""
-  };
+  currentDashboardName:string;
+  currentDashboardId:string;
+  dashboards:any = [];
+  dashBoardToDashboardItem:any = {};
+  dashBoardItemObjectsAndData:any = {};
+  dashBoardVisualizationData:any = {};
+  openedDashboardIds:any = {};
 
-  constructor(public modalCtrl: ModalController, public toastCtrl:ToastController,
-              public NetworkAvailability : NetworkAvailability,
-              public user : User,public DashboardService : DashboardService
-
-               ) {}
+  constructor(public modalCtrl:ModalController,
+              private appProvider:AppProvider, private userProvider:UserProvider,
+              private DashboardService:DashboardServiceProvider,
+              private NetworkAvailability:NetworkAvailabilityProvider,
+              private menu:MenuController) {
+    this.menu.enable(true);
+  }
 
   ngOnInit() {
-    this.user.getCurrentUser().then(user=>{
-      this.currentUser = user;
-      this.getAllDashboards(this.currentUser);
+    this.isLoading = true;
+    this.loadingMessage = "Loading current user information";
+    this.userProvider.getCurrentUser().then(currentUser=> {
+      this.currentUser = currentUser;
+      this.loadingListOfAllDashboards(currentUser);
+    }, error=> {
+      this.isLoading = false;
+      this.appProvider.setNormalNotification("Fail to loading current user information");
     });
   }
 
-  ionViewDidEnter(){
-
+  loadingListOfAllDashboards(currentUser) {
+    let network = this.NetworkAvailability.getNetWorkStatus();
+    if (network.isAvailable) {
+      this.loadingMessage = "Loading dashboards from server";
+      this.DashboardService.allDashboards(currentUser).then((dashboards:any)=> {
+        this.dashboards = dashboards;
+        if (dashboards.length > 0) {
+          this.currentDashboardName = dashboards[0].name;
+          for (let dashboard of  dashboards) {
+            this.dashBoardToDashboardItem[dashboard.id] = dashboard.dashboardItems;
+          }
+          this.getDashboardItemObjectsAndData(dashboards[0].dashboardItems, dashboards[0].id);
+        } else {
+          this.currentDashboardName = "No dashboard found";
+        }
+        this.isLoading = false;
+      }, error=> {
+        this.isLoading = false;
+        this.dashboards = [];
+        this.currentDashboardName = "No dashboard found";
+        this.appProvider.setNormalNotification("Fail to load dashboards from the server");
+        console.error(JSON.stringify(error));
+      });
+    } else {
+      //there is no network available
+      this.isLoading = false;
+      this.appProvider.setNormalNotification(network.message);
+    }
   }
 
-  reloadDashboards(){
-    this.getAllDashboards(this.currentUser);
+  getDashboardItemObjectsAndData(dashboardItems, selectedDashboardId) {
+    this.isDashboardItemsLoading = true;
+    if (dashboardItems.length > 0) {
+      this.loadingMessage = "Loading dashboard items";
+      if (this.dashBoardItemObjectsAndData[selectedDashboardId]) {
+        this.initiateSelectedDashboardItem(selectedDashboardId);
+      } else {
+        this.DashboardService.getDashboardItemObjects(dashboardItems, selectedDashboardId, this.currentUser).then((dashBoardItemObjects:any)=> {
+          this.dashBoardItemObjectsAndData[selectedDashboardId] = dashBoardItemObjects;
+          this.initiateSelectedDashboardItem(selectedDashboardId);
+        }, (error:any)=> {
+          this.isDashboardItemsLoading = false;
+          this.initiateSelectedDashboardItem(selectedDashboardId);
+          let message = "Fail to load dashboard items for ";
+          if (error.errorMessage) {
+            message = error.errorMessage + " ";
+          }
+          this.appProvider.setNormalNotification(message + this.currentDashboardName);
+          console.error(JSON.stringify(error));
+        });
+      }
+    } else {
+      this.initiateSelectedDashboardItem(selectedDashboardId);
+      this.isDashboardItemsLoading = true;
+      this.appProvider.setNormalNotification("There are no supported dashboard item found for " + this.currentDashboardName);
+    }
   }
 
-  openDashboardList(){
-    if(this.dashboards.length > 0){
-      let modal = this.modalCtrl.create(DashboardSearchPage,{selectedDashboardName:this.selectedDashboardName,currentUser : this.currentUser});
-      modal.onDidDismiss((dashboard:any)=>{
-        if(dashboard && dashboard.name){
-          if(dashboard.name != this.selectedDashboardName){
-            this.dashBoardProgressTracker.isDashboardItemObjectsAndDataLoaded = false;
-            this.selectedDashboardId = dashboard.id;
-            this.selectedDashboardName = dashboard.name;
-            let selectedDashboards = this.dashBoardToDashboardItem[this.selectedDashboardId];
-            this.getDashboardItemObjectsAndData(selectedDashboards);
+  initiateSelectedDashboardItem(selectedDashboardId) {
+    this.currentDashboardId = selectedDashboardId;
+    this.isDashboardItemsLoading = false;
+    let selectedDashboardItems = this.dashBoardItemObjectsAndData[selectedDashboardId];
+    if(selectedDashboardItems.length > 0){
+      this.openedDashboardIds[selectedDashboardItems[0].id]= true;
+    }
+  }
+
+  updateDashboardVisualizationData(data,dashboardItemId){
+    this.dashBoardVisualizationData[dashboardItemId] = data;
+  }
+
+  toggleDashboardItemCard(dashboardItemId) {
+    if (!this.openedDashboardIds[dashboardItemId]) {
+      this.openedDashboardIds[dashboardItemId] = true;
+    }else{
+      this.openedDashboardIds[dashboardItemId] = false;
+    }
+  }
+
+  openDashboardListFilter() {
+    if (this.dashboards.length > 0) {
+      this.isLoading = true;
+      this.loadingMessage = "Please wait ...";
+      let modal = this.modalCtrl.create('DashboardFilterPage', {
+        currentDashboardName: this.currentDashboardName,
+        currentUser: this.currentUser
+      });
+      modal.onDidDismiss((dashboard:any)=> {
+        this.isLoading = false;
+        this.loadingMessage = "";
+        if (dashboard && dashboard.name) {
+          if (dashboard.name != this.currentDashboardName) {
+            this.currentDashboardName = dashboard.name;
+            let selectedDashboards = this.dashBoardToDashboardItem[dashboard.id];
+            this.getDashboardItemObjectsAndData(selectedDashboards, dashboard.id);
           }
         }
       });
       modal.present();
-    }else{
-      this.setNotificationToasterMessage("No dashboard found at moment");
     }
   }
-
-  getAllDashboards(currentUser){
-    this.dashBoardProgressTracker.isDashboardsLoaded = false;
-    this.dashBoardProgressTracker.isDashboardItemObjectsAndDataLoaded = false;
-    let network = this.NetworkAvailability.getNetWorkStatus();
-    if(network.isAvailable){
-      this.isLoading = true;
-      this.loadingMessage = "Loading dashboards";
-      this.DashboardService.allDashboards(currentUser).then((dashboards : any)=>{
-        this.dashboards = dashboards;
-        this.dashboardsCopy = dashboards;
-        if(dashboards.length > 0){
-          this.dashBoardProgressTracker.isDashboardsLoaded = true;
-          this.selectedDashboardId = dashboards[0].id;
-          this.selectedDashboardName = dashboards[0].name;
-          for(let dashboard of  this.dashboards){
-            this.dashBoardToDashboardItem[dashboard.id] = dashboard.dashboardItems;
-          }
-          this.getDashboardItemObjectsAndData(this.dashboards[0].dashboardItems);
-        }
-      },error=>{
-        this.dashboards = [];
-        this.dashboardsCopy = [];
-        this.selectedDashboardName = "There is no dashboard found";
-        this.dashBoardProgressTracker.isDashboardItemObjectsAndDataLoaded = true;
-        this.dashBoardProgressTracker.isDashboardsLoaded = true;
-        this.setToasterMessage("Fail to load dashboards from the server");
-      });
-    }else{
-      this.setNotificationToasterMessage(network.message);
-      this.selectedDashboardName = "There is no dashboard found";
-      this.dashBoardProgressTracker.isDashboardItemObjectsAndDataLoaded = true;
-      this.dashBoardProgressTracker.isDashboardsLoaded = true;
-    }
-  }
-
-  hideAndShowVisualizationCard(dashBoardItemId){
-    if(this.selectedDashboardItemId == dashBoardItemId){
-      this.selectedDashboardItemId = "";
-    }else{
-      this.selectedDashboardItemId = dashBoardItemId
-    }
-  }
-
-  getDashboardItemObjectsAndData(dashboardItems){
-    if(dashboardItems.length > 0){
-      this.dashBoardProgressTracker.isDashboardItemObjectsAndDataLoaded = false;
-      if(this.dashBoardProgressTracker.dashBoardItemObjectsAndData[this.selectedDashboardId]){
-        this.initiateSelectedDashboardItem();
-      }else{
-        this.DashboardService.getDashboardItemObjects(dashboardItems,this.currentUser).then((dashBoardItemObjects:any)=>{
-          this.dashBoardProgressTracker.dashBoardItemObjectsAndData[this.selectedDashboardId] = dashBoardItemObjects;
-          this.initiateSelectedDashboardItem();
-        },error=>{
-          this.dashBoardProgressTracker.isDashboardItemObjectsAndDataLoaded = true;
-          if(error.errorMessage){
-            this.setToasterMessage(error.errorMessage);
-          }else{
-            this.setToasterMessage("Fail to load dashboard items metadata from server " );
-          }
-        });
-      }
-    }else{
-      this.dashBoardProgressTracker.isDashboardItemObjectsAndDataLoaded = true;
-      this.setToasterMessage("There are no supported dashboard item found");
-    }
-  }
-
-  initiateSelectedDashboardItem(){
-    let selectedDashboardItems = this.dashBoardProgressTracker.dashBoardItemObjectsAndData[this.selectedDashboardId];
-    this.selectedDashboardItemId = selectedDashboardItems[0].id;
-    this.dashBoardProgressTracker.isDashboardItemObjectsAndDataLoaded = true;
-  }
-
-  updateDashboardVisualizationData(analyticData,dashboardItemId){
-    this.dashBoardProgressTracker.dashBoardVisualizationData[dashboardItemId] = analyticData;
-  }
-
-  setNotificationToasterMessage(message){
-    let toast = this.toastCtrl.create({
-      message: message,
-      position : 'top',
-      duration: 1500
-    });
-    toast.present();
-  }
-
-  setToasterMessage(message){
-    let toast = this.toastCtrl.create({
-      message: message,
-      duration: 3000
-    });
-    toast.present();
-  }
-
-
 
 }
