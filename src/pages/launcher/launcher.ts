@@ -4,13 +4,13 @@ import { BackgroundMode } from '@ionic-native/background-mode';
 import {UserProvider} from "../../providers/user/user";
 import {NetworkAvailabilityProvider} from "../../providers/network-availability/network-availability";
 import {DashboardServiceProvider} from "../../providers/dashboard-service/dashboard-service";
-
 /**
  * Generated class for the LauncherPage page.
  *
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
+
 @IonicPage()
 @Component({
   selector: 'page-launcher',
@@ -20,20 +20,20 @@ export class LauncherPage implements OnInit{
 
   logoUrl : string;
 
-  constructor(public navCtrl: NavController,
+  constructor(private navCtrl: NavController,
               private menu : MenuController,
               private UserProvider : UserProvider,
-              private DashboardService : DashboardServiceProvider,
+              private DashboardServiceProvider : DashboardServiceProvider,
               private NetworkAvailabilityProvider : NetworkAvailabilityProvider,
               private backgroundMode: BackgroundMode) {
   }
 
-  ngOnInit() {
+  ngOnInit(){
+    this.logoUrl = 'assets/img/logo.png';
     this.backgroundMode.enable();
     this.menu.enable(false);
     this.NetworkAvailabilityProvider.setNetworkStatusDetection();
-    this.DashboardService.resetDashboards();
-    this.logoUrl = 'assets/img/logo.png';
+    this.DashboardServiceProvider.resetDashboards();
     this.UserProvider.getCurrentUser().then((user : any)=>{
       if(user && user.isLogin){
         this.navCtrl.setRoot("DashboardPage");
@@ -44,7 +44,5 @@ export class LauncherPage implements OnInit{
     },error=>{
     });
   }
-
-
 
 }

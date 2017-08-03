@@ -1,9 +1,9 @@
-import { Component,OnInit } from '@angular/core';
-import { IonicPage, ModalController,MenuController } from 'ionic-angular';
-import {AppProvider} from "../../providers/app/app";
-import {UserProvider} from "../../providers/user/user";
+import { Component, OnInit} from '@angular/core';
+import { IonicPage, ModalController, MenuController } from 'ionic-angular';
 import {DashboardServiceProvider} from "../../providers/dashboard-service/dashboard-service";
 import {NetworkAvailabilityProvider} from "../../providers/network-availability/network-availability";
+import {UserProvider} from "../../providers/user/user";
+import {AppProvider} from "../../providers/app/app";
 
 /**
  * Generated class for the DashboardPage page.
@@ -11,12 +11,13 @@ import {NetworkAvailabilityProvider} from "../../providers/network-availability/
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
+
 @IonicPage()
 @Component({
   selector: 'page-dashboard',
   templateUrl: 'dashboard.html',
 })
-export class DashboardPage implements OnInit {
+export class DashboardPage implements OnInit{
 
   currentUser:any;
   loadingMessage:string;
@@ -38,10 +39,10 @@ export class DashboardPage implements OnInit {
               private DashboardService:DashboardServiceProvider,
               private NetworkAvailability:NetworkAvailabilityProvider,
               private menu:MenuController) {
-    this.menu.enable(true);
   }
 
   ngOnInit() {
+    this.menu.enable(true);
     this.isLoading = true;
     this.loadingMessage = "Loading current user information";
     this.userProvider.getCurrentUser().then(currentUser=> {

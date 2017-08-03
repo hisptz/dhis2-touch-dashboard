@@ -113,6 +113,19 @@ export class AppProvider {
         formattedBaseUrl = formattedBaseUrl + '/' + urlArray[i];
       }
     }
+
+    formattedBaseUrl = this.getUrlWithLowercaseDomain(formattedBaseUrl);
     return formattedBaseUrl;
+  }
+
+  getUrlWithLowercaseDomain(formattedBaseUrl){
+    let baseUrlArray = formattedBaseUrl.split("://");
+
+    if(baseUrlArray.length > 0){
+      let domainName = baseUrlArray[1].split("/")[0];
+      let lowerCaseDomain = baseUrlArray[1].split("/")[0].toLowerCase();
+      formattedBaseUrl = formattedBaseUrl.replace(domainName,lowerCaseDomain)
+    }
+    return formattedBaseUrl
   }
 }

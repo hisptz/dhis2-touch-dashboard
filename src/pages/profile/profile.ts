@@ -7,6 +7,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
+
 @IonicPage()
 @Component({
   selector: 'page-profile',
@@ -14,10 +15,13 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ProfilePage implements OnInit{
 
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
-  ngOnInit() {
+  ngOnInit(){
 
   }
+
+
 }

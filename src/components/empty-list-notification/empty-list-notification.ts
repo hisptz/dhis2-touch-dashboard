@@ -1,4 +1,5 @@
 import { Component, Input} from '@angular/core';
+import {ResourceProvider} from "../../providers/resource/resource";
 
 /**
  * Generated class for the EmptyListNotificationComponent component.
@@ -16,8 +17,8 @@ export class EmptyListNotificationComponent {
 
   imageUrl : string;
 
-  constructor() {
-    this.imageUrl = 'assets/img/no-content.png';
+  constructor(ResourceProvider : ResourceProvider) {
+    this.imageUrl = ResourceProvider.getEmptyListNotificatioIcon();
   }
 
 }

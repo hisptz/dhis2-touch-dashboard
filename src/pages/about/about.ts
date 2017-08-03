@@ -1,4 +1,4 @@
-import { Component,OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
@@ -7,6 +7,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
+
 @IonicPage()
 @Component({
   selector: 'page-about',
@@ -17,11 +18,10 @@ export class AboutPage implements OnInit{
   logoUrl : string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.logoUrl = 'assets/img/logo.png';
   }
 
-  ngOnInit() {
-
+  ngOnInit(){
+    this.logoUrl = 'assets/img/logo.png';
   }
 
 }

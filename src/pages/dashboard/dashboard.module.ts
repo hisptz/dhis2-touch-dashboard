@@ -11,8 +11,5 @@ import {SharedModule} from "../../components/shared.module";
     SharedModule,
     IonicPageModule.forChild(DashboardPage),
   ],
-  exports: [
-    DashboardPage
-  ]
 })
 export class DashboardPageModule {}

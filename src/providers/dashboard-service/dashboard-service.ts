@@ -77,9 +77,9 @@ export class DashboardServiceProvider {
     enumString = enumString.replace(/_/g, ' ');
     enumString = enumString.toLowerCase();
     return enumString.substr(0, 1) + enumString.replace(/(\b)([a-zA-Z])/g,
-        function (firstLetter) {
-          return firstLetter.toUpperCase();
-        }).replace(/ /g, '').substr(1);
+      function (firstLetter) {
+        return firstLetter.toUpperCase();
+      }).replace(/ /g, '').substr(1);
   }
 
 
@@ -300,10 +300,10 @@ export class DashboardServiceProvider {
     url += "&displayProperty=NAME" + dashboardType == "EVENT_CHART" ?
       "&outputType=EVENT&"
       : dashboardType == "EVENT_REPORT" ?
-      "&outputType=EVENT&displayProperty=NAME"
-      : dashboardType == "EVENT_MAP" ?
-      "&outputType=EVENT&displayProperty=NAME"
-      : "&displayProperty=NAME";
+        "&outputType=EVENT&displayProperty=NAME"
+        : dashboardType == "EVENT_MAP" ?
+          "&outputType=EVENT&displayProperty=NAME"
+          : "&displayProperty=NAME";
     if (dashboardObject.layer == 'event') {
       url += "&coordinatesOnly=true";
     }

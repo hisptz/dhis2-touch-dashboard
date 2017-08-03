@@ -8,11 +8,8 @@ import {SharedModule} from "../../components/shared.module";
     LauncherPage,
   ],
   imports: [
-    SharedModule,
     IonicPageModule.forChild(LauncherPage),
+    SharedModule
   ],
-  exports: [
-    LauncherPage
-  ]
 })
 export class LauncherPageModule {}

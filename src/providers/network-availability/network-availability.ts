@@ -33,7 +33,8 @@ export class NetworkAvailabilityProvider {
   displayNetworkUpdate(connectionState: string){
     this.updateNetworkStatus();
     let networkType = this.network.type;
-    let message = `You are now ${connectionState} via ${networkType}`;
+    console.log('networkType : ' + networkType);
+    let message = `You are now ${connectionState}`;
     this.AppProvider.setTopNotification(message);
   }
 

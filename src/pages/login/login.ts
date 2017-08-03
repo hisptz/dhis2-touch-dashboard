@@ -1,8 +1,8 @@
-import { Component,OnInit} from '@angular/core';
-import { IonicPage, NavController, NavParams , MenuController} from 'ionic-angular';
+import { Component,OnInit } from '@angular/core';
+import { IonicPage, NavController, MenuController } from 'ionic-angular';
 import {HttpClientProvider} from "../../providers/http-client/http-client";
-import {UserProvider} from "../../providers/user/user";
 import {AppProvider} from "../../providers/app/app";
+import {UserProvider} from "../../providers/user/user";
 
 /**
  * Generated class for the LoginPage page.
@@ -10,13 +10,13 @@ import {AppProvider} from "../../providers/app/app";
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
+
 @IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
 })
 export class LoginPage implements OnInit{
-
 
   logoUrl : string;
   currentUser : any;
@@ -32,11 +32,11 @@ export class LoginPage implements OnInit{
               private UserProvider : UserProvider,
               private AppProvider : AppProvider,
               private HttpClientProvider : HttpClientProvider,
-              public navParams: NavParams) {
+              ) {
 
   }
 
-  ngOnInit() {
+  ngOnInit(){
     this.menu.enable(false);
     this.logoUrl = 'assets/img/logo.png';
     this.currentUser = {};
@@ -48,12 +48,15 @@ export class LoginPage implements OnInit{
 
     this.UserProvider.getCurrentUser().then((currentUser: any)=>{
       if(currentUser && currentUser.serverUrl){
+        if(currentUser.password){
+          delete currentUser.password;
+        }
         this.currentUser = currentUser;
       }
     });
   }
 
-  async startLoginProcess(){
+  startLoginProcess(){
     if(this.currentUser.serverUrl && this.currentUser.username && this.currentUser.password){
       this.currentResourceType = "communication";
       this.progressTracker = {};
@@ -126,11 +129,13 @@ export class LoginPage implements OnInit{
           console.log(JSON.stringify(error));
           this.AppProvider.setNormalNotification('Please check server address');
         }
+        console.error(JSON.stringify(error));
       });
     }else{
       this.AppProvider.setNormalNotification("Please enter server address, username and password");
     }
   }
+
   getResponseData(response){
     if(response.data.data){
       return this.getResponseData(response.data);

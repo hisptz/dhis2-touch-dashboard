@@ -8,11 +8,8 @@ import {SharedModule} from "../../components/shared.module";
     LoginPage,
   ],
   imports: [
-    SharedModule,
     IonicPageModule.forChild(LoginPage),
+    SharedModule
   ],
-  exports: [
-    LoginPage
-  ]
 })
 export class LoginPageModule {}
