@@ -7,6 +7,18 @@
   </div>
 
   <div *ngIf="isVisualizationDataLoaded" class="dashboard-card">
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div >
+            <span *ngIf="dashboardItem.title" >{{ dashboardItem.title }}</span>
+            <span *ngIf="!dashboardItem.title">{{ dashboardItem.name }}</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
     <div *ngIf="visualizationType && visualizationType =='chart'">
       <chart-card [chartObject]="chartObject" [dashboardItemId]="dashboardItem.id"></chart-card>
     </div>
