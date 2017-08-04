@@ -6,7 +6,7 @@ import {DashboardModule} from "../../components/dashboard.module";
 
 @NgModule({
   declarations: [
-    DashboardPage,
+    DashboardPage
   ],
   imports: [
     SharedModule,DashboardModule,

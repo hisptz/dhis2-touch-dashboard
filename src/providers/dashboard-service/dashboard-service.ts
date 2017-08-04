@@ -22,14 +22,40 @@ export class DashboardServiceProvider {
 
   dashboards:Dashboard[];
   dashboardObjectsMapper:any = {};
+  currentFullScreenVisualizationData : any = {};
 
   constructor(private httpClient:HttpClientProvider) {
   }
 
+  /**
+   * reset all dashboard issues
+   */
   resetDashboards() {
     this.dashboards = [];
     this.dashboardObjectsMapper = {};
+    this.currentFullScreenVisualizationData
   }
+
+  /**
+   * setCurrentFullScreenVisualizationData
+   * @param data
+   */
+  setCurrentFullScreenVisualizationData(data){
+    if(data.dashboardItem && data.dashboardItem.id){
+      data.dashboardItem.id = 'full-' + data.dashboardItem.id;
+    }
+    this.currentFullScreenVisualizationData = data;
+  }
+
+  /**
+   *   getCurrentFullScreenVisualizationData
+   * @returns {any}
+   */
+  getCurrentFullScreenVisualizationData(){
+    return this.currentFullScreenVisualizationData;
+  }
+
+
 
   /**
    * get all dashboards

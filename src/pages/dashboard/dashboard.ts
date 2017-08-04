@@ -176,7 +176,8 @@ export class DashboardPage implements OnInit{
         dashboardItemData : event.dashboardItemData,
         analyticData : event.analyticData
       };
-      this.navCtrl.push('InteractiveDashboardPage',data);
+      this.DashboardService.setCurrentFullScreenVisualizationData(data);
+      this.navCtrl.push('InteractiveDashboardPage');
     }
   }
 

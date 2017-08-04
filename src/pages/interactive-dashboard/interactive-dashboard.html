@@ -13,8 +13,10 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content >
 
-  here we are, inside interactive dashboard
+  <visualization-card [dashboardItem]="dashboardItem"
+                      [dashboardItemData]="dashboardItemData"
+                      [analyticData]="analyticData"></visualization-card>
 
 </ion-content>
