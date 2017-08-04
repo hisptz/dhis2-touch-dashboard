@@ -61,7 +61,6 @@ export class VisualizationCardComponent implements OnInit{
     };
     this.chartObject = this.visualizationService.drawChart(this.analyticData, chartConfiguration);
     this.chartObject.chart["zoomType"] ="xy";
-    this.chartObject.chart["backgroundColor"] = "#F4F4F4";
     this.chartObject["credits"] =  {enabled: false};
     this.isVisualizationDataLoaded = true;
   }

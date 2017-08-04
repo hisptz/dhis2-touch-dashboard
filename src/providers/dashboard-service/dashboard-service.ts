@@ -23,6 +23,7 @@ export class DashboardServiceProvider {
   dashboards:Dashboard[];
   dashboardObjectsMapper:any = {};
   currentFullScreenVisualizationData : any = {};
+  openedDashboardIds :any  = {};
 
   constructor(private httpClient:HttpClientProvider) {
   }
@@ -46,6 +47,15 @@ export class DashboardServiceProvider {
     }
     this.currentFullScreenVisualizationData = data;
   }
+
+  setOpenedDashboardIds(openedDashboardIds){
+    this.openedDashboardIds = openedDashboardIds;
+  }
+
+  getOpenedDashboardIds(){
+    return this.openedDashboardIds;
+  }
+
 
   /**
    *   getCurrentFullScreenVisualizationData

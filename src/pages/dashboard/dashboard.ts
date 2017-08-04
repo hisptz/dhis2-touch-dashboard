@@ -55,6 +55,12 @@ export class DashboardPage implements OnInit{
     });
   }
 
+
+  ionViewDidEnter() {
+    console.log("Here we are");
+    this.openedDashboardIds = this.DashboardService.getOpenedDashboardIds();
+  }
+
   loadingListOfAllDashboards(currentUser) {
     this.isLoading = true;
     let network = this.NetworkAvailability.getNetWorkStatus();
@@ -177,6 +183,7 @@ export class DashboardPage implements OnInit{
         analyticData : event.analyticData
       };
       this.DashboardService.setCurrentFullScreenVisualizationData(data);
+      this.DashboardService.setOpenedDashboardIds(this.openedDashboardIds);
       this.navCtrl.push('InteractiveDashboardPage');
     }
   }
