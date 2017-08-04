@@ -1,67 +1,68 @@
-import { Component,Input,Output,EventEmitter,OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
+import { IonicPage, NavParams } from 'ionic-angular';
 import {DashboardServiceProvider} from "../../providers/dashboard-service/dashboard-service";
 import {UserProvider} from "../../providers/user/user";
 import {AppProvider} from "../../providers/app/app";
 import {VisualizerService} from "../../providers/visualizer-service";
 
 /**
- * Generated class for the DashboardCardComponent component.
+ * Generated class for the InteractiveDashboardPage page.
  *
- * See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
- * for more info on Angular Components.
+ * See http://ionicframework.com/docs/components/#navigation for more info
+ * on Ionic pages and navigation.
  */
+
+@IonicPage()
 @Component({
-  selector: 'dashboard-card',
-  templateUrl: 'dashboard-card.html'
+  selector: 'page-interactive-dashboard',
+  templateUrl: 'interactive-dashboard.html',
 })
-export class DashboardCardComponent implements OnInit{
+export class InteractiveDashboardPage implements OnInit{
 
-  @Input() dashboardItem;
-  @Input() dashboardItemData;
-  @Output() dashboardItemAnalyticData = new EventEmitter();
-  @Output() loadInFullScreen = new EventEmitter();
-
-  currentUser : any;
+  dashboardItem : any;
+  dashboardItemData : any;
   analyticData : any;
+  currentUser : any;
   chartObject : any;
   tableObject : any;
   isVisualizationDataLoaded : boolean = false;
   visualizationType : string;
 
   constructor(private DashboardService : DashboardServiceProvider,private userProvider : UserProvider,
-              private appProvider : AppProvider,
+              private appProvider : AppProvider, private navParams : NavParams,
               private visualizationService : VisualizerService) {
   }
 
-
-  ngOnInit() {
-    this.visualizationType = '';
-    this.userProvider.getCurrentUser().then((currentUser :any)=>{
-      if(currentUser && currentUser.username){
-        this.currentUser = currentUser;
-        if(this.dashboardItemData){
-          this.analyticData = this.dashboardItemData;
-          this.initiateVisualization();
-        }else{
-          if(this.dashboardItem && this.dashboardItem.analyticsUrl){
-            this.DashboardService.getAnalyticDataForDashboardItem(this.dashboardItem.analyticsUrl,currentUser).then((analyticData:any)=>{
-              this.analyticData = analyticData;
-              this.dashboardItemAnalyticData.emit(analyticData);
-              this.initiateVisualization();
-            },error=>{
-              this.isVisualizationDataLoaded = true;
-              this.appProvider.setNormalNotification("fail to load data for " + (this.dashboardItem.title) ? this.dashboardItem.title : this.dashboardItem.name);
-            });
-          }else{
-            this.isVisualizationDataLoaded = true;
-            this.appProvider.setNormalNotification("There is no dashboard item information");
-          }
-        }
-      }else{
-        this.isVisualizationDataLoaded = true;
-        this.appProvider.setNormalNotification("Fail to get user information");
-      }
-    })
+  ngOnInit(){
+    let data = this.navParams.get('data');
+    console.log(JSON.stringify(data));
+    //this.visualizationType = '';
+    // this.userProvider.getCurrentUser().then((currentUser :any)=>{
+    //   if(currentUser && currentUser.username){
+    //     this.currentUser = currentUser;
+    //     if(this.dashboardItemData){
+    //       this.analyticData = this.dashboardItemData;
+    //       this.initiateVisualization();
+    //     }else{
+    //       if(this.dashboardItem && this.dashboardItem.analyticsUrl){
+    //         this.DashboardService.getAnalyticDataForDashboardItem(this.dashboardItem.analyticsUrl,currentUser).then((analyticData:any)=>{
+    //           this.analyticData = analyticData;
+    //           this.dashboardItemAnalyticData.emit(analyticData);
+    //           this.initiateVisualization();
+    //         },error=>{
+    //           this.isVisualizationDataLoaded = true;
+    //           this.appProvider.setNormalNotification("fail to load data for " + (this.dashboardItem.title) ? this.dashboardItem.title : this.dashboardItem.name);
+    //         });
+    //       }else{
+    //         this.isVisualizationDataLoaded = true;
+    //         this.appProvider.setNormalNotification("There is no dashboard item information");
+    //       }
+    //     }
+    //   }else{
+    //     this.isVisualizationDataLoaded = true;
+    //     this.appProvider.setNormalNotification("Fail to get user information");
+    //   }
+    // })
   }
 
   initiateVisualization(){
@@ -125,16 +126,5 @@ export class DashboardCardComponent implements OnInit{
     }
     this.tableObject = this.visualizationService.drawTable(this.analyticData, tableConfiguration);
     this.isVisualizationDataLoaded = true;
-  }
-
-  loadVisualization(event){
-    if(this.analyticData && event.type == 'tap'){
-      var data = {
-        dashboardItem : this.dashboardItem,
-        dashboardItemData : this.dashboardItemData,
-        analyticData : this.analyticData
-      }
-      this.loadInFullScreen.emit(data);
-    }
   }
 }

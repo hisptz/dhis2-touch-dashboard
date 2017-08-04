@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { IonicPage, ModalController, MenuController } from 'ionic-angular';
+import { IonicPage, ModalController, MenuController,NavController } from 'ionic-angular';
 import {DashboardServiceProvider} from "../../providers/dashboard-service/dashboard-service";
 import {NetworkAvailabilityProvider} from "../../providers/network-availability/network-availability";
 import {UserProvider} from "../../providers/user/user";
@@ -35,6 +35,7 @@ export class DashboardPage implements OnInit{
   emptyListMessage : any;
 
   constructor(public modalCtrl:ModalController,
+              private navCtrl : NavController,
               private appProvider:AppProvider, private userProvider:UserProvider,
               private DashboardService:DashboardServiceProvider,
               private NetworkAvailability:NetworkAvailabilityProvider,
@@ -165,6 +166,17 @@ export class DashboardPage implements OnInit{
         }
       });
       modal.present();
+    }
+  }
+
+  loadVisualization(event){
+    if(event){
+      let  data = {
+        dashboardItem : event.dashboardItem,
+        dashboardItemData : event.dashboardItemData,
+        analyticData : event.analyticData
+      };
+      this.navCtrl.push('InteractiveDashboardPage',data);
     }
   }
 
