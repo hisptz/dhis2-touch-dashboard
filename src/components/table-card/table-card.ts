@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,Input,OnInit } from '@angular/core';
 
 /**
  * Generated class for the TableCardComponent component.
@@ -10,13 +10,15 @@ import { Component } from '@angular/core';
   selector: 'table-card',
   templateUrl: 'table-card.html'
 })
-export class TableCardComponent {
+export class TableCardComponent implements OnInit{
 
-  text: string;
+  @Input() tableObject;
 
   constructor() {
-    console.log('Hello TableCardComponent Component');
-    this.text = 'Hello World === table-card';
+  }
+
+  ngOnInit(){
+
   }
 
 }

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component,OnInit,Input } from '@angular/core';
+
+import * as HighCharts from 'highcharts';
 
 /**
  * Generated class for the ChartCardComponent component.
@@ -10,13 +12,27 @@ import { Component } from '@angular/core';
   selector: 'chart-card',
   templateUrl: 'chart-card.html'
 })
-export class ChartCardComponent {
+export class ChartCardComponent implements OnInit{
 
-  text: string;
+  @Input() chartObject;
+  @Input() dashboardItemId;
+
+  isLoading : boolean = true;
+
 
   constructor() {
-    console.log('Hello ChartCardComponent Component');
-    this.text = 'Hello World ** chart-card';
+  }
+
+  ngOnInit(){
+    this.isLoading = true;
+    if(this.dashboardItemId && this.chartObject){
+      this.chartObject.chart.renderTo = this.dashboardItemId;
+      setTimeout(()=>{
+        HighCharts.chart(this.chartObject);
+        this.isLoading = false;
+      },500);
+
+    }
   }
 
 }

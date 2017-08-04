@@ -3,6 +3,7 @@ import { IonicModule } from 'ionic-angular';
 import { DashboardCardComponent } from './dashboard-card/dashboard-card';
 import {ChartCardComponent} from "./chart-card/chart-card";
 import {TableCardComponent} from "./table-card/table-card";
+import {SharedModule} from "./shared.module";
 
 @NgModule({
   declarations: [
@@ -10,7 +11,7 @@ import {TableCardComponent} from "./table-card/table-card";
     TableCardComponent
   ],
   imports: [
-    IonicModule
+    IonicModule,SharedModule
   ],
   exports: [DashboardCardComponent,ChartCardComponent,
     TableCardComponent ]
