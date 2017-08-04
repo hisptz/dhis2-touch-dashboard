@@ -1,0 +1,34 @@
+<!-- Generated template for the VisualizationCardComponent component -->
+<div>
+  <div *ngIf="!isVisualizationDataLoaded">
+    <div class="visualizationLoader">
+      <page-loading loadingSize="large" loadingMessage="Loading Visualization data"></page-loading>
+    </div>
+  </div>
+
+  <div *ngIf="isVisualizationDataLoaded" class="dashboard-card">
+    <div *ngIf="visualizationType && visualizationType =='chart'">
+      <chart-card [chartObject]="chartObject" [dashboardItemId]="dashboardItem.id"></chart-card>
+    </div>
+
+    <div *ngIf="visualizationType && visualizationType =='table'">
+      <table-card [tableObject]="tableObject"></table-card>
+    </div>
+
+    <div *ngIf="tableObject || chartObject" >
+      <span  class="chart-icon">
+              <button [disabled]="visualizationType == 'table'" mini ion-fab color="light"
+                      (tap)="changeVisualization('table')">
+                <img src="assets/dashboard/table.png">
+              </button>
+        </span>
+      <span  class="chart-icon">
+              <button [disabled]="visualizationType == 'chart'" mini ion-fab color="light"
+                      (tap)="changeVisualization('chart')">
+                <img src="assets/dashboard/combined.png">
+              </button>
+        </span>
+    </div>
+
+  </div>
+</div>
