@@ -20,6 +20,7 @@ import {NetworkAvailabilityProvider} from "../providers/network-availability/net
 import {AppProvider} from "../providers/app/app";
 import {VisualizerService} from "../providers/visualizer-service";
 import {DashboardServiceProvider} from "../providers/dashboard-service/dashboard-service";
+import {DashboardModule} from "../components/dashboard.module";
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import {DashboardServiceProvider} from "../providers/dashboard-service/dashboard
   ],
   imports: [
     BrowserModule,
-    SharedModule,
+    SharedModule,DashboardModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()

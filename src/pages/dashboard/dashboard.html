@@ -66,8 +66,7 @@
 
                   <div *ngIf="openedDashboardIds[dashboardItem.id]">
                     <div class="list-separator"></div>
-                    <div *ngIf="dashboardItem.name">{{dashboardItem.name}}</div>
-                    <div *ngIf="dashboardItem.title">{{dashboardItem.title}}</div>
+                    <dashboard-card ></dashboard-card>
                     <!--<page-visualization-card [dashboardItem]="dashboardItem"-->
                                              <!--(dashboardItemAnalyticData)="updateDashboardVisualizationData($event,dashboardItem.id)"-->
                                              <!--[dashboardItemData]="dashBoardVisualizationData[dashboardItem.id]">-->
