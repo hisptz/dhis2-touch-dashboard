@@ -15,8 +15,41 @@
 
 <ion-content >
 
-  <visualization-card [dashboardItem]="dashboardItem"
-                      [dashboardItemData]="dashboardItemData"
-                      [analyticData]="analyticData"></visualization-card>
+  <div>
+    <div *ngIf="!isVisualizationDataLoaded">
+      <div class="visualizationLoader">
+        <page-loading loadingSize="large" loadingMessage="Loading Visualization data"></page-loading>
+      </div>
+    </div>
+
+    <div *ngIf="isVisualizationDataLoaded" class="dashboard-card">
+
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div >
+              <span *ngIf="dashboardItem.title" >{{ dashboardItem.title }}</span>
+              <span *ngIf="!dashboardItem.title">{{ dashboardItem.name }}</span>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <div *ngIf="visualizationType && visualizationType =='chart'">
+        <chart-card [chartObject]="chartObject" [dashboardItemId]="dashboardItem.id"></chart-card>
+      </div>
+
+      <div *ngIf="visualizationType && visualizationType =='table'">
+        <table-card [tableObject]="tableObject"></table-card>
+      </div>
+
+      <div *ngIf="tableObject || chartObject" >
+        <span clear ion-button class="chart-icon-container" *ngFor="let visualization of visualizationOptions.bottom"  (tap)="changeVisualization(visualization.type)" >
+          <img class="chart-icon" [src]="visualization.icon">
+        </span>
+      </div>
+
+    </div>
+  </div>
 
 </ion-content>

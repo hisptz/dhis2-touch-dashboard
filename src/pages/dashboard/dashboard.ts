@@ -56,9 +56,9 @@ export class DashboardPage implements OnInit{
   }
 
 
-  ionViewDidEnter() {
-    console.log("Here we are");
+  ionViewWillEnter() {
     this.openedDashboardIds = this.DashboardService.getOpenedDashboardIds();
+    console.log(this.openedDashboardIds);
   }
 
   loadingListOfAllDashboards(currentUser) {
@@ -184,6 +184,7 @@ export class DashboardPage implements OnInit{
       };
       this.DashboardService.setCurrentFullScreenVisualizationData(data);
       this.DashboardService.setOpenedDashboardIds(this.openedDashboardIds);
+      console.log('her we are');
       this.navCtrl.push('InteractiveDashboardPage');
     }
   }
