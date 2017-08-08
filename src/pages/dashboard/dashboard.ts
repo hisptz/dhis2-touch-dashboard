@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { IonicPage, ModalController, MenuController,NavController } from 'ionic-angular';
+import { IonicPage, ModalController, MenuController } from 'ionic-angular';
 import {DashboardServiceProvider} from "../../providers/dashboard-service/dashboard-service";
 import {NetworkAvailabilityProvider} from "../../providers/network-availability/network-availability";
 import {UserProvider} from "../../providers/user/user";
@@ -35,7 +35,6 @@ export class DashboardPage implements OnInit{
   emptyListMessage : any;
 
   constructor(public modalCtrl:ModalController,
-              private navCtrl : NavController,
               private appProvider:AppProvider, private userProvider:UserProvider,
               private DashboardService:DashboardServiceProvider,
               private NetworkAvailability:NetworkAvailabilityProvider,
@@ -55,11 +54,6 @@ export class DashboardPage implements OnInit{
     });
   }
 
-
-  ionViewDidEnter() {
-    console.log("Here we are");
-    this.openedDashboardIds = this.DashboardService.getOpenedDashboardIds();
-  }
 
   loadingListOfAllDashboards(currentUser) {
     this.isLoading = true;
@@ -175,6 +169,7 @@ export class DashboardPage implements OnInit{
     }
   }
 
+  //@todo handle on close reopen card
   loadVisualization(event){
     if(event){
       let  data = {
@@ -182,9 +177,22 @@ export class DashboardPage implements OnInit{
         dashboardItemData : event.dashboardItemData,
         analyticData : event.analyticData
       };
+      let openedDashboardIds = [];
+      Object.keys(this.openedDashboardIds).forEach(key=>{
+        if(this.openedDashboardIds[key]){
+          openedDashboardIds.push(key);
+        }
+      });
+      this.DashboardService.setOpenedDashboardIds(openedDashboardIds);
       this.DashboardService.setCurrentFullScreenVisualizationData(data);
-      this.DashboardService.setOpenedDashboardIds(this.openedDashboardIds);
-      this.navCtrl.push('InteractiveDashboardPage');
+      this.isLoading = true;
+      this.loadingMessage = "Please wait, while preparing awesome data visualization";
+      let modal = this.modalCtrl.create('InteractiveDashboardPage', {});
+      modal.onDidDismiss((dashboard:any)=> {
+        this.isLoading = false;
+        this.loadingMessage = "";
+      });
+      modal.present();
     }
   }
 
