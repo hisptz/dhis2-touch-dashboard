@@ -41,11 +41,6 @@ export class ResourceProvider {
           isDisabled: false
         },
         {
-          type: "combined",
-          icon: 'assets/dashboard/combined.png',
-          isDisabled: false
-        },
-        {
           type: "area",
           icon: 'assets/dashboard/area.png',
           isDisabled: false
