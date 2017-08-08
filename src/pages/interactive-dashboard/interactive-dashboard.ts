@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage,ViewController } from 'ionic-angular';
 import {DashboardServiceProvider} from "../../providers/dashboard-service/dashboard-service";
 import {VisualizerService} from "../../providers/visualizer-service";
 import {ResourceProvider} from "../../providers/resource/resource";
@@ -27,6 +27,8 @@ export class InteractiveDashboardPage implements OnInit{
   isVisualizationDataLoaded : boolean = false;
   visualizationType : string;
 
+  isChartLoading : boolean = false;
+
   visualizationOptions : any = {
     top : [],
     bottom :  [],
@@ -37,7 +39,7 @@ export class InteractiveDashboardPage implements OnInit{
   metadataIdentifiers : any;
 
   constructor(private DashboardServiceProvider : DashboardServiceProvider,
-              private ResourceProvider : ResourceProvider,
+              private ResourceProvider : ResourceProvider,private viewCtrl : ViewController,
               private visualizationService : VisualizerService) {
   }
 
@@ -54,7 +56,6 @@ export class InteractiveDashboardPage implements OnInit{
   }
 
   initiateVisualization(){
-    console.log("on initialization");
     if((this.dashboardItem.visualizationType == 'CHART') || (this.dashboardItem.visualizationType == 'EVENT_CHART')) {
       this.visualizationType = "chart";
       this.drawChart();
@@ -66,14 +67,20 @@ export class InteractiveDashboardPage implements OnInit{
     }
   }
 
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
+
   drawChart(chartType?:string) {
-    console.log('draw chart');
     this.isVisualizationDataLoaded = false;
+    this.isChartLoading = true;
     let itemChartType = (this.dashboardItem.type) ? this.dashboardItem.type.toLowerCase() : 'bar';
+    console.log(chartType);
     let layout: any = {};
     layout['series'] = this.dashboardItem.series ? this.dashboardItem.series : (this.dashboardItem.columns.length > 0) ?this.dashboardItem.columns[0].dimension :  'pe';
     layout['category'] = this.dashboardItem.category ? this.dashboardItem.category :(this.dashboardItem.rows.length > 0)? this.dashboardItem.rows[0].dimension : 'dx';
-    this.chartObject = {};
+    this.chartObject = null;
     let chartConfiguration = {
       'type': chartType ? chartType : itemChartType,
       'title': "",
@@ -84,6 +91,10 @@ export class InteractiveDashboardPage implements OnInit{
     this.chartObject = this.visualizationService.drawChart(this.analyticData, chartConfiguration);
     this.chartObject.chart["zoomType"] ="xy";
     this.chartObject["credits"] =  {enabled: false};
+    setTimeout(()=>{
+      this.isChartLoading = false;
+    },500);
+
     this.isVisualizationDataLoaded = true;
   }
 
