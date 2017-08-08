@@ -36,7 +36,7 @@
 
               <div *ngIf="visualizationType && visualizationType =='chart'">
                 <ion-row>
-                  <ion-col col-10 col-sm-11 col-md-11 col-lg-11>
+                  <ion-col col-10 col-sm-11 col-md-11 col-lg-11 no-padding>
 
                     <div *ngIf="!isChartLoading">
                       <chart-card [chartObject]="chartObject" [dashboardItemId]="dashboardItem.id"></chart-card>
@@ -46,8 +46,8 @@
                     </div>
 
                   </ion-col>
-                  <ion-col col-2 col-sm-1 col-md-1 col-lg-1 text-right>
-                    <span ion-button color="light" outline class="chart-icon-container"  *ngFor="let visualization of visualizationOptions.right"  (tap)="drawChart(visualization.type)" >
+                  <ion-col col-2 col-sm-1 col-md-1 col-lg-1 text-right no-padding>
+                    <span ion-button color="light" clear class="chart-icon-container"  *ngFor="let visualization of visualizationOptions.right"  (tap)="drawChart(visualization.type)" >
                       <img class="chart-icon" [src]="visualization.icon">
                     </span>
                   </ion-col>
@@ -60,7 +60,7 @@
               </div>
 
               <div *ngIf="tableObject || chartObject" >
-                <span ion-button color="light" outline class="chart-icon-container"  *ngFor="let visualization of visualizationOptions.bottom"  (tap)="changeVisualization(visualization.type)" >
+                <span ion-button color="light" clear class="chart-icon-container"  *ngFor="let visualization of visualizationOptions.bottom"  (tap)="changeVisualization(visualization.type)" >
                   <img class="chart-icon" [src]="visualization.icon">
                 </span>
               </div>
