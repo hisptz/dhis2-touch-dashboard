@@ -68,6 +68,8 @@
                     </ion-col>
                   </ion-row>
 
+                  here : {{ openedDashboardIds[dashboardItem.id] }}
+
                   <div *ngIf="openedDashboardIds[dashboardItem.id]">
                     <dashboard-card [dashboardItem]="dashboardItem"
                                     (dashboardItemAnalyticData)="updateDashboardVisualizationData($event,dashboardItem.id)"

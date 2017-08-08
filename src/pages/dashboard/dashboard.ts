@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { IonicPage, ModalController, MenuController,NavController } from 'ionic-angular';
+import { IonicPage, ModalController, MenuController } from 'ionic-angular';
 import {DashboardServiceProvider} from "../../providers/dashboard-service/dashboard-service";
 import {NetworkAvailabilityProvider} from "../../providers/network-availability/network-availability";
 import {UserProvider} from "../../providers/user/user";
@@ -35,7 +35,6 @@ export class DashboardPage implements OnInit{
   emptyListMessage : any;
 
   constructor(public modalCtrl:ModalController,
-              private navCtrl : NavController,
               private appProvider:AppProvider, private userProvider:UserProvider,
               private DashboardService:DashboardServiceProvider,
               private NetworkAvailability:NetworkAvailabilityProvider,
@@ -43,6 +42,7 @@ export class DashboardPage implements OnInit{
   }
 
   ngOnInit() {
+    console.log('here we are on init');
     this.menu.enable(true);
     this.isLoading = true;
     this.loadingMessage = "Loading current user information";
@@ -57,8 +57,11 @@ export class DashboardPage implements OnInit{
 
 
   ionViewWillEnter() {
-    this.openedDashboardIds = this.DashboardService.getOpenedDashboardIds();
-    console.log(this.openedDashboardIds);
+    let openedDashboardIds = this.DashboardService.getOpenedDashboardIds();
+    this.openedDashboardIds = {};
+    openedDashboardIds.forEach(key=>{
+      this.openedDashboardIds[key] = true;
+    });
   }
 
   loadingListOfAllDashboards(currentUser) {
@@ -183,9 +186,23 @@ export class DashboardPage implements OnInit{
         analyticData : event.analyticData
       };
       this.DashboardService.setCurrentFullScreenVisualizationData(data);
-      this.DashboardService.setOpenedDashboardIds(this.openedDashboardIds);
-      console.log('her we are');
-      this.navCtrl.push('InteractiveDashboardPage');
+      let openedDashboardIds = [];
+      Object.keys(this.openedDashboardIds).forEach(key=>{
+        if(this.openedDashboardIds[key]){
+          openedDashboardIds.push(key);
+        }
+      });
+
+      this.DashboardService.setOpenedDashboardIds(openedDashboardIds);
+      this.isLoading = true;
+      this.loadingMessage = "Please wait ...";
+      let modal = this.modalCtrl.create('InteractiveDashboardPage', {});
+      modal.onDidDismiss((dashboard:any)=> {
+        this.isLoading = false;
+        this.loadingMessage = "";
+
+      });
+      modal.present();
     }
   }
 
