@@ -21,6 +21,8 @@ import {AppProvider} from "../providers/app/app";
 import {VisualizerService} from "../providers/visualizer-service";
 import {DashboardServiceProvider} from "../providers/dashboard-service/dashboard-service";
 import {DashboardModule} from "../components/dashboard.module";
+import { AboutProvider } from '../providers/about/about';
+import { ProfileProvider } from '../providers/profile/profile';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import {DashboardModule} from "../components/dashboard.module";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ResourceProvider,HttpClientProvider,UserProvider,NetworkAvailabilityProvider,AppProvider,
     VisualizerService,DashboardServiceProvider,
+    AboutProvider,
+    ProfileProvider,
   ]
 })
 export class AppModule {}

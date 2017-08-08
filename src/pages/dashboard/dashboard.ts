@@ -42,7 +42,6 @@ export class DashboardPage implements OnInit{
   }
 
   ngOnInit() {
-    console.log('here we are on init');
     this.menu.enable(true);
     this.isLoading = true;
     this.loadingMessage = "Loading current user information";
@@ -55,14 +54,6 @@ export class DashboardPage implements OnInit{
     });
   }
 
-
-  ionViewWillEnter() {
-    let openedDashboardIds = this.DashboardService.getOpenedDashboardIds();
-    this.openedDashboardIds = {};
-    openedDashboardIds.forEach(key=>{
-      this.openedDashboardIds[key] = true;
-    });
-  }
 
   loadingListOfAllDashboards(currentUser) {
     this.isLoading = true;
@@ -178,6 +169,7 @@ export class DashboardPage implements OnInit{
     }
   }
 
+  //@todo handle on close reopen card
   loadVisualization(event){
     if(event){
       let  data = {
@@ -185,22 +177,20 @@ export class DashboardPage implements OnInit{
         dashboardItemData : event.dashboardItemData,
         analyticData : event.analyticData
       };
-      this.DashboardService.setCurrentFullScreenVisualizationData(data);
       let openedDashboardIds = [];
       Object.keys(this.openedDashboardIds).forEach(key=>{
         if(this.openedDashboardIds[key]){
           openedDashboardIds.push(key);
         }
       });
-
       this.DashboardService.setOpenedDashboardIds(openedDashboardIds);
+      this.DashboardService.setCurrentFullScreenVisualizationData(data);
       this.isLoading = true;
-      this.loadingMessage = "Please wait ...";
+      this.loadingMessage = "Please wait, while preparing awesome data visualization";
       let modal = this.modalCtrl.create('InteractiveDashboardPage', {});
       modal.onDidDismiss((dashboard:any)=> {
         this.isLoading = false;
         this.loadingMessage = "";
-
       });
       modal.present();
     }

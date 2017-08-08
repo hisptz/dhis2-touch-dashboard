@@ -27,6 +27,8 @@ export class InteractiveDashboardPage implements OnInit{
   isVisualizationDataLoaded : boolean = false;
   visualizationType : string;
 
+  visualizationTitle : string = 'Interactive Dashboard';
+
   isChartLoading : boolean = false;
 
   visualizationOptions : any = {
@@ -49,6 +51,11 @@ export class InteractiveDashboardPage implements OnInit{
     this.analyticData = data.analyticData;
     this.dashboardItemData = data.dashboardItemData;
     this.dashboardItem = data.dashboardItem;
+    if(this.dashboardItem.title){
+      this.visualizationTitle = this.dashboardItem.title;
+    }else if(this.dashboardItem.name){
+      this.visualizationTitle = this.dashboardItem.name;
+    }
     this.visualizationType = '';
     this.visualizationOptions.right = this.ResourceProvider.getVisualizationIcons().charts;
     this.visualizationOptions.bottom = this.ResourceProvider.getVisualizationIcons().visualizationType;
@@ -76,7 +83,6 @@ export class InteractiveDashboardPage implements OnInit{
     this.isVisualizationDataLoaded = false;
     this.isChartLoading = true;
     let itemChartType = (this.dashboardItem.type) ? this.dashboardItem.type.toLowerCase() : 'bar';
-    console.log(chartType);
     let layout: any = {};
     layout['series'] = this.dashboardItem.series ? this.dashboardItem.series : (this.dashboardItem.columns.length > 0) ?this.dashboardItem.columns[0].dimension :  'pe';
     layout['category'] = this.dashboardItem.category ? this.dashboardItem.category :(this.dashboardItem.rows.length > 0)? this.dashboardItem.rows[0].dimension : 'dx';
