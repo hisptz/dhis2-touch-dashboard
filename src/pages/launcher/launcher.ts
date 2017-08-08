@@ -36,7 +36,8 @@ export class LauncherPage implements OnInit{
     this.DashboardServiceProvider.resetDashboards();
     this.UserProvider.getCurrentUser().then((user : any)=>{
       if(user && user.isLogin){
-        this.navCtrl.setRoot("DashboardPage");
+        //this.navCtrl.setRoot("DashboardPage");
+        this.navCtrl.setRoot("AboutPage");
       }else{
         //this.navCtrl.setRoot("DashboardPage");
         this.navCtrl.setRoot("LoginPage");

@@ -19,13 +19,49 @@
 <ion-content class="about-page">
 
   <ion-grid>
-    <ion-row>
-      <ion-col class="topSLogan">
-        <div class="logo-inside-app ">
-          <img [src]="logoUrl" >
+
+    <div *ngIf="isLoading">
+      <page-loading [loadingSize]="'large'" [loadingMessage]="loadingMessage" ></page-loading>
+    </div>
+
+    <div *ngIf="!isLoading" class="about-details">
+      <ion-row>
+        <ion-col class="topSLogan">
+          <div class="logo-inside-app">
+            <img [src]="logoUrl" >
+          </div>
+        </ion-col>
+      </ion-row>
+
+      {{ appInformation|json }}
+
+      <div class="item-card" *ngFor="let aboutContent of aboutContents">
+        <ion-row (tap)="toggleAboutContents(aboutContent)">
+          <ion-col col-11>
+            <img  class="side-menu-icon" [src]="aboutContent.icon"/>&nbsp;&nbsp;
+            <span ion-text [color]="(isAboutContentOpen[aboutContent.id]) ?'current' : 'font-color'">
+              {{ aboutContent.name }}
+            </span>
+          </ion-col>
+          <ion-col col-1 item >
+            <div style="text-align: center;">
+              <ion-icon [color]="(isAboutContentOpen[aboutContent.id]) ?'current' : 'font-color'" *ngIf="!(isAboutContentOpen[aboutContent.id])" name="ios-arrow-down" item-right></ion-icon>
+              <ion-icon [color]="(isAboutContentOpen[aboutContent.id]) ?'current' : 'font-color'" *ngIf="(isAboutContentOpen[aboutContent.id])" name="ios-arrow-up" item-right></ion-icon>
+            </div>
+          </ion-col>
+        </ion-row>
+        <div *ngIf="(isAboutContentOpen[aboutContent.id])" >
+          <hr>
+          <ion-row>
+            <ion-col>
+              {{ aboutContent.name }}'s contents are here<br>Coming soon!!!
+            </ion-col>
+          </ion-row>
         </div>
-      </ion-col>
-    </ion-row>
+      </div>
+
+    </div>
+
   </ion-grid>
 
 </ion-content>
