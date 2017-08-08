@@ -30,7 +30,10 @@ export class ProfilePage implements OnInit{
     this.isLoading = true;
     this.isProfileContentOpen = {};
     this.profileContents = this.profileProvider.getProfileContentDetails();
-
+    //@todo implement loading information
+    setTimeout(()=>{
+      this.isLoading = false;
+    },500)
   }
 
   toggleProfileContents(content){
