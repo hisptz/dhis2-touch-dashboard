@@ -30,10 +30,12 @@
           <div class="logo-inside-app">
             <img [src]="logoUrl" >
           </div>
+          <div >
+              <span *ngIf="appInformation && appInformation.name">{{ appInformation.name }}</span><br>
+              <span *ngIf="appInformation && appInformation.version">{{ appInformation.version }}</span>
+          </div>
         </ion-col>
       </ion-row>
-
-      {{ appInformation|json }}
 
       <div class="item-card" *ngFor="let aboutContent of aboutContents">
         <ion-row (tap)="toggleAboutContents(aboutContent)">
@@ -52,11 +54,25 @@
         </ion-row>
         <div *ngIf="(isAboutContentOpen[aboutContent.id])" >
           <hr>
-          <ion-row>
-            <ion-col>
-              {{ aboutContent.name }}'s contents are here<br>Coming soon!!!
-            </ion-col>
-          </ion-row>
+          <div *ngIf="aboutContent.id == 'appInformation'">
+            <ion-row>
+              <ion-col >
+                <div *ngFor="let info of appInformation; ">
+                  <p>{{ info.key }}</p>
+                  <p>{{ info.value }}</p>
+                </div>
+              </ion-col>
+            </ion-row>
+          </div>
+          <div *ngIf="aboutContent.id == 'systemInfo'">
+            <ion-row>
+              <ion-col >
+                <div *ngFor="let info of systemInfo">
+                  <p><b>{{ info.key }}</b><br>{{ info.value }}</p>
+                </div>
+              </ion-col>
+            </ion-row>
+          </div>
         </div>
       </div>
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {AppProvider} from "../app/app";
+import {UserProvider} from "../user/user";
 
 /*
   Generated class for the AboutProvider provider.
@@ -10,9 +11,18 @@ import {AppProvider} from "../app/app";
 @Injectable()
 export class AboutProvider {
 
-  constructor(private appProvider : AppProvider) {
+  constructor(private appProvider : AppProvider,private userProvider : UserProvider) {
   }
 
+  getAboutContentDetails(){
+    let syncContents = [
+      //{id : 'appInformation',name : 'App information',icon: 'assets/about-icons/app-information.png'},
+      // {id : 'dataValues',name : 'Data values',icon: 'assets/about-icons/data-values.png'},
+      // {id : 'eventStatus',name : 'Event storage status',icon: 'assets/about-icons/event-status.png'},
+      {id : 'systemInfo',name : 'System info',icon: 'assets/about-icons/system-info.png'},
+    ];
+    return syncContents;
+  }
 
   getAppInformation(){
     let appInformation = {name : '',version : '',package : ''};
@@ -28,18 +38,28 @@ export class AboutProvider {
     });
   }
 
-  getAboutContentDetails(){
-    let syncContents = [
-      {id : 'appInformation',name : 'App information',icon: 'assets/about-icons/'},
-      {id : 'dataValues',name : 'Data values',icon: 'assets/about-icons/'},
-      {id : 'eventStatus',name : 'Event storage status',icon: 'assets/about-icons/'},
-      {id : 'systemInfo',name : 'System info',icon: 'assets/about-icons/'},
-    ];
-    return syncContents;
+  getSystemInformation(){
+    return new Promise((resolve,reject) => {
+      this.userProvider.getCurrentUserSystemInformation().then(systemInfo=>{
+        resolve(this.getArrayFromObject(systemInfo));
+      }).catch(error=>{
+        reject(error);
+      });
+    });
   }
 
-
-
+  getArrayFromObject(object){
+    let array = [];
+    for(let key in object){
+      let newValue = object[key];
+      if(newValue instanceof Object) {
+        newValue = JSON.stringify(newValue)
+      }
+      let newKey = (key.charAt(0).toUpperCase() + key.slice(1)).replace(/([A-Z])/g, ' $1').trim();
+      array.push({key : newKey,value : newValue})
+    }
+    return array;
+  }
 
 
 }

@@ -18,7 +18,10 @@ import {AppProvider} from "../../providers/app/app";
 export class AboutPage implements OnInit{
 
   logoUrl : string;
+
   appInformation : any;
+  systemInfo : any;
+
   loadingMessage : string;
   isLoading : boolean = true;
 
@@ -37,10 +40,20 @@ export class AboutPage implements OnInit{
     this.aboutContents = this.aboutProvider.getAboutContentDetails();
     this.aboutProvider.getAppInformation().then(appInformation=>{
       this.appInformation = appInformation;
-      this.isLoading = false;
-      this.loadingMessage = '';
+      this.loadingMessage = 'Loading system information';
+      this.aboutProvider.getSystemInformation().then(systemInfo=>{
+        this.systemInfo = systemInfo;
+        this.isLoading = false;
+        this.loadingMessage = '';
+      }).catch(error=>{
+        this.isLoading = false;
+        this.loadingMessage = '';
+        console.log(JSON.stringify(error));
+        this.appProvider.setNormalNotification('Fail to load system information');
+      });
     }).catch(error=>{
       this.isLoading = false;
+      this.loadingMessage = '';
       console.log(JSON.stringify(error));
       this.appProvider.setNormalNotification('Fail to load app information');
     })
