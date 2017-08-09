@@ -35,6 +35,9 @@ export class ProfilePage implements OnInit{
     this.isLoading = true;
     this.isProfileContentOpen = {};
     this.profileContents = this.profileProvider.getProfileContentDetails();
+    if(this.profileContents.length > 0){
+     this.toggleProfileContents(this.profileContents[0]);
+    }
     this.profileProvider.getSavedUserData().then((userData)=>{
       this.userData = userData;
       this.isLoading = false;
