@@ -54,7 +54,11 @@ export class ProfileProvider {
     let omittedKey = ['userRoles','organisationUnits','dataViewOrganisationUnits'];
     Object.keys(userData).forEach(key=>{
       if(omittedKey.indexOf(key)  == -1){
-        userInfo[key] = userData[key];
+        let value = userData[key];
+        if(Date.parse(value)){
+          value = value.split('T')[0];
+        }
+        userInfo[key] = value;
       }
     });
     return this.getArrayFromObject(userInfo);
