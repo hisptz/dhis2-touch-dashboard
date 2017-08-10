@@ -23,6 +23,7 @@ import {DashboardServiceProvider} from "../providers/dashboard-service/dashboard
 import {DashboardModule} from "../components/dashboard.module";
 import { AboutProvider } from '../providers/about/about';
 import { ProfileProvider } from '../providers/profile/profile';
+import { DashboardProvider } from '../providers/dashboard/dashboard';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { ProfileProvider } from '../providers/profile/profile';
     VisualizerService,DashboardServiceProvider,
     AboutProvider,
     ProfileProvider,
+    DashboardProvider,
   ]
 })
 export class AppModule {}
