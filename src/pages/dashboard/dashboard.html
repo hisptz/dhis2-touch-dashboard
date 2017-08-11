@@ -47,6 +47,9 @@
       </div>
 
       <div *ngIf="!isDashboardItemsLoading">
+
+        {{ dashboards[0].dashboardItems[0]|json }}
+
         <div *ngFor="let dashBoard of dashboards">
           <div *ngIf="currentDashboardId == dashBoard.id">
             <div *ngIf="!dashBoardItemObjectsAndData[currentDashboardId]">

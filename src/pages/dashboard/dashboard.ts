@@ -46,8 +46,12 @@ export class DashboardPage implements OnInit{
     this.isLoading = true;
     this.loadingMessage = "Loading current user information";
     this.userProvider.getCurrentUser().then(currentUser=> {
-      this.currentUser = currentUser;
-      this.loadingListOfAllDashboards(currentUser);
+      this.userProvider.getUserData().then((userData :any)=>{
+        //todo user org unit
+        this.currentUser = currentUser;
+        this.loadingListOfAllDashboards(currentUser)
+      },error=>{})
+      ;
     }, error=> {
       this.isLoading = false;
       this.appProvider.setNormalNotification("Fail to loading current user information");
@@ -110,6 +114,12 @@ export class DashboardPage implements OnInit{
       });
       modal.present();
     }
+  }
+
+  reLoadDashBoard(refresher){
+    this.DashboardService.resetDashboards();
+    this.loadingListOfAllDashboards(this.currentUser);
+    refresher.complete();
   }
 
 }

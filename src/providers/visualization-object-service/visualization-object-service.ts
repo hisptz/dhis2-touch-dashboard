@@ -13,6 +13,8 @@ import {FavoriteServiceProvider} from "../favorite-service/favorite-service";
 @Injectable()
 export class VisualizationObjectServiceProvider {
 
+
+
   constructor(private analyticsService: AnalyticsServiceProvider,
               private favoriteService: FavoriteServiceProvider) {
   }

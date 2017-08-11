@@ -63,8 +63,7 @@ export class DashboardProvider {
             observer.next(this.dashboards);
             observer.complete()
           }, error => {
-            observer.next(error);
-            observer.complete();
+            observer.error(error);
           });
       }
     });
