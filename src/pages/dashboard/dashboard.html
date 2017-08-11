@@ -68,7 +68,6 @@
                   </ion-col>
                 </ion-row>
                 <div *ngIf="openedDashboardItemIds[dashboardItem.id]">
-                  {{ dashboardItem|json }}
                   <dashboard-card [dashboardItem]="dashboardItem"
                                   [dashboardId]="currentDashboardId">
                   </dashboard-card>

@@ -30,6 +30,9 @@ export class DashboardCardComponent implements OnInit{
 
   currentUser : any;
   visualizationObject: any;
+  isVisualizationDataLoaded: boolean;
+  visualizationType: string;
+
   constructor(private userProvider : UserProvider,
               private appProvider : AppProvider,
               private visualizationObjectService: VisualizationObjectServiceProvider,
@@ -53,6 +56,10 @@ export class DashboardCardComponent implements OnInit{
           currentUser: currentUser
         }
       );
+
+      this.visualizationObject = initialVisualizationObject;
+      this.isVisualizationDataLoaded = initialVisualizationObject.details.loaded;
+      this.visualizationType = initialVisualizationObject.details.currentVisualization;
 
       this.favoriteService.getFavorite({
         visualizationObject: initialVisualizationObject,
@@ -89,7 +96,7 @@ export class DashboardCardComponent implements OnInit{
           const visualizationObjectWithLayout = this.extendVisualizationObjectWithLayout(
             visualizatiobObjectWithFilters,
             visualizationDetailsWithFiltersAndLayout.layouts
-          )
+          );
 
           if (visualizationDetailsWithFiltersAndLayout) {
             this.analyticsService.getAnalytics(
@@ -109,6 +116,7 @@ export class DashboardCardComponent implements OnInit{
                 visualizationObjectWithAnalytics, currentUser
               ).subscribe((visualizatioObject: any) => {
                 this.visualizationObject = visualizatioObject;
+                this.isVisualizationDataLoaded = visualizatioObject.details.loaded;
               })
             })
           }
