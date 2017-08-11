@@ -54,10 +54,11 @@
                 <empty-list-notification [emptyListMessage]="'There are no dashboard item set'"></empty-list-notification>
               </div>
               <div class="dashboard-card " *ngFor="let dashboardItem of dashBoard.dashboardItems">
+                {{ dashboardItem|json }}
                 <dashboard-card [dashboardItem]="dashboardItem"
                 [dashboardId]="currentDashboardId">
                 </dashboard-card>
-                
+
           </div>
         </div>
       </div>

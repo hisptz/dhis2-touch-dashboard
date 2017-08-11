@@ -50,8 +50,7 @@ export class DashboardPage implements OnInit{
         //todo user org unit
         this.currentUser = currentUser;
         this.loadingListOfAllDashboards(currentUser)
-      },error=>{})
-      ;
+      },error=>{});
     }, error=> {
       this.isLoading = false;
       this.appProvider.setNormalNotification("Fail to loading current user information");
@@ -73,14 +72,19 @@ export class DashboardPage implements OnInit{
           this.currentDashboardName = dashboards[0].name;
           this.currentDashboardId = dashboards[0].id;
           for (let dashboard of  dashboards) {
-            this.dashBoardToDashboardItem[dashboard.id] = dashboard.dashboardItems;
+            if(dashboard.dashboardItems && dashboard.dashboardItems.length > 0 ){
+              dashboard.dashboardItems.forEach((dashboardItem : any)=>{
+                dashboardItem['title'] = this.DashboardService.getDashBoardTitle(dashboardItem);
+                dashboardItem['icon'] = this.DashboardService.getDashBoardItemIcon(dashboardItem.type);
+              });
+            }
           }
-          //this.getDashboardItemObjectsAndData(dashboards[0].dashboardItems, dashboards[0].id);
+          this.isLoading = false;
         } else {
+          this.isLoading = false;
           this.currentDashboardName = "No dashboard found";
           this.emptyListMessage = "No dashboard found from server";
         }
-        this.isLoading = false;
 
       },error=>{
         this.isLoading = false;
@@ -93,6 +97,8 @@ export class DashboardPage implements OnInit{
       this.appProvider.setNormalNotification(network.message);
     }
   }
+
+
 
   openDashboardListFilter() {
     if (this.dashboards.length > 0) {
@@ -109,8 +115,6 @@ export class DashboardPage implements OnInit{
           if (dashboard.name != this.currentDashboardName) {
             this.currentDashboardName = dashboard.name;
             this.currentDashboardId = dashboard.id;
-            let selectedDashboards = this.dashBoardToDashboardItem[dashboard.id];
-            //this.getDashboardItemObjectsAndData(selectedDashboards, dashboard.id);
           }
         }
       });
