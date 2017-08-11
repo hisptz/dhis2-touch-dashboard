@@ -14,23 +14,76 @@ import {Observable} from 'rxjs/Observable';
 @Injectable()
 export class DashboardProvider {
 
+  dashboards:Dashboard[];
+  dashboardObjectsMapper:any = {};
+  currentFullScreenVisualizationData : any = {};
+  openedDashboardIds :any  = {};
+
   constructor(private http : HttpClientProvider) {}
+
+  /**
+   * reset all dashboard issues
+   */
+  resetDashboards() {
+    this.dashboards = [];
+    this.dashboardObjectsMapper = {};
+    this.currentFullScreenVisualizationData
+  }
+
+  /**
+   * setCurrentFullScreenVisualizationData
+   * @param data
+   */
+  setCurrentFullScreenVisualizationData(data){
+    if(data.dashboardItem && data.dashboardItem.id){
+      data.dashboardItem.id = 'full-' + data.dashboardItem.id;
+    }
+    this.currentFullScreenVisualizationData = data;
+  }
+
+  /**
+   *   getCurrentFullScreenVisualizationData
+   * @returns {any}
+   */
+  getCurrentFullScreenVisualizationData(){
+    return this.currentFullScreenVisualizationData;
+  }
+
 
   loadAll(currentUser): Observable<any> {
     return Observable.create(observer => {
-      let url = '/api/25/dashboards.json?fields=id,name,publicAccess,access,externalAccess,userGroupAccesses,dashboardItems[id,type,created,shape,appKey,reports[id,displayName],chart[id,displayName],map[id,displayName],reportTable[id,displayName],eventReport[id,displayName],eventChart[id,displayName],resources[id,displayName],users[id,displayName]&paging=false';
-      this.http.get(url,currentUser)
-        .then((dashboardResponse : any) => {
-          dashboardResponse = JSON.parse(dashboardResponse.data);
-          observer.next(dashboardResponse);
-          observer.complete();
-        }, error => {
-          observer.next(error);
-          observer.complete();
-        });
+      if (this.dashboards && this.dashboards.length > 0) {
+        observer.next(this.dashboards);
+        observer.complete();
+      } else {
+        let url = '/api/25/dashboards.json?fields=id,name,publicAccess,access,externalAccess,userGroupAccesses,dashboardItems[id,type,created,shape,appKey,reports[id,displayName],chart[id,displayName],map[id,displayName],reportTable[id,displayName],eventReport[id,displayName],eventChart[id,displayName],resources[id,displayName],users[id,displayName]&paging=false';
+        this.http.get(url,currentUser)
+          .then((dashboardResponse : any) => {
+            this.dashboards = this.getDashboardsArrayFromApi(JSON.parse(dashboardResponse.data));
+            observer.next(this.dashboards);
+            observer.complete()
+          }, error => {
+            observer.next(error);
+            observer.complete();
+          });
+      }
     });
   }
 
+  /**
+   * get formatted dashboards as array
+   * @param dashboardsResponse
+   * @returns {Array}
+   */
+  getDashboardsArrayFromApi(dashboardsResponse) {
+    let dashboardsArray = [];
+    if (dashboardsResponse && dashboardsResponse.dashboards) {
+      for (let dashboard of  dashboardsResponse.dashboards) {
+        dashboardsArray.push(dashboard);
+      }
+    }
+    return dashboardsArray;
+  }
 
 
 }
