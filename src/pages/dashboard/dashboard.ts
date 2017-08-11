@@ -27,10 +27,7 @@ export class DashboardPage implements OnInit{
   currentDashboardName:string;
   currentDashboardId:string;
   dashboards:any = [];
-  dashBoardToDashboardItem:any = {};
-  dashBoardItemObjectsAndData:any = {};
-  dashBoardVisualizationData:any = {};
-  openedDashboardIds:any = {};
+  openedDashboardItemIds:any = {};
 
   emptyListMessage : any;
 
@@ -64,6 +61,7 @@ export class DashboardPage implements OnInit{
     this.currentDashboardName = '';
     this.currentDashboardId = '';
     if (network.isAvailable) {
+      this.openedDashboardItemIds = {};
       this.loadingMessage = "Loading dashboards";
       this.dashboards = [];
       this.DashboardService.loadAll(currentUser).subscribe((dashboards: any)=>{
@@ -79,13 +77,15 @@ export class DashboardPage implements OnInit{
               });
             }
           }
+          if(dashboards[0].dashboardItems && dashboards[0].dashboardItems.length > 0){
+            this.toggleDashboardItemCard(dashboards[0].dashboardItems[0].id);
+          }
           this.isLoading = false;
         } else {
           this.isLoading = false;
           this.currentDashboardName = "No dashboard found";
           this.emptyListMessage = "No dashboard found from server";
         }
-
       },error=>{
         this.isLoading = false;
         console.log(JSON.stringify(error));
@@ -98,7 +98,13 @@ export class DashboardPage implements OnInit{
     }
   }
 
-
+  toggleDashboardItemCard(dashboardItemId){
+    if(this.openedDashboardItemIds[dashboardItemId]){
+      this.openedDashboardItemIds[dashboardItemId] = false;
+    }else{
+      this.openedDashboardItemIds[dashboardItemId] = true;
+    }
+  }
 
   openDashboardListFilter() {
     if (this.dashboards.length > 0) {
@@ -115,6 +121,9 @@ export class DashboardPage implements OnInit{
           if (dashboard.name != this.currentDashboardName) {
             this.currentDashboardName = dashboard.name;
             this.currentDashboardId = dashboard.id;
+            if(dashboard.dashboardItems && dashboard.dashboardItems.length > 0){
+              this.toggleDashboardItemCard(dashboard.dashboardItems[0].id);
+            }
           }
         }
       });

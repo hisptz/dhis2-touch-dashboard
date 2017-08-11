@@ -18,7 +18,7 @@ export class ResourceProvider {
       USERS: "assets/dashboard/roles.png",
       REPORTS: "assets/dashboard/table.png",
       RESOURCES: "assets/dashboard/roles.png",
-      APP: "assets/dashboard/role.png",
+      APP: "assets/dashboard/roles.png",
       MESSAGES: "assets/dashboard/sms.png",
       CHART: "assets/dashboard/charts.png",
       EVENT_CHART: "assets/dashboard/charts.png",
