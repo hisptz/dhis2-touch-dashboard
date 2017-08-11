@@ -31,7 +31,7 @@ export class DashboardCardComponent implements OnInit{
       this.currentUser = currentUser;
       const vizualiationDetails = {
         dashboardItem: this.dashboardItem,
-        dashboardId: this.dashboardId
+        dashboardId: this.dashboardId,
       }
     })
   }
