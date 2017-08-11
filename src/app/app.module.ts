@@ -41,6 +41,8 @@ import { VisualizationObjectServiceProvider } from '../providers/visualization-o
 import { VisualizerServiceProvider } from '../providers/visualizer-service/visualizer-service';
 import { UtilitiesServiceProvider } from '../providers/utilities-service/utilities-service';
 import { MapFilesConversionProvider } from '../providers/map-files-conversion/map-files-conversion';
+import {TileLayers} from '../constants/tile-layers';
+import {OrgUnitService} from '../providers/org-unit.service';
 
 @NgModule({
   declarations: [
@@ -82,7 +84,7 @@ import { MapFilesConversionProvider } from '../providers/map-files-conversion/ma
     VisualizationObjectServiceProvider,
     VisualizerServiceProvider,
     UtilitiesServiceProvider,
-    MapFilesConversionProvider,
+    MapFilesConversionProvider,TileLayers,OrgUnitService,
   ]
 })
 export class AppModule {}

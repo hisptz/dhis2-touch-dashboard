@@ -36,11 +36,11 @@ export class FavoriteServiceProvider {
       this.http.get(this._getFavoriteUrl(
         visualizationDetails.apiRootUrl,
         visualizationObjectFavorite.type,
-        visualizationObjectFavorite.id),currentUser
+        visualizationObjectFavorite.id),
+        currentUser
       ).then((favorite: any) => {
         favorite = JSON.parse(favorite.data);
         const newFavorite :any = _.clone(favorite);
-
         newFavorite.subtitle = this.getFavoriteSubtitle(favorite.filters, visualizationDetails.visualizationObject.details.userOrganisationUnit);
         visualizationDetails.favorite = Object.assign({}, newFavorite, favoriteOptions);
         visualizationDetails.favorite = this.relativePeriodService.getISOFormatFromRelativePeriod(visualizationDetails.favorite);

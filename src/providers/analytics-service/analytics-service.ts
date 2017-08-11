@@ -37,12 +37,17 @@ export class AnalyticsServiceProvider {
             visualizationSettings,
             parameters
           )
+
         }
         return analyticUrl !== '' ? this.http.get(analyticUrl,currentUser) : Observable.of(null)
       })).subscribe((analyticsResponse : any) => {
-        analyticsResponse = JSON.parse(analyticsResponse.data);
+        const newAnalyticsResponse: any[] = _.map(analyticsResponse, (analyticsResponseObject: any) =>
+          analyticsResponseObject !== null && analyticsResponseObject.data ? JSON.parse(analyticsResponseObject.data) : null
+        );
+
+        // alert(analyticsResponse)
         visualizationDetails.analytics = _.filter(_.map(visualizationDetails.filters, (filter: any, filterIndex) => {
-          return {id: filter.id, content: analyticsResponse[filterIndex]}
+          return {id: filter.id, content: newAnalyticsResponse[filterIndex]}
         }), (analytics) => {
           return analytics.content !== null;
         });
