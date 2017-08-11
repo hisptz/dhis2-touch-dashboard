@@ -71,6 +71,7 @@ export class DashboardPage implements OnInit{
         this.dashboards = dashboards;
         if (dashboards.length > 0) {
           this.currentDashboardName = dashboards[0].name;
+          this.currentDashboardId = dashboards[0].id;
           for (let dashboard of  dashboards) {
             this.dashBoardToDashboardItem[dashboard.id] = dashboard.dashboardItems;
           }
@@ -107,6 +108,7 @@ export class DashboardPage implements OnInit{
         if (dashboard && dashboard.name) {
           if (dashboard.name != this.currentDashboardName) {
             this.currentDashboardName = dashboard.name;
+            this.currentDashboardId = dashboard.id;
             let selectedDashboards = this.dashBoardToDashboardItem[dashboard.id];
             //this.getDashboardItemObjectsAndData(selectedDashboards, dashboard.id);
           }
