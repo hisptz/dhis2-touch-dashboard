@@ -271,6 +271,7 @@ export class DashboardCardComponent implements OnInit{
           this.visualizationObjectService.splitVisualizationObject(newVisualizationObject) :
           _.clone(newVisualizationObject);
 
+
         const newVisualizationDetails = _.clone(splitedVisualizationObject.details);
 
         /**
@@ -278,13 +279,15 @@ export class DashboardCardComponent implements OnInit{
          */
         newVisualizationDetails.mapConfiguration = _.assign({}, this.mapService.getMapConfiguration(splitedVisualizationObject));
 
+
         /**
          * Update with geo features
          */
         this.geoFeatureService.getGeoFeature({
           apiRootUrl: '/api/25/',
           visualizationObject: splitedVisualizationObject
-        }, currentUser).subscribe(geoFeatureResponse => {
+        }, currentUser).subscribe((geoFeatureResponse: any) => {
+
           if (geoFeatureResponse.geoFeatures) {
             splitedVisualizationObject.layers = _.map(splitedVisualizationObject.layers, (layer: any) => {
               const newLayer = _.clone(layer);

@@ -41,13 +41,16 @@ export class GeoFeatureServiceProvider {
             return geoFeatureParam !== '' ? this.http.get(this._getGeoFeatureUrl(apiRootUrl, geoFeatureParam),currentUser) : Observable.of([])
           })
         )
-          .subscribe((geoFeatures :any) => {
-            geoFeatures = JSON.parse(geoFeatures.data);
+          .subscribe((geoFeaturesResponse :any) => {
+
+            const newGeoFeaturesResponse: any[] = _.map(geoFeaturesResponse, (geoFeatureObject: any) =>
+              geoFeatureObject !== null && geoFeatureObject.data ? JSON.parse(geoFeatureObject.data) : []
+            );
             const newGeoFeatures = [];
             visualizationFilters.forEach((filterObject, filterIndex) => {
               newGeoFeatures.push({
                 id: filterObject.id,
-                content: geoFeatures[filterIndex]
+                content: newGeoFeaturesResponse[filterIndex]
               })
             });
             visualizationDetails.geoFeatures = newGeoFeatures;

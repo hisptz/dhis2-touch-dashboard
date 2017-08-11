@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import {Dashboard} from "../../model/dashboard";
 import {HttpClientProvider} from "../http-client/http-client";
 import {Observable} from 'rxjs/Observable';
+import {ResourceProvider} from "../resource/resource";
 
 /*
   Generated class for the DashboardProvider provider.
@@ -19,7 +20,7 @@ export class DashboardProvider {
   currentFullScreenVisualizationData : any = {};
   openedDashboardIds :any  = {};
 
-  constructor(private http : HttpClientProvider) {}
+  constructor(private http : HttpClientProvider,private resourceProvder : ResourceProvider) {}
 
   /**
    * reset all dashboard issues
@@ -56,7 +57,7 @@ export class DashboardProvider {
         observer.next(this.dashboards);
         observer.complete();
       } else {
-        let url = '/api/25/dashboards.json?fields=id,name,publicAccess,access,externalAccess,userGroupAccesses,dashboardItems[id,type,created,shape,appKey,reports[id,displayName],chart[id,displayName],map[id,displayName],reportTable[id,displayName],eventReport[id,displayName],eventChart[id,displayName],resources[id,displayName],users[id,displayName]&paging=false';
+        let url = '/api/25/dashboards.json?fields=id,name,publicAccess,access,externalAccess,userGroupAccesses,dashboardItems[id,displayName,type,created,shape,appKey,reports[id,displayName],chart[id,displayName],map[id,displayName],reportTable[id,displayName],eventReport[id,displayName],eventChart[id,displayName],resources[id,displayName],users[id,displayName]&paging=false';
         this.http.get(url,currentUser)
           .then((dashboardResponse : any) => {
             this.dashboards = this.getDashboardsArrayFromApi(JSON.parse(dashboardResponse.data));
@@ -82,6 +83,24 @@ export class DashboardProvider {
       }
     }
     return dashboardsArray;
+  }
+
+  getDashBoardTitle(dashboardItem){
+    let key = _.camelCase(dashboardItem.type);
+    let title : string = key;
+    if(dashboardItem[key] && dashboardItem[key].length > 0){
+      title = _.capitalize(key);
+    }else if(dashboardItem[key] && dashboardItem[key].id){
+      title =  dashboardItem[key].displayName;
+    }else{
+      title = _.capitalize(key);
+    }
+    return title;
+  }
+
+  getDashBoardItemIcon(dashBoardType){
+    let icons = this.resourceProvder.getDashBoardItemsIcons();
+    return icons[dashBoardType];
   }
 
 

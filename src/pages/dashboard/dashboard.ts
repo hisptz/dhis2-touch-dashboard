@@ -27,10 +27,7 @@ export class DashboardPage implements OnInit{
   currentDashboardName:string;
   currentDashboardId:string;
   dashboards:any = [];
-  dashBoardToDashboardItem:any = {};
-  dashBoardItemObjectsAndData:any = {};
-  dashBoardVisualizationData:any = {};
-  openedDashboardIds:any = {};
+  openedDashboardItemIds:any = {};
 
   emptyListMessage : any;
 
@@ -50,8 +47,7 @@ export class DashboardPage implements OnInit{
         //todo user org unit
         this.currentUser = currentUser;
         this.loadingListOfAllDashboards(currentUser)
-      },error=>{})
-      ;
+      },error=>{});
     }, error=> {
       this.isLoading = false;
       this.appProvider.setNormalNotification("Fail to loading current user information");
@@ -65,6 +61,7 @@ export class DashboardPage implements OnInit{
     this.currentDashboardName = '';
     this.currentDashboardId = '';
     if (network.isAvailable) {
+      this.openedDashboardItemIds = {};
       this.loadingMessage = "Loading dashboards";
       this.dashboards = [];
       this.DashboardService.loadAll(currentUser).subscribe((dashboards: any)=>{
@@ -73,15 +70,22 @@ export class DashboardPage implements OnInit{
           this.currentDashboardName = dashboards[0].name;
           this.currentDashboardId = dashboards[0].id;
           for (let dashboard of  dashboards) {
-            this.dashBoardToDashboardItem[dashboard.id] = dashboard.dashboardItems;
+            if(dashboard.dashboardItems && dashboard.dashboardItems.length > 0 ){
+              dashboard.dashboardItems.forEach((dashboardItem : any)=>{
+                dashboardItem['title'] = this.DashboardService.getDashBoardTitle(dashboardItem);
+                dashboardItem['icon'] = this.DashboardService.getDashBoardItemIcon(dashboardItem.type);
+              });
+            }
           }
-          //this.getDashboardItemObjectsAndData(dashboards[0].dashboardItems, dashboards[0].id);
+          if(dashboards[0].dashboardItems && dashboards[0].dashboardItems.length > 0){
+            this.toggleDashboardItemCard(dashboards[0].dashboardItems[0].id);
+          }
+          this.isLoading = false;
         } else {
+          this.isLoading = false;
           this.currentDashboardName = "No dashboard found";
           this.emptyListMessage = "No dashboard found from server";
         }
-        this.isLoading = false;
-
       },error=>{
         this.isLoading = false;
         console.log(JSON.stringify(error));
@@ -91,6 +95,14 @@ export class DashboardPage implements OnInit{
       //there is no network available
       this.isLoading = false;
       this.appProvider.setNormalNotification(network.message);
+    }
+  }
+
+  toggleDashboardItemCard(dashboardItemId){
+    if(this.openedDashboardItemIds[dashboardItemId]){
+      this.openedDashboardItemIds[dashboardItemId] = false;
+    }else{
+      this.openedDashboardItemIds[dashboardItemId] = true;
     }
   }
 
@@ -109,8 +121,9 @@ export class DashboardPage implements OnInit{
           if (dashboard.name != this.currentDashboardName) {
             this.currentDashboardName = dashboard.name;
             this.currentDashboardId = dashboard.id;
-            let selectedDashboards = this.dashBoardToDashboardItem[dashboard.id];
-            //this.getDashboardItemObjectsAndData(selectedDashboards, dashboard.id);
+            if(dashboard.dashboardItems && dashboard.dashboardItems.length > 0){
+              this.toggleDashboardItemCard(dashboard.dashboardItems[0].id);
+            }
           }
         }
       });
