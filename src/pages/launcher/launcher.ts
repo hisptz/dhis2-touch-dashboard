@@ -38,8 +38,8 @@ export class LauncherPage implements OnInit{
       if(user && user.isLogin){
         this.navCtrl.setRoot("DashboardPage");
       }else{
-        this.navCtrl.setRoot("DashboardPage");
-        //this.navCtrl.setRoot("LoginPage");
+        //this.navCtrl.setRoot("DashboardPage");
+        this.navCtrl.setRoot("LoginPage");
       }
     },error=>{
     });
