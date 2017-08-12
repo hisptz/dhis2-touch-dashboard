@@ -1,4 +1,4 @@
-import { Component,Input,OnInit,ViewChild } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Visualization} from "../../model/visualization";
 import {ChartTemplateComponent} from "../chart-template/chart-template";
 import {ResourceProvider} from "../../providers/resource/resource";
@@ -18,6 +18,7 @@ export class ChartComponent implements OnInit{
 
   @Input() visualizationObject: Visualization;
   @Input() isInFullScreen;
+  @Output() onChartTypeUpdate: EventEmitter<string> = new EventEmitter<string>()
   @ViewChild(ChartTemplateComponent)
   chartTemplate: ChartTemplateComponent;
   private _showOptions: boolean;
@@ -55,6 +56,7 @@ export class ChartComponent implements OnInit{
 
   updateChart(chartType){
     //@todo logic to update visualization, instance line,bar,pie etc
+    //
 
     //deactivate selected type
     this.visualizationOptions.forEach((visualization : any)=>{
@@ -64,6 +66,8 @@ export class ChartComponent implements OnInit{
         visualization.isDisabled = false;
       }
     });
+
+    this.onChartTypeUpdate.emit(chartType);
   }
 
   get chartObjects(): any {

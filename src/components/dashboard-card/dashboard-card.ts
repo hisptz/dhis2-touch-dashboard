@@ -171,6 +171,18 @@ export class DashboardCardComponent implements OnInit{
     this.loadInFullScreen.emit(data);
   }
 
+  updateVisualizationWithNewChartType(chartType) {
+    this.visualizationObject.details.loaded = false;
+    this.isVisualizationDataLoaded = false;
+    this.extendVisualizationObjectWithDrawingObjects(this.visualizationObject, this.currentUser, chartType)
+      .subscribe((newVisualizationObject: any) => {
+        setTimeout(()=>{
+          this.visualizationObject = _.assign({}, newVisualizationObject);
+          this.isVisualizationDataLoaded = newVisualizationObject.details.loaded;
+        },70);
+      })
+  }
+
   extendVisualizationObjectWithLayout(visualizationObject: any, layouts: any) {
     const newVisualizationObject = _.clone(visualizationObject);
     const newVisualizationDetails = _.clone(newVisualizationObject.details);
@@ -256,7 +268,7 @@ export class DashboardCardComponent implements OnInit{
     return newVisualizationObject;
   }
 
-  extendVisualizationObjectWithDrawingObjects(currentVisualizationObject: any, currentUser) {
+  extendVisualizationObjectWithDrawingObjects(currentVisualizationObject: any, currentUser: any, chartType?: string) {
     const currentVisualization: string = currentVisualizationObject.details.currentVisualization;
     const newVisualizationObject = _.clone(currentVisualizationObject);
 
@@ -268,12 +280,22 @@ export class DashboardCardComponent implements OnInit{
     return Observable.create(observer => {
       if (currentVisualization === 'CHART') {
         const mergeVisualizationObject = this.visualizationObjectService.mergeVisualizationObject(newVisualizationObject);
+
+
         /**
          * Update visualization layers with chart configuration
          */
         const visualizationObjectLayersWithChartConfiguration = _.map(mergeVisualizationObject.layers, (layer, layerIndex) => {
           const newLayer = _.clone(layer);
           const newSettings = _.clone(layer.settings);
+
+          /**
+           * Updated settings with new chart type if any
+           */
+          if (chartType) {
+            newSettings.type = chartType;
+          }
+
           newSettings.chartConfiguration = _.assign({}, this.chartService.getChartConfiguration1(
             newSettings,
             mergeVisualizationObject.id + '_' + layerIndex,
