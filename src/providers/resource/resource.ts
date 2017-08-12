@@ -69,19 +69,19 @@ export class ResourceProvider {
       ],
       visualizationType: [
         {
-          type: "table",
-          icon: "assets/dashboard/table.png"
+          type: "TABLE",
+          icon: "assets/dashboard/table.png",
+          isDisabled: false
         },
         {
-          type: "chart",
-          icon: 'assets/dashboard/charts.png'
-        }, {
-          type: "chart",
-          icon: 'assets/dashboard/charts.png'
+          type: "CHART",
+          icon: 'assets/dashboard/charts.png',
+          isDisabled: false
         },
         {
-          type: "map",
-          icon: 'assets/dashboard/map.png'
+          type: "MAP",
+          icon: 'assets/dashboard/map.png',
+          isDisabled: false
         },
         //{type: "dictionary", icon: "assets/dashboard/dictionary.png"}
       ]

@@ -59,7 +59,9 @@
 
 
     <div *ngIf="isInFullScreen && visualizationType && (visualizationType =='TABLE' || visualizationType =='MAP' || visualizationType =='CHART' )">
-      {{ visualizationOptions|json }}
+      <button [disabled]="visualizationType == visualization.type" ion-button color="light" clear class="chart-icon-container"  *ngFor="let visualization of visualizationOptions"  (tap)="updateVisualizationType(visualization.type)" >
+        <img class="chart-icon" [src]="visualization.icon">
+      </button>
     </div>
 
   </div>

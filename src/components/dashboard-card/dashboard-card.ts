@@ -137,6 +137,20 @@ export class DashboardCardComponent implements OnInit{
     })
   }
 
+  updateVisualizationType(visualizationType){
+
+    //@todo logic to update visualization, instance chart, map and table
+
+    //deactivate selected type
+    this.visualizationOptions.forEach((visualization : any)=>{
+      if(visualization.type == visualizationType){
+        visualization.isDisabled = true;
+      }else{
+        visualization.isDisabled = false;
+      }
+    });
+  }
+
   loadFullScreenDashboard(){
     let data = {
       dashboardItem : this.dashboardItem,
