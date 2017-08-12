@@ -33,6 +33,9 @@ export class DashboardCardComponent implements OnInit{
   isVisualizationDataLoaded: boolean;
   visualizationType: string;
 
+  zoomIcon : string;
+  filterIcon : string;
+
   constructor(private userProvider : UserProvider,
               private appProvider : AppProvider,
               private visualizationObjectService: VisualizationObjectServiceProvider,
@@ -43,10 +46,14 @@ export class DashboardCardComponent implements OnInit{
               private mapService: MapServiceProvider,
               private geoFeatureService: GeoFeatureServiceProvider
               ) {
+
   }
 
 
   ngOnInit() {
+    this.zoomIcon = 'assets/dashboard/full-screen.png';
+    this.filterIcon = 'assets/dashboard/filter.png';
+
     this.userProvider.getCurrentUser().then((currentUser :any)=>{
       this.currentUser = currentUser;
       const initialVisualizationObject = this.visualizationObjectService.loadInitialVisualizationObject(

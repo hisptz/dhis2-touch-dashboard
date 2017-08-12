@@ -4,64 +4,64 @@
       <page-loading loadingSize="large" loadingMessage="Loading Visualization data"></page-loading>
     </div>
   </div>
-  <div *ngIf="isVisualizationDataLoaded" class="dashboard-card">
+  <div *ngIf="isVisualizationDataLoaded">
     <ion-row>
       <ion-col col-2 col-sm-1 col-md-1 col-lg-1 text-left no-padding>
-        <!--<span ion-button color="light" clear class="chart-icon-container" >-->
-        <!--<img class="chart-icon" [src]="filterIcon">-->
-        <!--</span>-->
+        <button ion-button color="light" clear class="chart-icon-container" >
+          <img class="chart-icon" [src]="filterIcon">
+        </button>
       </ion-col>
       <ion-col col-8 col-sm-10 col-md-10 col-lg-10  no-padding></ion-col>
       <ion-col col-2 col-sm-1 col-md-1 col-lg-1 text-right no-padding >
-        <span ion-button color="light" clear class="chart-icon-container" >
-          <!--<img class="chart-icon" [src]="zoomIcon">-->
-        </span>
+        <button ion-button color="light" clear class="chart-icon-container" >
+          <img class="chart-icon" [src]="zoomIcon">
+        </button>
       </ion-col>
     </ion-row>
 
+    <div class="dashboard-card" >
+      <div *ngIf="visualizationType && visualizationType =='CHART'">
+        <chart [visualizationObject]="visualizationObject"></chart>
+      </div>
 
-    <div *ngIf="visualizationType && visualizationType =='CHART'">
-      <chart [visualizationObject]="visualizationObject"></chart>
-    </div>
+      <div *ngIf="visualizationType && visualizationType =='TABLE'">
+        <table-card [visualizationObject]="visualizationObject" ></table-card>
+      </div>
 
-    <div *ngIf="visualizationType && visualizationType =='TABLE'">
-      table
-      <!--<table-card [tableObject]="tableObject"></table-card>-->
-    </div>
+      <div *ngIf="visualizationType && visualizationType =='MAP'">
+        map
+        <!--<table-card [tableObject]="tableObject"></table-card>-->
+      </div>
 
-    <div *ngIf="visualizationType && visualizationType =='MAP'">
-      map
-      <!--<table-card [tableObject]="tableObject"></table-card>-->
-    </div>
+      <div *ngIf="visualizationType && visualizationType =='REPORTS'">
+        REPORTS
+        <!--<table-card [tableObject]="tableObject"></table-card>-->
+      </div>
 
-    <div *ngIf="visualizationType && visualizationType =='REPORTS'">
-      REPORTS
-      <!--<table-card [tableObject]="tableObject"></table-card>-->
-    </div>
+      <div *ngIf="visualizationType && visualizationType =='USERS'">
+        table
+        <!--<table-card [tableObject]="tableObject"></table-card>-->
+      </div>
 
-    <div *ngIf="visualizationType && visualizationType =='USERS'">
-      table
-      <!--<table-card [tableObject]="tableObject"></table-card>-->
-    </div>
+      <div *ngIf="visualizationType && visualizationType =='RESOURCES'">
+        resources
+        <!--<table-card [tableObject]="tableObject"></table-card>-->
+      </div>
 
-    <div *ngIf="visualizationType && visualizationType =='RESOURCES'">
-      resources
-      <!--<table-card [tableObject]="tableObject"></table-card>-->
-    </div>
+      <div *ngIf="visualizationType && visualizationType =='MESSAGES'">
+        messages
+        <!--<table-card [tableObject]="tableObject"></table-card>-->
+      </div>
 
-    <div *ngIf="visualizationType && visualizationType =='MESSAGES'">
-      messages
-      <!--<table-card [tableObject]="tableObject"></table-card>-->
-    </div>
+      <div *ngIf="visualizationType && visualizationType =='APP'">
+        app
+        <!--<table-card [tableObject]="tableObject"></table-card>-->
+      </div>
 
-    <div *ngIf="visualizationType && visualizationType =='APP'">
-      app
-      <!--<table-card [tableObject]="tableObject"></table-card>-->
-    </div>
-
-    <div *ngIf="visualizationType && visualizationType =='DICTIONARY'">
-      dictionary
-      <!--<table-card [tableObject]="tableObject"></table-card>-->
+      <div *ngIf="visualizationType && visualizationType =='DICTIONARY'">
+        dictionary
+        <!--<table-card [tableObject]="tableObject"></table-card>-->
+      </div>
     </div>
 
   </div>
