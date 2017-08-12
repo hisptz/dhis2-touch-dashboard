@@ -12,10 +12,10 @@ import {AnalyticsHeader, AnalyticsMetadata, AnalyticsObject} from '../../model/a
 @Injectable()
 export class VisualizerServiceProvider {
 
-  constructor() {}
+  constructor() {
+  }
 
   drawChart(incomingAnalyticsObject: any, chartConfiguration: ChartConfiguration): any {
-
     // TODO MOVE THIS LOGIC TO ANALYTICS OBJECT IN THE FUTURE
     const analyticsObject = this._sanitizeAnalyticsBasedOnConfiguration(
       this._standardizeIncomingAnalytics(incomingAnalyticsObject),
@@ -26,7 +26,7 @@ export class VisualizerServiceProvider {
      * Get generic chart object attributes
      * @type {{chart: any; title: any; subtitle: any; credits: any; colors: any[]; plotOptions: {}; tooltip: any; exporting: any}}
      */
-    let chartObject = {
+    let chartObject: any = {
       chart: this._getChartAttributeOptions(chartConfiguration),
       title: this._getChartTitleObject(chartConfiguration),
       subtitle: this._getChartSubtitleObject(chartConfiguration),
@@ -72,16 +72,17 @@ export class VisualizerServiceProvider {
     const newChartObject = _.cloneDeep(initialChartObject);
     return newChartObject;
   }
+
   private _extendPieChartOptions(initialChartObject: any, analyticsObject: any, chartConfiguration: ChartConfiguration) {
     const newChartObject = _.cloneDeep(initialChartObject);
 
     const xAxisCategories: any[] = this._getAxisItems(analyticsObject, chartConfiguration.xAxisType, true);
     const yAxisSeriesItems: any[] = this._getAxisItems(analyticsObject, chartConfiguration.yAxisType);
-    // console.log(JSON.stringify(xAxisCategories));
+
     /**
      * Sort the corresponding series
      */
-    let sortedSeries = this._getSortableSeries(this._getChartSeries(
+    const sortedSeries = this._getSortableSeries(this._getChartSeries(
       analyticsObject,
       xAxisCategories,
       yAxisSeriesItems,
@@ -91,17 +92,17 @@ export class VisualizerServiceProvider {
     if (yAxisSeriesItems.length > 1) {
 
       /**
-       * Get parent series for drilldown
+       * Get parent series for drill down
        * @type {{name: string; colorByPoint: boolean; data: any}[]}
        */
       newChartObject.series = this._getDrilldownParentSeries(
         sortedSeries,
         yAxisSeriesItems,
         chartConfiguration.yAxisType
-      )
+      );
 
       /**
-       * Get drilldown series
+       * Get drill down series
        * @type {{series: any}}
        */
       newChartObject.drilldown = {
@@ -115,8 +116,6 @@ export class VisualizerServiceProvider {
       newChartObject.series = _.assign([], sortedSeries);
     }
 
-    console.log(JSON.stringify(newChartObject))
-
     return newChartObject;
   }
 
@@ -125,6 +124,7 @@ export class VisualizerServiceProvider {
      * Get series name
      * @type {string | string | string | string}
      */
+      // todo find readable names for parent types that are not data, period or organisation unit
     const seriesName = parentType === 'pe' ? 'Period' :
       parentType === 'dx' ? 'Data' :
         parentType === 'ou' ? 'Organisation unit' : 'Categories';
@@ -150,9 +150,9 @@ export class VisualizerServiceProvider {
     const correspondingSeriesObject = _.find(drilldownSeries, ['id', parentId]);
 
     if (correspondingSeriesObject) {
-      parentData =_.reduce(_.map(correspondingSeriesObject.data, (data :any )=> data.y), (sum : any, n) => {
-        const newNumber = !isNaN(n) ? parseInt(n) : 0;
-        return parseInt(sum) + newNumber;
+      parentData = _.reduce(_.map(correspondingSeriesObject.data, (data : any) => data.y), (sum: any, n) => {
+        const newNumber = !isNaN(n) ? parseInt(n, 10) : 0;
+        return parseInt(sum, 10) + newNumber;
       });
     }
     return parentData;
@@ -169,10 +169,12 @@ export class VisualizerServiceProvider {
 
     return newChartObject;
   }
+
   private _extendStackedChartOptions(initialChartObject: any, analyticsObject: any, chartConfiguration: ChartConfiguration) {
     const newChartObject = _.cloneDeep(initialChartObject);
     return newChartObject;
   }
+
   private _extendOtherChartOptions(initialChartObject: any, analyticsObject: any, chartConfiguration: ChartConfiguration): any {
     const newChartObject = _.clone(initialChartObject);
     const xAxisCategories: any[] = this._getAxisItems(analyticsObject, chartConfiguration.xAxisType, true);
@@ -193,9 +195,14 @@ export class VisualizerServiceProvider {
     ), chartConfiguration.cumulativeValues ? -1 : chartConfiguration.sortOrder);
 
     /**
+     * Rearange series based on some chart type
+     */
+    const rearrangedSeries = this._getRearrangedSeries(sortedSeries, chartConfiguration.type)
+
+    /**
      * Get series
      */
-    newChartObject.series = _.assign([], sortedSeries);
+    newChartObject.series = _.assign([], rearrangedSeries);
 
     /**
      * Get refined x axis options
@@ -205,15 +212,21 @@ export class VisualizerServiceProvider {
     return newChartObject;
   }
 
+  private _getRearrangedSeries(series: any[], chartType: string) {
+    // todo find best way to rearrange charts
+    // return _.indexOf(chartType, 'stacked') !== -1 || chartType === 'area' ? _.reverse(series) : series;
+    return series;
+  }
+
   private _getRefinedXAxisCategories(series: any[]) {
     let newCategories: any[] = [];
-    //todo find a way to effectively merge categories from each data
+    // todo find a way to effectively merge categories from each data
     if (series) {
-      const seriesDataObjects = _.map(series, (seriesObject) => { return seriesObject.data });
+      const seriesDataObjects = _.map(series, (seriesObject: any) => seriesObject.data);
 
       if (seriesDataObjects) {
         const seriesCategoryNamesArray = _.map(seriesDataObjects, (seriesData) => {
-          return _.map(seriesData, (data : any) => {
+          return _.map(seriesData, (data: any) => {
             return data.name;
           })
         });
@@ -233,7 +246,7 @@ export class VisualizerServiceProvider {
     let seriesCategories = [];
     if (sortOrder === 1) {
       newSeries = _.map(series, (seriesObject : any, seriesIndex) => {
-        const newSeriesObject = _.clone(seriesObject);
+        const newSeriesObject :any = _.clone(seriesObject);
 
         if (seriesIndex === 0) {
           newSeriesObject.data = _.assign([], _.reverse(_.sortBy(seriesObject.data, ['y'])));
@@ -252,7 +265,7 @@ export class VisualizerServiceProvider {
       })
     } else if (sortOrder === -1) {
       newSeries = _.map(series, (seriesObject : any, seriesIndex) => {
-        const newSeriesObject = _.clone(seriesObject);
+        const newSeriesObject : any = _.clone(seriesObject);
         if (seriesIndex === 0) {
           newSeriesObject.data = _.assign([], _.sortBy(seriesObject.data, ['y']));
 
@@ -271,12 +284,10 @@ export class VisualizerServiceProvider {
     return newSeries;
   }
 
-  private _getChartSeries(
-    analyticsObject: AnalyticsObject,
-    xAxisItems: any[],
-    yAxisItems: any[],
-    chartConfiguration: ChartConfiguration
-  ) {
+  private _getChartSeries(analyticsObject: AnalyticsObject,
+                          xAxisItems: any[],
+                          yAxisItems: any[],
+                          chartConfiguration: ChartConfiguration) {
     const series: any[] = [];
     if (yAxisItems) {
       yAxisItems.forEach((yAxisItem, yAxisIndex) => {
@@ -298,12 +309,10 @@ export class VisualizerServiceProvider {
     return series;
   }
 
-  private _getSeriesData(
-    analyticsObject: AnalyticsObject,
-    chartConfiguration: ChartConfiguration,
-    yAxisItemId: string,
-    xAxisItems: any[]
-  ) {
+  private _getSeriesData(analyticsObject: AnalyticsObject,
+                         chartConfiguration: ChartConfiguration,
+                         yAxisItemId: string,
+                         xAxisItems: any[]) {
     const data: any[] = [];
     /**
      * Get index to locate data for y axis
@@ -369,9 +378,9 @@ export class VisualizerServiceProvider {
 
     switch (chartConfiguration.type) {
       case 'pie':
-        dataLabels =  {
+        dataLabels = {
           enabled: chartConfiguration.showData,
-          format: '{series.name}<br/> <b>{point.y}</b> ( {point.percentage:.1f} % )'
+          format: '{point.name}<br/> <b>{point.y}</b> ( {point.percentage:.1f} % )'
         };
         break;
       default:
@@ -383,6 +392,7 @@ export class VisualizerServiceProvider {
 
     return dataLabels;
   }
+
   private _getAxisItems(analyticsObject: any, axisType: string, isCategory: boolean = false) {
     let items: any[] = [];
     const metadataNames = analyticsObject.metaData.names;
@@ -397,7 +407,7 @@ export class VisualizerServiceProvider {
       })
     }
 
-    //todo find best way to remove this hardcoding
+    // todo find best way to remove this hardcoding
     if (isCategory && axisType === 'pe') {
       return _.reverse(items);
     }
@@ -406,18 +416,16 @@ export class VisualizerServiceProvider {
 
   private _getChartTitleObject(chartConfiguration: ChartConfiguration): any {
 
-    // if (chartConfiguration.hideTitle) {
-    //   return null;
-    // }
-    // return {
-    //   text: chartConfiguration.title,
-    //   style: {
-    //     color: '#269ABC',
-    //     fontWeight: '600',
-    //     fontSize: '13px'
-    //   }
-    // }
-    return null
+    if (chartConfiguration.hideTitle) {
+      return null;
+    }
+    return {
+      text: chartConfiguration.title,
+      style: {
+        fontWeight: '600',
+        fontSize: '13px'
+      }
+    }
   }
 
   private _getChartSubtitleObject(chartConfiguration: ChartConfiguration): any {
@@ -456,9 +464,7 @@ export class VisualizerServiceProvider {
   }
 
   private _getChartLabelOptions(chartConfiguration: ChartConfiguration) {
-    return {
-
-    }
+    return {}
   }
 
   private _getTooltipOptions(chartConfiguration: ChartConfiguration) {
@@ -537,7 +543,9 @@ export class VisualizerServiceProvider {
           /**
            * Set attributes for stacked charts
            */
-          if (chartConfiguration.type === 'stacked_column' || chartConfiguration.type === 'stacked_bar') {
+          if (chartConfiguration.type === 'stacked_column' ||
+            chartConfiguration.type === 'stacked_bar' ||
+            chartConfiguration.type === 'area') {
             plotOptions[plotOptionChartType].stacking = chartConfiguration.percentStackedValues ? 'percent' : 'normal';
           }
           break;
@@ -799,13 +807,14 @@ export class VisualizerServiceProvider {
 
     return newChartObject;
   }
+
   private _getMoreOptionsForStackedChartTypes(initialChartObject: any, chartConfiguration: ChartConfiguration, stackedType: string) {
     const newChartObject = _.cloneDeep(initialChartObject);
 
     /**
      * Set initial xAxis attributes
      */
-    newChartObject.xAxis =  {
+    newChartObject.xAxis = {
       categories: []
     };
 
@@ -844,7 +853,7 @@ export class VisualizerServiceProvider {
     /**
      * Set initial xAxis attributes
      */
-    newChartObject.xAxis =  {
+    newChartObject.xAxis = {
       categories: [],
       labels: {
         rotation: -45,
@@ -872,7 +881,8 @@ export class VisualizerServiceProvider {
     let newAnalyticsObject = _.clone(analyticsObject);
 
     if (chartConfiguration.cumulativeValues) {
-      newAnalyticsObject = _.assign({}, this._mapAnalyticsToCumulativeFormat(analyticsObject, chartConfiguration.xAxisType, chartConfiguration.yAxisType));
+      newAnalyticsObject = _.assign({}, this._mapAnalyticsToCumulativeFormat(
+        analyticsObject, chartConfiguration.xAxisType, chartConfiguration.yAxisType));
     }
 
     return newAnalyticsObject;
@@ -889,11 +899,11 @@ export class VisualizerServiceProvider {
       const dataValueIndex = _.findIndex(analyticsObject.headers, _.find(analyticsObject.headers, ['name', 'value']));
       const newRows: any[] = [];
       yAxisDimensionArray.forEach(yAxisDimensionValue => {
-        let initialValue: number = 0;
+        let initialValue = 0;
         xAxisDimensionArray.forEach(xAxisDimensionValue => {
           analyticsObject.rows.forEach((row) => {
             if (row[yAxisDimensionIndex] === yAxisDimensionValue && row[xAxisDimensionIndex] === xAxisDimensionValue) {
-              initialValue += parseInt(row[dataValueIndex]);
+              initialValue += parseInt(row[dataValueIndex], 10);
               const newRow = _.clone(row);
               newRow[dataValueIndex] = initialValue;
               newRows.push(newRow);
@@ -1001,6 +1011,5 @@ export class VisualizerServiceProvider {
 
     return sanitizedMetadata;
   }
-
 
 }
