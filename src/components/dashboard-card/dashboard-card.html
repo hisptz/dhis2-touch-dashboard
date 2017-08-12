@@ -30,7 +30,7 @@
 
       <div *ngIf="visualizationType && visualizationType =='MAP'">
         <map-template [visualizationObject]="visualizationObject"
-                      [mapHeight]="'400px'" ></map-template>
+                      [mapHeight]="visualizationObject.details.itemHeight" ></map-template>
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='REPORTS'">
