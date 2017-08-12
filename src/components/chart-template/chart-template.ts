@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+declare var Highcharts: any;
 
 /**
  * Generated class for the ChartTemplateComponent component.
@@ -10,13 +11,38 @@ import { Component } from '@angular/core';
   selector: 'chart-template',
   templateUrl: 'chart-template.html'
 })
-export class ChartTemplateComponent {
+export class ChartTemplateComponent implements OnInit{
 
-  text: string;
+
+  @Input() renderId: string;
+  @Input() chartHeight: string;
+  @Input() chartObject: any;
+  @Output() onChartRenderFailure: EventEmitter<string> = new EventEmitter<string>();
+  chart: any;
 
   constructor() {
-    console.log('Hello ChartTemplateComponent Component');
-    this.text = 'Hello World';
+  }
+
+  ngOnInit(){
+    if (this.chartObject) {
+      setTimeout(() => {
+        if (this.chartObject.series) {
+          this.chart = Highcharts.chart(this.chartObject);
+        } else {
+          this.onChartRenderFailure.emit('Required properties for rendering  are missing')
+        }
+      }, 20)
+    }
+  }
+
+  download(filename, downloadFormat) {
+    if (this.chart) {
+      if (downloadFormat === 'pdf') {
+        this.chart.exportChartLocal({'filename': filename, 'type': 'application/pdf'})
+      } else if (downloadFormat === 'png') {
+        this.chart.exportChartLocal({'filename': filename, 'type': 'image/png'})
+      }
+    }
   }
 
 }
