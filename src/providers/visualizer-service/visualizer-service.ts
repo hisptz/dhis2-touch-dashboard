@@ -422,13 +422,12 @@ export class VisualizerServiceProvider {
 
   private _getChartSubtitleObject(chartConfiguration: ChartConfiguration): any {
 
-    // if (chartConfiguration.hideSubtitle) {
-    //   return null;
-    // }
-    // return {
-    //   text: chartConfiguration.subtitle
-    // };
-    return null
+    if (chartConfiguration.hideSubtitle) {
+      return null;
+    }
+    return {
+      text: chartConfiguration.subtitle
+    };
   }
 
   private _getChartCreditsOptions(): any {

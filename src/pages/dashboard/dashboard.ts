@@ -132,8 +132,8 @@ export class DashboardPage implements OnInit{
   }
 
   reLoadDashBoard(refresher){
-    this.DashboardService.resetDashboards();
-    this.loadingListOfAllDashboards(this.currentUser);
+    //this.DashboardService.resetDashboards();
+    //this.loadingListOfAllDashboards(this.currentUser);
     refresher.complete();
   }
 

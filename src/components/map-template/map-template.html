@@ -1,4 +1,12 @@
 <!-- Generated template for the MapTemplateComponent component -->
+
 <div>
-  {{text}}
+
+  <div *ngIf="visualizationObject.details.loading">
+    <page-loading [loadingSize]="'large'" [loadingMessage]="'Preparing map'" ></page-loading>
+  </div>
+
+  <div id="map-view-port-{{visualizationObject.id}}" [ngClass]="{hide: visualizationObject.details.loading||hasError}"
+       style="width:100%"></div>
+
 </div>

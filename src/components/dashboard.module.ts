@@ -5,7 +5,6 @@ import {TableCardComponent} from "./table-card/table-card";
 import {SharedModule} from "./shared.module";
 import {ChartComponent} from "./chart/chart";
 import {ChartTemplateComponent} from "./chart-template/chart-template";
-import { MapComponent } from './map/map';
 import { MapTemplateComponent } from './map-template/map-template';
 import { AppComponent } from './app/app';
 import { UsersComponent } from './users/users';
@@ -15,8 +14,7 @@ import { ReportsComponent } from './reports/reports';
 
 @NgModule({
   declarations: [DashboardCardComponent,
-    ChartComponent,ChartTemplateComponent,
-    MapComponent,MapTemplateComponent,
+    ChartComponent,ChartTemplateComponent,MapTemplateComponent,
     TableCardComponent,UsersComponent,
     ResourcesComponent,AppComponent,
     MessagesComponent,
@@ -25,8 +23,7 @@ import { ReportsComponent } from './reports/reports';
     IonicModule,SharedModule
   ],
   exports: [DashboardCardComponent,
-    ChartComponent,ChartTemplateComponent,
-    MapComponent,MapTemplateComponent,
+    ChartComponent,ChartTemplateComponent,MapTemplateComponent,
     TableCardComponent,UsersComponent,
     ResourcesComponent,AppComponent,
     MessagesComponent,

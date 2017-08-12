@@ -7,7 +7,7 @@
   <div *ngIf="isVisualizationDataLoaded">
     <ion-row>
       <ion-col col-2 col-sm-1 col-md-1 col-lg-1 text-left no-padding>
-        <button ion-button color="light" clear class="chart-icon-container" >
+        <button [disabled]="'true'" ion-button color="light" clear class="chart-icon-container" >
           <img class="chart-icon" [src]="filterIcon">
         </button>
       </ion-col>
@@ -19,7 +19,7 @@
       </ion-col>
     </ion-row>
 
-    <div class="dashboard-card" >
+    <div class="dashboard-card-overflow" >
       <div *ngIf="visualizationType && visualizationType =='CHART'">
         <chart [visualizationObject]="visualizationObject"></chart>
       </div>
@@ -29,7 +29,8 @@
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='MAP'">
-        <map ></map>
+        <map-template [visualizationObject]="visualizationObject"
+                      [mapHeight]="'340px'" ></map-template>
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='REPORTS'">

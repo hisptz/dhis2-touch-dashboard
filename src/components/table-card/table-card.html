@@ -13,11 +13,11 @@
     <div *ngIf="tableObject">
       <table class="table table-bordered" width="100%" >
         <thead>
-        <tr>
-          <th [attr.colspan]="tableObject.rows[0].items.length">
-            <span style="margin: 0px" text-center>{{tableObject.subtitle}} </span>
-          </th>
-        </tr>
+        <!--<tr>-->
+          <!--<th [attr.colspan]="tableObject.rows[0].items.length">-->
+            <!--<span style="margin: 0px" text-center>{{tableObject.subtitle}} </span>-->
+          <!--</th>-->
+        <!--</tr>-->
 
         <tr *ngFor="let header of tableObject.headers; let j = index">
           <th *ngIf="tableObject.hasParentOu"></th>

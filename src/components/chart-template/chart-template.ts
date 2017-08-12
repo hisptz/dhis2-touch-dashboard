@@ -33,6 +33,7 @@ export class ChartTemplateComponent implements OnInit{
         }
       }, 20)
     }
+
   }
 
   download(filename, downloadFormat) {
