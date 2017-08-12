@@ -77,7 +77,6 @@ export class VisualizerServiceProvider {
 
     const xAxisCategories: any[] = this._getAxisItems(analyticsObject, chartConfiguration.xAxisType, true);
     const yAxisSeriesItems: any[] = this._getAxisItems(analyticsObject, chartConfiguration.yAxisType);
-    // console.log(JSON.stringify(xAxisCategories));
     /**
      * Sort the corresponding series
      */
@@ -114,8 +113,6 @@ export class VisualizerServiceProvider {
        */
       newChartObject.series = _.assign([], sortedSeries);
     }
-
-    console.log(JSON.stringify(newChartObject))
 
     return newChartObject;
   }
