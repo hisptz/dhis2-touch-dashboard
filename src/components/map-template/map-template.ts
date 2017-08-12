@@ -38,11 +38,14 @@ export class MapTemplateComponent implements OnInit{
   hideTable: boolean = true;
   mapTable: any = {headers: [], rows: []};
 
+  layerIcon : string;
+
   constructor(private mapVisualizationService: MapVisualizationServiceProvider,
               private tileLayers: TileLayers) {
   }
 
   ngOnInit(){
+    this.layerIcon = 'assets/images/layers.png';
     if (this.visualizationObject.details.loaded) {
       if (!this.visualizationObject.details.hasError) {
         setTimeout(() => {
