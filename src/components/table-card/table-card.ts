@@ -44,8 +44,6 @@ export class TableCardComponent implements OnInit{
     }
   }
 
-
-
   sortData(tableObject, n, isLastItem) {
     if (tableObject.columns.length == 1 && isLastItem) {
       this.current_sorting = [];
@@ -152,9 +150,7 @@ export class TableCardComponent implements OnInit{
           }
         });
         some_header.push({items: some_items, style: ''});
-        //
-      })
-
+      });
       //  Processing rows
       data.rows.forEach((row) => {
         let counter = 1;
