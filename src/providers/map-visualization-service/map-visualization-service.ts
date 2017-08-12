@@ -648,13 +648,13 @@ export class MapVisualizationServiceProvider {
 
         toolTipContent += '</table></div>';
 
-        layer.bindTooltip(toolTipContent, {
-          direction: 'auto',
-          permanent: false,
-          sticky: true,
-          interactive: true,
-          opacity: 1
-        });
+        // layer.bindTooltip(toolTipContent, {
+        //   direction: 'auto',
+        //   permanent: false,
+        //   sticky: true,
+        //   interactive: true,
+        //   opacity: 1
+        // });
 
         const popUp = layer.getPopup();
         if (popUp && popUp.isOpen()) {
