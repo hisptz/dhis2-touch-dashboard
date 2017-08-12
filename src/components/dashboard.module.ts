@@ -11,12 +11,14 @@ import { UsersComponent } from './users/users';
 import { ResourcesComponent } from './resources/resources';
 import { MessagesComponent } from './messages/messages';
 import { ReportsComponent } from './reports/reports';
+import { VisualizationLegendComponent } from './visualization-legend/visualization-legend';
 
 @NgModule({
   declarations: [DashboardCardComponent,
     ChartComponent,ChartTemplateComponent,MapTemplateComponent,
     TableCardComponent,UsersComponent,
     ResourcesComponent,AppComponent,
+    VisualizationLegendComponent,
     MessagesComponent,
     ReportsComponent ],
   imports: [
@@ -26,6 +28,7 @@ import { ReportsComponent } from './reports/reports';
     ChartComponent,ChartTemplateComponent,MapTemplateComponent,
     TableCardComponent,UsersComponent,
     ResourcesComponent,AppComponent,
+    VisualizationLegendComponent,
     MessagesComponent,
     ReportsComponent ]
 })
