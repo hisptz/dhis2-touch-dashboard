@@ -49,6 +49,28 @@ map-template {
     border-bottom-right-radius: 0px;
   }
 
+  table.popup-table tr td{
+    border: 0px solid #ffffff!important;
+  }
+
+  .layers-button {
+    position: relative;
+    background-repeat: no-repeat;
+    right: -220px;
+    top: 128px;
+    width: 26px !important;
+    height: 26px !important;
+    cursor: pointer;
+    padding: 0px !important;
+    background-color: #ffffff;
+    z-index: 490 !important;
+    text-align: center;
+
+    -webkit-box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.5) !important;
+    -moz-box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.5) !important;
+  }
+
   .legendContainer {
     overflow-y: scroll;
     overflow-x: hidden;

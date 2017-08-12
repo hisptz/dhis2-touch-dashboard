@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as _ from 'lodash';
 import {Color} from '../color';
 import {TileLayers} from '../../constants/tile-layers';
@@ -12,11 +12,11 @@ import GJV from 'geojson-validation';
 
 declare var html2canvas;
 /*
-  Generated class for the MapVisualizationServiceProvider provider.
+ Generated class for the MapVisualizationServiceProvider provider.
 
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
+ See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+ for more info on providers and Angular DI.
+ */
 @Injectable()
 export class MapVisualizationServiceProvider {
 
@@ -34,7 +34,8 @@ export class MapVisualizationServiceProvider {
   constructor(private tileLayers: TileLayers,
               private colorInterpolation: ColorInterpolationServiceProvider,
               private legendSet: LegendSetServiceProvider,
-              private fileConversion: MapFilesConversionProvider) {}
+              private fileConversion: MapFilesConversionProvider) {
+  }
 
   drawMap(L, visualizationObject: Visualization, prioritizeFilter?: boolean): MapObject {
     this.visualizationObject = visualizationObject;
@@ -637,24 +638,24 @@ export class MapVisualizationServiceProvider {
         const hoveredFeature: any = event.layer.feature;
         const properties = hoveredFeature.properties;
         let toolTipContent: string = '<div style="color:#333!important;font-size: 10px">' +
-          '<table>';
+          '<div>';
 
         if (properties['dataElement.value']) {
-          toolTipContent += '<tr><td style="color:#333!important;font-weight:bold;"> ' + properties.name + ' </td><td style="color:#333!important;" > ( ' + properties['dataElement.value'] + ' ) ' + ((properties['dataElement.value'] / totalValues) * 100).toFixed(0) + '% </td></tr>';
+          toolTipContent += '<p><span style="color:#333!important;font-weight:bold;"> ' + properties.name + ' </span><span style="color:#333!important;" > ( ' + properties['dataElement.value'] + ' ) ' + ((properties['dataElement.value'] / totalValues) * 100).toFixed(0) + '% </span></p>';
         } else {
-          toolTipContent += '<tr><td style="color:#333!important;font-weight:bold;" > ' + properties.name + ' </td></tr>';
+          toolTipContent += '<p><span style="color:#333!important;font-weight:bold;" > ' + properties.name + ' </span></p>';
 
         }
 
-        toolTipContent += '</table></div>';
+        toolTipContent += '</div></div>';
 
-        layer.bindTooltip(toolTipContent, {
-          direction: 'auto',
-          permanent: false,
-          sticky: true,
-          interactive: true,
-          opacity: 1
-        });
+        // layer.bindTooltip(toolTipContent, {
+        //   direction: 'auto',
+        //   permanent: false,
+        //   sticky: true,
+        //   interactive: true,
+        //   opacity: 1
+        // });
 
         const popUp = layer.getPopup();
         if (popUp && popUp.isOpen()) {
@@ -748,18 +749,17 @@ export class MapVisualizationServiceProvider {
 
         let toolTipContent: string =
           '<div style="color:#333!important;font-size: 10px">' +
-          '<table>';
-        toolTipContent += '<tr><td style="color:#333!important;font-weight:bold;"></td><td style="color:#333!important;" ><b> ' + featureName + '</b></td>';
+          '<div>';
+        toolTipContent += '<div><span style="color:#333!important;text-align: center;" ><b> ' + featureName + '</b></span></div>';
         if (feature.properties['dataElement.value']) {
           const fraction = (feature.properties['dataElement.value'] / totalValues);
           const percent = fraction ? ( fraction * 100).toFixed(0) + '%' : '';
-          toolTipContent += '<tr><td style="color:#333!important;font-weight:bold;">Data: </td><td style="color:#333!important;" > ' + feature.properties['dataElement.name'] + '</td>' +
-            '<tr><td style="color:#333!important;font-weight:bold;">Value: </td><td style="color:#333!important;" > ' + feature.properties['dataElement.value'] + '  (' + percent + ')</td>';
-          toolTipContent += '<tr><td style="color:#333!important;font-weight:bold;" ></td></tr>';
+          toolTipContent += '<div ><span style="color:#333!important;font-weight:bold;">Data: </span><span style="color:#333!important;" > ' + feature.properties['dataElement.name'] + '</span>' +
+            '<div style="padding:0px!important;"><span style="color:#333!important;font-weight:bold;">Value: </span><span style="color:#333!important;" > ' + feature.properties['dataElement.value'] + '  (' + percent + ')</span>';
+          toolTipContent += '<div><span style="color:#333!important;font-weight:bold;" ></span></div>';
         }
-        toolTipContent += '</tr>' +
-          '</table>' +
-          '</div>';
+        '</div>' +
+        '</div>';
 
         layer.bindPopup(toolTipContent);
 
@@ -913,7 +913,7 @@ export class MapVisualizationServiceProvider {
 
   private _prepareBoundaryFeatureStyle(feature, visualizationLayerSettings, legendSet) {
     const opacity = visualizationLayerSettings.opacity;
-    let colorObject : any  = _.find(legendSet, ['name', feature.le]);
+    let colorObject: any = _.find(legendSet, ['name', feature.le]);
     let featureStyle: any = {
       'color': colorObject.color,
       'fillColor': '#ffffff',
