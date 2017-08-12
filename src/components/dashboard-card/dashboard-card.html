@@ -13,15 +13,15 @@
       </ion-col>
       <ion-col col-8 col-sm-10 col-md-10 col-lg-10  no-padding></ion-col>
       <ion-col col-2 col-sm-1 col-md-1 col-lg-1 text-right no-padding >
-        <button ion-button color="light" clear class="chart-icon-container" >
+        <button ion-button color="light" clear class="chart-icon-container" (tap)="loadFullScreenDashboard()" >
           <img class="chart-icon" [src]="zoomIcon">
         </button>
       </ion-col>
     </ion-row>
 
-    <div class="dashboard-card-overflow" >
+    <div class="{{ dashBoardCardClass }}" >
       <div *ngIf="visualizationType && visualizationType =='CHART'">
-        <chart [visualizationObject]="visualizationObject"></chart>
+        <chart [visualizationObject]="visualizationObject" [isFullScreen]="isFullScreen" ></chart>
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='TABLE'">
@@ -30,7 +30,7 @@
 
       <div *ngIf="visualizationType && visualizationType =='MAP'">
         <map-template [visualizationObject]="visualizationObject"
-                      [mapHeight]="'340px'" ></map-template>
+                      [mapHeight]="'400px'" ></map-template>
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='REPORTS'">
@@ -54,9 +54,16 @@
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='DICTIONARY'">
-        dictionary
-        <!--<table-card [tableObject]="tableObject"></table-card>-->
       </div>
+    </div>
+
+    <br>
+    <div *ngIf="isInFullScreen">
+      isInFullScreen : {{ isInFullScreen }}
+    </div>
+
+    <div *ngIf="isInFullScreen && visualizationType && (visualizationType =='TABLE' || visualizationType =='MAP' && visualizationType =='CHART' )">
+      button options to be loaded here
     </div>
 
   </div>

@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 export class ChartComponent implements OnInit{
 
   @Input() visualizationObject: Visualization;
+  @Input() isFullScreen;
   @ViewChild(ChartTemplateComponent)
   chartTemplate: ChartTemplateComponent;
   private _showOptions: boolean;

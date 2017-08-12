@@ -29,6 +29,8 @@ export class DashboardPage implements OnInit{
   dashboards:any = [];
   openedDashboardItemIds:any = {};
 
+  isInFullScreen : boolean;
+
   emptyListMessage : any;
 
   constructor(public modalCtrl:ModalController,
@@ -41,6 +43,7 @@ export class DashboardPage implements OnInit{
   ngOnInit() {
     this.menu.enable(true);
     this.isLoading = true;
+    this.isInFullScreen = false;
     this.loadingMessage = "Loading current user information";
     this.userProvider.getCurrentUser().then(currentUser=> {
       this.userProvider.getUserData().then((userData :any)=>{
@@ -53,7 +56,6 @@ export class DashboardPage implements OnInit{
       this.appProvider.setNormalNotification("Fail to loading current user information");
     });
   }
-
 
   loadingListOfAllDashboards(currentUser) {
     this.isLoading = true;
@@ -129,6 +131,21 @@ export class DashboardPage implements OnInit{
       });
       modal.present();
     }
+  }
+
+  loadFullScreenDashboard(modalData){
+    this.isLoading = true;
+    this.loadingMessage = "Please wait ...";
+    let data = {
+      dashboardItem : modalData.dashboardItem,
+      dashboardId : modalData.dashboardId
+    };
+    let modal = this.modalCtrl.create('FullScreenDashboardPage', data);
+    modal.onDidDismiss(()=> {
+      this.loadingMessage = "";
+      this.isLoading = false;
+    });
+    modal.present();
   }
 
   reLoadDashBoard(refresher){

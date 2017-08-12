@@ -3,6 +3,11 @@ dashboard-card {
     padding-top: 10px;
   }
 
+  .dashboard-card-overflow-with-fixed-height{
+    overflow:auto;
+    max-height: 410px;
+  }
+
   .dashboard-card-overflow{
     overflow:auto;
   }

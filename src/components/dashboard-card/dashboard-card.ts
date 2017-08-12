@@ -1,6 +1,5 @@
 import { Component,Input,Output,EventEmitter,OnInit } from '@angular/core';
 import {UserProvider} from "../../providers/user/user";
-import {AppProvider} from "../../providers/app/app";
 import {VisualizationObjectServiceProvider} from '../../providers/visualization-object-service/visualization-object-service';
 import {FavoriteServiceProvider} from '../../providers/favorite-service/favorite-service';
 import {AnalyticsServiceProvider} from '../../providers/analytics-service/analytics-service';
@@ -25,7 +24,8 @@ export class DashboardCardComponent implements OnInit{
 
   @Input() dashboardItem;
   @Input() dashboardId;
-  @Output() dashboardItemAnalyticData = new EventEmitter();
+  @Input() dashBoardCardClass;
+  @Input() isInFullScreen;
   @Output() loadInFullScreen = new EventEmitter();
 
   currentUser : any;
@@ -37,7 +37,6 @@ export class DashboardCardComponent implements OnInit{
   filterIcon : string;
 
   constructor(private userProvider : UserProvider,
-              private appProvider : AppProvider,
               private visualizationObjectService: VisualizationObjectServiceProvider,
               private favoriteService: FavoriteServiceProvider,
               private analyticsService: AnalyticsServiceProvider,
@@ -132,6 +131,14 @@ export class DashboardCardComponent implements OnInit{
 
       })
     })
+  }
+
+  loadFullScreenDashboard(){
+    let data = {
+      dashboardItem : this.dashboardItem,
+      dashboardId : this.dashboardId
+    };
+    this.loadInFullScreen.emit(data);
   }
 
   extendVisualizationObjectWithLayout(visualizationObject: any, layouts: any) {
