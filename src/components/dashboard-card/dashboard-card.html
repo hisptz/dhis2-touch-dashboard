@@ -21,8 +21,7 @@
 
 
     <div *ngIf="visualizationType && visualizationType =='CHART'">
-      chart
-      <!--<chart-card [chartObject]="chartObject" [dashboardItemId]="dashboardItem.id"></chart-card>-->
+      <chart [visualizationObject]="visualizationObject"></chart>
     </div>
 
     <div *ngIf="visualizationType && visualizationType =='TABLE'">

@@ -91,7 +91,8 @@ export class AnalyticsServiceProvider {
       return '';
     }
     let url: string = apiRootUrl + 'analytics';
-    const aggregationType: string = visualizationSettings.hasOwnProperty('aggregationType') ? '&aggregationType=' + visualizationSettings.aggregationType : '';
+    const aggregationType: string = visualizationSettings.hasOwnProperty('aggregationType') ?
+      visualizationSettings.aggregationType !== 'DEFAULT' ? '&aggregationType=' + visualizationSettings.aggregationType : '' : '';
     const value: string = visualizationSettings.hasOwnProperty('value') ? '&value=' + visualizationSettings.value.id : '';
 
     if (visualizationType === 'EVENT_CHART') {
@@ -130,9 +131,11 @@ export class AnalyticsServiceProvider {
       url += '.json?';
     }
 
+
     if (url.split('&').length <= 1 && parameters.split('&').length <= 1) {
       return '';
     }
+
     if (parameters !== '') {
       url += parameters;
     }

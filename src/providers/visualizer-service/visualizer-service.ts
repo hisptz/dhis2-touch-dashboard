@@ -406,27 +406,29 @@ export class VisualizerServiceProvider {
 
   private _getChartTitleObject(chartConfiguration: ChartConfiguration): any {
 
-    if (chartConfiguration.hideTitle) {
-      return null;
-    }
-    return {
-      text: chartConfiguration.title,
-      style: {
-        color: '#269ABC',
-        fontWeight: '600',
-        fontSize: '13px'
-      }
-    }
+    // if (chartConfiguration.hideTitle) {
+    //   return null;
+    // }
+    // return {
+    //   text: chartConfiguration.title,
+    //   style: {
+    //     color: '#269ABC',
+    //     fontWeight: '600',
+    //     fontSize: '13px'
+    //   }
+    // }
+    return null
   }
 
   private _getChartSubtitleObject(chartConfiguration: ChartConfiguration): any {
 
-    if (chartConfiguration.hideSubtitle) {
-      return null;
-    }
-    return {
-      text: chartConfiguration.subtitle
-    };
+    // if (chartConfiguration.hideSubtitle) {
+    //   return null;
+    // }
+    // return {
+    //   text: chartConfiguration.subtitle
+    // };
+    return null
   }
 
   private _getChartCreditsOptions(): any {
@@ -548,7 +550,8 @@ export class VisualizerServiceProvider {
   private _getChartAttributeOptions(chartConfiguration: ChartConfiguration) {
     const chartOptions: any = {
       renderTo: chartConfiguration.renderId,
-      type: this._getAllowedChartType(chartConfiguration.type)
+      type: this._getAllowedChartType(chartConfiguration.type),
+      backgroundColor : '#F4F4F4'
     };
 
     /**
