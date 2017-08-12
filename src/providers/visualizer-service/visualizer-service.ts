@@ -416,16 +416,17 @@ export class VisualizerServiceProvider {
 
   private _getChartTitleObject(chartConfiguration: ChartConfiguration): any {
 
-    if (chartConfiguration.hideTitle) {
-      return null;
-    }
-    return {
-      text: chartConfiguration.title,
-      style: {
-        fontWeight: '600',
-        fontSize: '13px'
-      }
-    }
+    // if (chartConfiguration.hideTitle) {
+    //   return null;
+    // }
+    // return {
+    //   text: chartConfiguration.title,
+    //   style: {
+    //     fontWeight: '600',
+    //     fontSize: '13px'
+    //   }
+    // }
+    return null;
   }
 
   private _getChartSubtitleObject(chartConfiguration: ChartConfiguration): any {

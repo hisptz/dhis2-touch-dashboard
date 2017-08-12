@@ -316,7 +316,11 @@ export class DashboardCardComponent implements OnInit{
 
         newVisualizationObject.layers = _.assign([], visualizationObjectLayersWithChartObject);
 
+        const settings =  _.map(newVisualizationObject.layers, (layer: any) => layer.settings);
         newVisualizationObject.details.loaded = true;
+        newVisualizationObject.details.chartType = chartType ? chartType :
+          settings && settings.length > 0 ? _.lowerCase(settings[0].type) : '';
+
         observer.next(newVisualizationObject);
         observer.complete();
 

@@ -29,7 +29,7 @@
 
      </ion-col>
      <ion-col col-2 col-sm-1 col-md-1 col-lg-1 text-right no-padding>
-       <button *ngFor="let visualization of visualizationOptions" [disabled]="visualization.isDisabled" ion-button color="light" clear class="chart-icon-container"    (tap)="updateChart(visualization.type)" >
+       <button *ngFor="let visualization of visualizationOptions" [disabled]="visualizationObject.details.chartType == visualization.type" ion-button color="light" clear class="chart-icon-container"    (tap)="updateChart(visualization.type)" >
          <img class="chart-icon" [src]="visualization.icon">
        </button>
      </ion-col>
