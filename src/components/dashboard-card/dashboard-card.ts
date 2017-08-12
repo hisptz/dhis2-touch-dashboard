@@ -149,6 +149,18 @@ export class DashboardCardComponent implements OnInit{
         visualization.isDisabled = false;
       }
     });
+
+    this.visualizationType = visualizationType;
+    this.visualizationObject.details.loaded = false;
+    this.isVisualizationDataLoaded = false;
+    this.visualizationObject.details.currentVisualization = visualizationType;
+
+    this.extendVisualizationObjectWithDrawingObjects(this.visualizationObject, this.currentUser)
+      .subscribe((newVisualizationObject: any) => {
+        console.log(JSON.stringify(newVisualizationObject.layers));
+        this.visualizationObject = _.assign({}, newVisualizationObject);
+        this.isVisualizationDataLoaded = newVisualizationObject.details.loaded;
+      })
   }
 
   loadFullScreenDashboard(){
@@ -236,12 +248,23 @@ export class DashboardCardComponent implements OnInit{
       return newLayer;
     });
 
+    /**
+     * Make a copy of layers for later use
+     */
+    newVisualizationObject.operatingLayers = _.assign([], newVisualizationObject.layers);
+
     return newVisualizationObject;
   }
 
   extendVisualizationObjectWithDrawingObjects(currentVisualizationObject: any, currentUser) {
     const currentVisualization: string = currentVisualizationObject.details.currentVisualization;
     const newVisualizationObject = _.clone(currentVisualizationObject);
+
+    /**
+     * Take original copy of layers
+     */
+    newVisualizationObject.layers = _.assign([], newVisualizationObject.operatingLayers);
+
     return Observable.create(observer => {
       if (currentVisualization === 'CHART') {
         const mergeVisualizationObject = this.visualizationObjectService.mergeVisualizationObject(newVisualizationObject);
