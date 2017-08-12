@@ -55,19 +55,17 @@ export class ChartComponent implements OnInit{
   }
 
   updateChart(chartType){
-    //@todo logic to update visualization, instance line,bar,pie etc
-    //
-
-    //deactivate selected type
-    this.visualizationOptions.forEach((visualization : any)=>{
-      if(visualization.type == chartType){
-        visualization.isDisabled = true;
-      }else{
-        visualization.isDisabled = false;
-      }
-    });
-
-    this.onChartTypeUpdate.emit(chartType);
+    if(this.visualizationObject.details.loaded){
+      this.onChartTypeUpdate.emit(chartType);
+      //deactivate selected type
+      this.visualizationOptions.forEach((visualization : any)=>{
+        if(visualization.type == chartType){
+          visualization.isDisabled = true;
+        }else{
+          visualization.isDisabled = false;
+        }
+      });
+    }
   }
 
   get chartObjects(): any {
