@@ -1,6 +1,7 @@
 import { Component,Input,OnInit,ViewChild } from '@angular/core';
 import {Visualization} from "../../model/visualization";
 import {ChartTemplateComponent} from "../chart-template/chart-template";
+import {ResourceProvider} from "../../providers/resource/resource";
 import * as _ from 'lodash';
 
 /**
@@ -16,7 +17,7 @@ import * as _ from 'lodash';
 export class ChartComponent implements OnInit{
 
   @Input() visualizationObject: Visualization;
-  @Input() isFullScreen;
+  @Input() isInFullScreen;
   @ViewChild(ChartTemplateComponent)
   chartTemplate: ChartTemplateComponent;
   private _showOptions: boolean;
@@ -25,7 +26,9 @@ export class ChartComponent implements OnInit{
   private _errorMessage: string;
   private _chartObjects: any;
 
-  constructor() {
+  visualizationOptions : any;
+
+  constructor(private resourceProvider : ResourceProvider,) {
     this._showOptions = false;
     this._loaded = false;
     this._chartHasError = false;
@@ -33,6 +36,7 @@ export class ChartComponent implements OnInit{
   }
 
   ngOnInit(){
+    this.visualizationOptions = this.resourceProvider.getVisualizationIcons().charts;
     this._loaded = this.visualizationObject.details.loaded;
     this._chartHasError = this.visualizationObject.details.hasError;
     this._errorMessage = this.visualizationObject.details.errorMessage;

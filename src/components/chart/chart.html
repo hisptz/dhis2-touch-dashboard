@@ -14,7 +14,8 @@
                     (onChartRenderFailure)="getChartError($event)"></chart-template>
   </div>
 
-  <div *ngIf="isFullScreen">
-    here we are
-  </div>
+ <div *ngIf="isInFullScreen">
+   isInFullScreen : {{ isInFullScreen }}<br>
+   {{ visualizationOptions|json}}
+ </div>
 </div>

@@ -8,6 +8,7 @@ import {ChartServiceProvider} from '../../providers/chart-service/chart-service'
 import {TableServiceProvider} from '../../providers/table-service/table-service';
 import {MapServiceProvider} from '../../providers/map-service/map-service';
 import {GeoFeatureServiceProvider} from '../../providers/geo-feature-service/geo-feature-service';
+import {ResourceProvider} from "../../providers/resource/resource";
 import * as _ from 'lodash';
 
 /**
@@ -33,6 +34,7 @@ export class DashboardCardComponent implements OnInit{
   isVisualizationDataLoaded: boolean;
   visualizationType: string;
 
+  visualizationOptions : any;
   zoomIcon : string;
   filterIcon : string;
 
@@ -43,6 +45,7 @@ export class DashboardCardComponent implements OnInit{
               private chartService: ChartServiceProvider,
               private tableService: TableServiceProvider,
               private mapService: MapServiceProvider,
+              private resourceProvider : ResourceProvider,
               private geoFeatureService: GeoFeatureServiceProvider
               ) {
 
@@ -52,6 +55,7 @@ export class DashboardCardComponent implements OnInit{
   ngOnInit() {
     this.zoomIcon = 'assets/dashboard/full-screen.png';
     this.filterIcon = 'assets/dashboard/filter.png';
+    this.visualizationOptions = this.resourceProvider.getVisualizationIcons().visualizationType;
 
     this.userProvider.getCurrentUser().then((currentUser :any)=>{
       this.currentUser = currentUser;
