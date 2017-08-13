@@ -262,7 +262,7 @@ export class MapVisualizationServiceProvider {
   }
 
   private _getMapLayers(L, visualizationLayers, basemap, mapObjectId, prioritizeFilter): any {
-    const mapLayers: any[] = [];
+    let mapLayers: any[] = [];
     const mapLayersWithNames: any[] = [];
     let centeringLayer: any = null;
     /**
@@ -284,9 +284,40 @@ export class MapVisualizationServiceProvider {
     visualizationLayers.forEach((layer, layerIndex) => {
       if (layer.settings.hasOwnProperty('layer')) {
 
-        if (layer.settings.layer === 'boundary' || layer.settings.layer.indexOf('thematic') !== -1 || layer.settings.layer === 'facility') {
+        if (layer.settings.layer === 'boundary') {
           const centerLayer = this._prepareGeoJSON(L, layer.settings, layer.analytics);
-          mapLayers.push(centerLayer);
+          if (centerLayer) {
+            mapLayers[0] = centerLayer;
+          }
+          const layerObject = {};
+          layerObject[layer.settings.name] = centerLayer;
+          mapLayersWithNames.push(layerObject);
+          /**
+           * Also add centering
+           * @type {L.GeoJSON}
+           */
+          centeringLayer = centerLayer;
+
+        } else if (layer.settings.layer === 'facility') {
+          const centerLayer = this._prepareGeoJSON(L, layer.settings, layer.analytics);
+          if (centerLayer) {
+            mapLayers[visualizationLayers.length - layerIndex] = centerLayer;
+          }
+          const layerObject = {};
+          layerObject[layer.settings.name] = centerLayer;
+          mapLayersWithNames.push(layerObject);
+          /**
+           * Also add centering
+           * @type {L.GeoJSON}
+           */
+          centeringLayer = centerLayer;
+
+        } else if (layer.settings.layer.indexOf('thematic') !== -1) {
+          const centerLayer = this._prepareGeoJSON(L, layer.settings, layer.analytics);
+          if (centerLayer) {
+            mapLayers[visualizationLayers.length - layerIndex] = centerLayer;
+          }
+
           const layerObject = {};
           layerObject[layer.settings.name] = centerLayer;
           mapLayersWithNames.push(layerObject);
@@ -307,7 +338,10 @@ export class MapVisualizationServiceProvider {
               this.mapObjects.push({id: mapObjectId, layer: centerLayer});
             }
 
-            mapLayers.push(centerLayer[0]);
+            // mapLayers.push(centerLayer[0]);
+            if (centerLayer[0]) {
+              mapLayers[visualizationLayers.length - layerIndex] = centerLayer[0];
+            }
 
             const layerObject = {};
             layerObject[layer.settings.name] = centerLayer[0];
@@ -315,7 +349,10 @@ export class MapVisualizationServiceProvider {
             centeringLayer = centerLayer[1];
           } else {
             const centerLayer = this._prepareMarkersLayerGroup(L, layer.settings, layer.analytics);
-            mapLayers.push(centerLayer[0]);
+            // mapLayers.push(centerLayer[0]);
+            if (centerLayer[0]) {
+              mapLayers[visualizationLayers.length - layerIndex] = centerLayer[0];
+            }
 
             const layerObject = {};
             layerObject[layer.settings.name] = centerLayer[0];
@@ -324,8 +361,11 @@ export class MapVisualizationServiceProvider {
           }
         } else if (layer.settings.layer === 'external') {
           const external = this.prepareTileLayer(L, this._prepareExternalTileLayer(layer.settings.config));
-          mapLayers.push(external);
+          // mapLayers.push(external);
 
+          if (external) {
+            mapLayers[visualizationLayers.length - layerIndex] = external;
+          }
           const layerObject = {};
           layerObject[layer.settings.name] = external;
           mapLayersWithNames.push(layerObject);
@@ -335,6 +375,9 @@ export class MapVisualizationServiceProvider {
 
       }
     });
+    mapLayers = mapLayers.filter(function (element) {
+      return element !== undefined;
+    })
     return [mapLayers, mapLayersWithNames, centeringLayer];
   }
 
