@@ -52,6 +52,10 @@ export class LoginPage implements OnInit{
           delete currentUser.password;
         }
         this.currentUser = currentUser;
+      }else{
+        this.currentUser.serverUrl = 'play.dhis2.org/demo';
+        this.currentUser.username = 'admin';
+        this.currentUser.password = 'district';
       }
     });
   }
