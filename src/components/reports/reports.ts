@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component,Input, OnInit } from '@angular/core';
+import {Visualization} from "../../model/visualization";
 
 /**
  * Generated class for the ReportsComponent component.
@@ -10,12 +11,22 @@ import { Component } from '@angular/core';
   selector: 'reports',
   templateUrl: 'reports.html'
 })
-export class ReportsComponent {
+export class ReportsComponent implements OnInit {
 
-  text: string;
+  @Input() visualizationObject: Visualization;
+  private _reports: any[];
+  constructor() { }
 
-  constructor() {
-    this.text = 'Report list';
+  ngOnInit() {
+    this._reports = this.visualizationObject.layers[0].settings.reports;
   }
 
+
+  get reports(): any[] {
+    return this._reports;
+  }
+
+  set reports(value: any[]) {
+    this._reports = value;
+  }
 }

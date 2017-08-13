@@ -43,6 +43,7 @@ import { UtilitiesServiceProvider } from '../providers/utilities-service/utiliti
 import { MapFilesConversionProvider } from '../providers/map-files-conversion/map-files-conversion';
 import {TileLayers} from '../constants/tile-layers';
 import {OrgUnitService} from '../providers/org-unit.service';
+import { MessageServiceProvider } from '../providers/message-service/message-service';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import {OrgUnitService} from '../providers/org-unit.service';
     VisualizerServiceProvider,
     UtilitiesServiceProvider,
     MapFilesConversionProvider,TileLayers,OrgUnitService,
+    MessageServiceProvider,
   ]
 })
 export class AppModule {}

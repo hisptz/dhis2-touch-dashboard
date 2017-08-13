@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component,OnInit, Input } from '@angular/core';
+import {Visualization} from "../../model/visualization";
 
 /**
  * Generated class for the ResourcesComponent component.
@@ -10,12 +11,22 @@ import { Component } from '@angular/core';
   selector: 'resources',
   templateUrl: 'resources.html'
 })
-export class ResourcesComponent {
+export class ResourcesComponent implements OnInit {
 
-  text: string;
+  @Input() visualizationObject: Visualization;
+  private _resources: any[];
+  constructor() { }
 
-  constructor() {
-    this.text = 'Resource list';
+  ngOnInit() {
+    this._resources = this.visualizationObject.layers[0].settings.resources;
   }
 
+
+  get resources(): any[] {
+    return this._resources;
+  }
+
+  set resources(value: any[]) {
+    this._resources = value;
+  }
 }

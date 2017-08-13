@@ -12,6 +12,7 @@ import { ResourcesComponent } from './resources/resources';
 import { MessagesComponent } from './messages/messages';
 import { ReportsComponent } from './reports/reports';
 import { VisualizationLegendComponent } from './visualization-legend/visualization-legend';
+import {SafePipe} from "./safe.pipe";
 
 @NgModule({
   declarations: [DashboardCardComponent,
@@ -19,7 +20,7 @@ import { VisualizationLegendComponent } from './visualization-legend/visualizati
     TableCardComponent,UsersComponent,
     ResourcesComponent,AppComponent,
     VisualizationLegendComponent,
-    MessagesComponent,
+    MessagesComponent,SafePipe,
     ReportsComponent ],
   imports: [
     IonicModule,SharedModule
@@ -29,7 +30,7 @@ import { VisualizationLegendComponent } from './visualization-legend/visualizati
     TableCardComponent,UsersComponent,
     ResourcesComponent,AppComponent,
     VisualizationLegendComponent,
-    MessagesComponent,
+    MessagesComponent,SafePipe,
     ReportsComponent ]
 })
 

@@ -38,23 +38,23 @@
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='REPORTS'">
-        <reports ></reports>
+        <reports [visualizationObject]="visualizationObject" ></reports>
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='USERS'">
-        <users ></users>
+        <users [visualizationObject]="visualizationObject"></users>
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='RESOURCES'">
-        <resources ></resources>
+        <resources [visualizationObject]="visualizationObject" ></resources>
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='MESSAGES'">
-        <messages ></messages>
+        <messages [currentUser]="currentUser" ></messages>
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='APP'">
-        <app ></app>
+        <app [currentUser]="currentUser" [visualizationObject]="visualizationObject" ></app>
       </div>
 
       <div *ngIf="visualizationType && visualizationType =='DICTIONARY'">

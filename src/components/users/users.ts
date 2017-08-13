@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component,OnInit,Input } from '@angular/core';
+import {Visualization} from "../../model/visualization";
 
 /**
  * Generated class for the UsersComponent component.
@@ -10,12 +11,24 @@ import { Component } from '@angular/core';
   selector: 'users',
   templateUrl: 'users.html'
 })
-export class UsersComponent {
+export class UsersComponent implements OnInit {
 
-  text: string;
-
+  @Input() visualizationObject: Visualization;
+  private _users: any[];
   constructor() {
-    this.text = 'Users list';
+
   }
 
+  ngOnInit() {
+    this._users = this.visualizationObject.layers[0].settings.users;
+  }
+
+
+  get users(): any[] {
+    return this._users;
+  }
+
+  set users(value: any[]) {
+    this._users = value;
+  }
 }
