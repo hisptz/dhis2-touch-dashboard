@@ -15,7 +15,6 @@ export class RelativePeriodServiceProvider {
   }
 
   getISOFormatFromRelativePeriod(favourite): Array<string> {
-    let isoFormat = [];
     let periodDimension = undefined;
     let newPeriodDimension = {dimension: 'pe', items: []};
     let periodIndex = null;
@@ -45,6 +44,7 @@ export class RelativePeriodServiceProvider {
       favourite[parentdimension].push(newPeriodDimension);
     }
 
+
     return favourite;
   }
 
@@ -65,6 +65,9 @@ export class RelativePeriodServiceProvider {
         fixedPeriods = [...fixedPeriods, ...newPeriods];
       })
     }
+    if (fixedPeriods.length<=0){
+      fixedPeriods = relativePeriodArray;
+    }
     return fixedPeriods;
   }
 
@@ -80,8 +83,7 @@ export class RelativePeriodServiceProvider {
       dimensionItem: '',
       displayName: '',
       dimensionItemType: 'PERIOD'
-    };
-
+    }
     const periodFunctions = this._getExecutingPeriodFunctions();
     if (relativePeriod) {
       let functionName = null;
@@ -89,7 +91,7 @@ export class RelativePeriodServiceProvider {
         if (relativePeriod.id.indexOf(category) > -1) {
           functionName = category;
         }
-      });
+      })
 
       /**
        Execute dynamic functions that return fixed periods
@@ -120,7 +122,6 @@ export class RelativePeriodServiceProvider {
         let endOfTheYear = false;
 
         lastNMonths.forEach((month) => {
-          const theTemplate = template;
           month === 12 ? endOfTheYear = true : endOfTheYear = false;
           if (month < 10) {
             months.push({
@@ -270,8 +271,6 @@ export class RelativePeriodServiceProvider {
         return lastweeks;
       },
       '_FINANCIAL_YEAR': (template, counts, tense) => {
-        const hypotheticalFinancialYearMonth = 10;
-        const currentFinancialYear = this._getThisFinancialYear();
         let currentYear = currentDate.getFullYear();
         let nthFinancialYears = [];
         if (tense == 'LAST') {

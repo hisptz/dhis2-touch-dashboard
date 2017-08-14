@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import {HttpClientProvider} from "../http-client/http-client";
 import {OrgUnitService} from "../org-unit.service";
 import {ColorInterpolationServiceProvider} from "../color-interpolation-service/color-interpolation-service";
+import {LegendSet} from "../../model/legend-set";
 
 /*
   Generated class for the LegendSetServiceProvider provider.
@@ -57,9 +58,10 @@ export class LegendSetServiceProvider {
         url: tileLayers[layer].url,
         image: tileLayers[layer].image,
         maxZoom: tileLayers[layer].maxZoom
-      };
+      }
       baseMapLayers.push(tileLayer);
-    });
+    })
+
     return baseMapLayers;
   }
 
@@ -84,7 +86,7 @@ export class LegendSetServiceProvider {
     return legend;
   }
 
-  public boundaryLayerLegendClasses(mapVisualizationSettings,currentUser, mapVisualizationAnalytics?): Observable<any> {
+  public boundaryLayerLegendClasses(mapVisualizationSettings, currentUser,mapVisualizationAnalytics?): Observable<any> {
     const features = mapVisualizationSettings.geoFeature;
     const Levels = this._getBoundaryLevels(features);
     const totalFeatures = features.length;
@@ -99,7 +101,7 @@ export class LegendSetServiceProvider {
           if (_.find(Levels, ['id', organisationUnitLevel.level])) {
             Levels[indexLevel].name = organisationUnitLevel.name;
           }
-        })
+        });
 
         Levels.forEach(level => {
           legend.push({
@@ -202,17 +204,21 @@ export class LegendSetServiceProvider {
 
   public getEventName(visualizationAnalytics) {
     const metaDataObject = visualizationAnalytics.metaData;
+    const ou = metaDataObject.ou;
+    const names = metaDataObject.names;
 
     // TODO : Find a best way to remove this hardcoding
-    let eventId = '';
-    for (const propt in metaDataObject) {
-      if (['names', 'pe', 'ou'].indexOf(propt) === -1) {
-        eventId = propt;
+    let eventName = '';
+    let eventid = '';
+    for (const propt in names) {
+      if (ou.indexOf(propt)<0&&propt!=='ou'){
+        eventName = names[propt];
+        eventid = propt;
       }
 
     }
 
-    return [metaDataObject.names[eventId], metaDataObject[eventId]];
+    return [eventName, metaDataObject[eventid]];
   }
 
   public prepareLayerEvent(layer, action): MapLayerEvent {
@@ -501,25 +507,31 @@ export class LegendSetServiceProvider {
   }
 
   getFacilityLayerLegendClasses(visualizationLayerSettings, isLegendView) {
-    const legend = {
-      layerId: '',
+    const legend: LegendSet = {
+      id: '',
       name: '',
       description: '',
+      hidden: false,
+      opened: false,
       pinned: false,
+      isEvent: false,
+      isClustered: false,
+      isThematic: false,
+      isBoundary: false,
+      isFacility: true,
       useIcons: false,
       opacity: 0,
-      layer: '',
       classes: [],
       change: []
     }
+
+
     const groupSet = visualizationLayerSettings.organisationUnitGroupSet;
     const features = visualizationLayerSettings.geoFeature;
-    legend.layerId = visualizationLayerSettings.id;
+    legend.id = visualizationLayerSettings.id;
     legend.name = groupSet.name;
     legend.opacity = visualizationLayerSettings.opacity ? visualizationLayerSettings.opacity * 100 : 80;
-
     const totalFeatures: number = features.length;
-
     groupSet.organisationUnitGroups.forEach(group => {
       const classLegend = {
         name: group.name,
@@ -540,7 +552,6 @@ export class LegendSetServiceProvider {
 
       classLegend.relativeFrequency = totalFeatures !== 0 ? (classLegend.count / totalFeatures).toFixed(0) + '%' : '';
       legend.classes.push(classLegend);
-
       if (!isLegendView) {
         features.forEach(feature => {
           const featureIndex = _.findIndex(group.organisationUnits, ['id', feature.id]);

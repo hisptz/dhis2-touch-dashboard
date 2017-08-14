@@ -14,6 +14,7 @@ export class MapServiceProvider {
 
   constructor(private mapVisualizationService : MapVisualizationServiceProvider) {}
 
+
   public getMapConfiguration(visualizationObject: Visualization): MapConfiguration {
     return {
       id: visualizationObject.id,
@@ -29,5 +30,4 @@ export class MapServiceProvider {
   getMapObject(visualizationDetails) {
     return this.mapVisualizationService.drawMap(visualizationDetails.leafletObject, visualizationDetails.visualizationObject);
   }
-
 }
