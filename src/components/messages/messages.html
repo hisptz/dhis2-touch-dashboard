@@ -30,7 +30,7 @@
                 <div class="message-container">
                   <div *ngIf="messageIndex == 0">
               <span *ngIf="messageConversation.user && messageConversation.user.displayName" class="sender">
-                 {{messageConversation.user.displayName  }} said
+                 {{messageConversation.user.displayName  }}&nbsp;:&nbsp;
               </span>
                     <span class="message">
                 {{ message.name }}
@@ -38,7 +38,7 @@
                   </div>
                   <div *ngIf="messageIndex > 0">
               <span *ngIf="message.sender && message.sender.displayName" class="sender">
-                 {{ message.sender.displayName   }} said
+                 {{ message.sender.displayName   }}&nbsp;:&nbsp;
               </span>
                     <span class="message">
                 {{ message.name }}

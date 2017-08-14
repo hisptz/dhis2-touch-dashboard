@@ -71,69 +71,77 @@ export class DashboardCardComponent implements OnInit{
       this.isVisualizationDataLoaded = initialVisualizationObject.details.loaded;
       this.visualizationType = initialVisualizationObject.details.currentVisualization;
 
-      this.favoriteService.getFavorite({
-        visualizationObject: initialVisualizationObject,
-        apiRootUrl: '/api/25/'
-      },
-        currentUser
-      ).subscribe(favoriteResult => {
-        if (favoriteResult) {
-          /**
-           * Extend visualization object with favorite
-           * @type {any}
-           */
-          const visualizationObjectWithFavorite = this.extendVisualizationWithFavorite(
-            initialVisualizationObject,
-            favoriteResult.favorite,
-            favoriteResult.error);
+      //todo double check why layers are reset after call get favorites
+      if (initialVisualizationObject.type === 'USERS' || initialVisualizationObject.type === 'REPORTS' || initialVisualizationObject.type === 'RESOURCES' || initialVisualizationObject.type === 'APP') {
+        this.visualizationObject.details.loaded = true;
+        this.isVisualizationDataLoaded = this.visualizationObject.details.loaded;
+      }else{
+        this.favoriteService.getFavorite({
+            visualizationObject: initialVisualizationObject,
+            apiRootUrl: '/api/25/'
+          },
+          currentUser
+        ).subscribe(favoriteResult => {
+          if (favoriteResult) {
+            /**
+             * Extend visualization object with favorite
+             * @type {any}
+             */
+            const visualizationObjectWithFavorite = this.extendVisualizationWithFavorite(
+              initialVisualizationObject,
+              favoriteResult.favorite,
+              favoriteResult.error);
 
-          const visualizationFilterResults = this.favoriteService.getVisualizationFiltersFromFavorite(favoriteResult);
+            const visualizationFilterResults = this.favoriteService.getVisualizationFiltersFromFavorite(favoriteResult);
 
-          /**
-           * Extend visualization object with filters
-           */
-          const visualizatiobObjectWithFilters = this.extendVisualizationObjectWithFilters(
-            visualizationObjectWithFavorite,
-            visualizationFilterResults.filters);
+            /**
+             * Extend visualization object with filters
+             */
+            const visualizatiobObjectWithFilters = this.extendVisualizationObjectWithFilters(
+              visualizationObjectWithFavorite,
+              visualizationFilterResults.filters);
 
-          const visualizationDetailsWithFiltersAndLayout = this.favoriteService.getVisualizationLayoutFromFavorite(
-            visualizationFilterResults
-          );
+            const visualizationDetailsWithFiltersAndLayout = this.favoriteService.getVisualizationLayoutFromFavorite(
+              visualizationFilterResults
+            );
 
-          /**
-           * Extend visualization object with layouts
-           */
-          const visualizationObjectWithLayout = this.extendVisualizationObjectWithLayout(
-            visualizatiobObjectWithFilters,
-            visualizationDetailsWithFiltersAndLayout.layouts
-          );
+            /**
+             * Extend visualization object with layouts
+             */
+            const visualizationObjectWithLayout = this.extendVisualizationObjectWithLayout(
+              visualizatiobObjectWithFilters,
+              visualizationDetailsWithFiltersAndLayout.layouts
+            );
 
-          if (visualizationDetailsWithFiltersAndLayout) {
-            this.analyticsService.getAnalytics(
-              visualizationDetailsWithFiltersAndLayout,
-              currentUser
-            ).subscribe(visualizationWithAnalytics => {
+            if (visualizationDetailsWithFiltersAndLayout) {
+              this.analyticsService.getAnalytics(
+                visualizationDetailsWithFiltersAndLayout,
+                currentUser
+              ).subscribe(visualizationWithAnalytics => {
 
-              /**
-               * Extend visualization object with analytics
-               */
-              const visualizationObjectWithAnalytics = this.extendVisualizationWithAnalytics(
-                visualizationObjectWithLayout,
-                visualizationWithAnalytics.analytics
-              )
+                /**
+                 * Extend visualization object with analytics
+                 */
+                const visualizationObjectWithAnalytics = this.extendVisualizationWithAnalytics(
+                  visualizationObjectWithLayout,
+                  visualizationWithAnalytics.analytics
+                )
 
-              this.extendVisualizationObjectWithDrawingObjects(
-                visualizationObjectWithAnalytics, currentUser
-              ).subscribe((visualizatioObject: any) => {
-                this.visualizationObject = visualizatioObject;
-                this.isVisualizationDataLoaded = visualizatioObject.details.loaded;
+                this.extendVisualizationObjectWithDrawingObjects(
+                  visualizationObjectWithAnalytics, currentUser
+                ).subscribe((visualizatioObject: any) => {
+                  this.visualizationObject = visualizatioObject;
+                  this.isVisualizationDataLoaded = visualizatioObject.details.loaded;
+                })
               })
-            })
+            }
+
           }
 
-        }
+        })
+      }
 
-      })
+
     })
   }
 
@@ -157,7 +165,6 @@ export class DashboardCardComponent implements OnInit{
 
     this.extendVisualizationObjectWithDrawingObjects(this.visualizationObject, this.currentUser)
       .subscribe((newVisualizationObject: any) => {
-        console.log(JSON.stringify(newVisualizationObject.layers));
         this.visualizationObject = _.assign({}, newVisualizationObject);
         this.isVisualizationDataLoaded = newVisualizationObject.details.loaded;
       })
