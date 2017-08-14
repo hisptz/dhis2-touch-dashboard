@@ -626,7 +626,8 @@ export class VisualizerServiceProvider {
   private _getChartAttributeOptions(chartConfiguration: ChartConfiguration) {
     const chartOptions: any = {
       renderTo: chartConfiguration.renderId,
-      type: this._getAllowedChartType(chartConfiguration.type)
+      type: this._getAllowedChartType(chartConfiguration.type),
+      backgroundColor : "#F4F4F4"
     };
 
     /**
