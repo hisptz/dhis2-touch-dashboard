@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {ResourceProvider} from "../providers/resource/resource";
 import {UserProvider} from "../providers/user/user";
+import {DashboardProvider} from "../providers/dashboard/dashboard";
 
 @Component({
   templateUrl: 'app.html'
@@ -18,7 +19,7 @@ export class MyApp {
   pages: Array<{title: string, component: any,icon : string}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar,
-              private  UserProvider : UserProvider,
+              private  UserProvider : UserProvider,private dashboardServices : DashboardProvider,
               public splashScreen: SplashScreen,public ResourceProvider : ResourceProvider) {
     this.initializeApp();
     this.logoUrl = "assets/img/logo.png";
@@ -49,6 +50,7 @@ export class MyApp {
       let user :any = await this.UserProvider.getCurrentUser();
       user.isLogin = false;
       this.UserProvider.setCurrentUser(user).then(()=>{
+        this.dashboardServices.resetDashboards();
         this.nav.setRoot('LoginPage');
       })
     }catch (e){

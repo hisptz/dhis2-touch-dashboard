@@ -3,7 +3,7 @@ import { IonicPage, NavController,MenuController } from 'ionic-angular';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import {UserProvider} from "../../providers/user/user";
 import {NetworkAvailabilityProvider} from "../../providers/network-availability/network-availability";
-import {DashboardServiceProvider} from "../../providers/dashboard-service/dashboard-service";
+import {DashboardProvider} from "../../providers/dashboard/dashboard";
 /**
  * Generated class for the LauncherPage page.
  *
@@ -23,7 +23,7 @@ export class LauncherPage implements OnInit{
   constructor(private navCtrl: NavController,
               private menu : MenuController,
               private UserProvider : UserProvider,
-              private DashboardServiceProvider : DashboardServiceProvider,
+              private DashboardServiceProvider : DashboardProvider,
               private NetworkAvailabilityProvider : NetworkAvailabilityProvider,
               private backgroundMode: BackgroundMode) {
   }
