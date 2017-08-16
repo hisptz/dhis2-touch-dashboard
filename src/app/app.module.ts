@@ -19,7 +19,6 @@ import {UserProvider} from "../providers/user/user";
 import {NetworkAvailabilityProvider} from "../providers/network-availability/network-availability";
 import {AppProvider} from "../providers/app/app";
 import {VisualizerService} from "../providers/visualizer-service";
-import {DashboardServiceProvider} from "../providers/dashboard-service/dashboard-service";
 import {DashboardModule} from "../components/dashboard.module";
 import { AboutProvider } from '../providers/about/about';
 import { ProfileProvider } from '../providers/profile/profile';
@@ -65,7 +64,7 @@ import { MessageServiceProvider } from '../providers/message-service/message-ser
     SplashScreen,HTTP,AppVersion,Network,BackgroundMode,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ResourceProvider,HttpClientProvider,UserProvider,NetworkAvailabilityProvider,AppProvider,
-    VisualizerService,DashboardServiceProvider,
+    VisualizerService,
     AboutProvider,
     ProfileProvider,
     DashboardProvider,
