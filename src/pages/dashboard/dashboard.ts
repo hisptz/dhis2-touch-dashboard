@@ -4,6 +4,7 @@ import {NetworkAvailabilityProvider} from "../../providers/network-availability/
 import {UserProvider} from "../../providers/user/user";
 import {AppProvider} from "../../providers/app/app";
 import {DashboardProvider} from "../../providers/dashboard/dashboard";
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 /**
  * Generated class for the DashboardPage page.
@@ -37,10 +38,14 @@ export class DashboardPage implements OnInit{
               private appProvider:AppProvider, private userProvider:UserProvider,
               private DashboardService: DashboardProvider,
               private NetworkAvailability:NetworkAvailabilityProvider,
+              private backgroundMode: BackgroundMode,
               private menu:MenuController) {
   }
 
   ngOnInit() {
+    this.backgroundMode.disable().then(()=>{
+      console.log("success");
+    },reason => (console.log('here : ' + JSON.stringify(reason))));
     this.menu.enable(true);
     this.isLoading = true;
     this.isInFullScreen = false;
