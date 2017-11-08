@@ -29,7 +29,7 @@ export class LauncherPage implements OnInit{
   }
 
   ngOnInit(){
-    this.logoUrl = 'assets/img/logo.png';
+    this.logoUrl = 'assets/img/app-logo.png';
     this.backgroundMode.enable();
     this.menu.enable(false);
     this.NetworkAvailabilityProvider.setNetworkStatusDetection();

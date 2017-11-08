@@ -38,7 +38,7 @@ export class LoginPage implements OnInit{
 
   ngOnInit(){
     this.menu.enable(false);
-    this.logoUrl = 'assets/img/logo.png';
+    this.logoUrl = 'assets/img/app-logo.png';
     this.currentUser = {};
     this.isLoginProcessActive = false;
     this.progress = "0";
