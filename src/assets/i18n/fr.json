@@ -1,0 +1,20 @@
+{
+  "innovation_in_every_dimension" : "L'innovation dans toutes les dimensions",
+  "establishing_connection_to_server" : "Établir une connexion au serveur",
+  "aggregate_metadata" : "Métadonnées agrégées",
+  "Event_and_tracker_metadata" : "Métadonnées d'événement et de suivi",
+  "report_metadata" : "Signaler les métadonnées",
+  "enter_server_address" :"Entrez l'adresse du serveur",
+  "enter_username" : "Saisissez votre nom d'utilisateur",
+  "enter_password" : "Entrer le mot de passe",
+  "login" : "S'identifier",
+  "powered_by" : "Alimenté par",
+  "offline_instances" : "Instances hors connexion",
+  "or": "ou",
+  "loading_system_information" : "Discovering system information",
+  "loading_current_user_authorities" : "Discovering current user authorities",
+  "preparing_local_storage" : "Préparation du stockage local",
+  "loading" : "Discovering",
+  "log_out" : "Log out",
+  "dashboard" : "Dashboard"
+}
