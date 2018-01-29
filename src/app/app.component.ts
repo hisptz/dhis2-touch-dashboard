@@ -2,9 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import {ResourceProvider} from "../providers/resource/resource";
+import {LauncherPage} from "../pages/launcher/launcher";
 import {UserProvider} from "../providers/user/user";
-import {DashboardProvider} from "../providers/dashboard/dashboard";
 
 @Component({
   templateUrl: 'app.html'
@@ -13,44 +12,41 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any;
-  logoUrl :string;
-  logOutIcon : string;
 
-  pages: Array<{title: string, component: any,icon : string}>;
+  pages: Array<{ title: string, component: any, icon: string }>;
+  logoUrl : string;
+  logOutIcon :  string;
 
-  constructor(public platform: Platform, public statusBar: StatusBar,
-              private  UserProvider : UserProvider,private dashboardServices : DashboardProvider,
-              public splashScreen: SplashScreen,public ResourceProvider : ResourceProvider) {
+  constructor(private platform: Platform, private statusBar: StatusBar,
+              private userProvider : UserProvider,
+              private splashScreen: SplashScreen) {
     this.initializeApp();
     this.logoUrl = "assets/img/logo.png";
-    var menuIcons = this.ResourceProvider.getSideMenuIcons();
-    this.logOutIcon = menuIcons.logOut;
+    this.logOutIcon = "assets/img/logo.png";
+    // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Dashboard', component: 'DashboardPage', icon : menuIcons.dashboard},
-      { title: 'Profile', component: 'ProfilePage', icon : menuIcons.profile },
-      { title: 'About', component: 'AboutPage', icon : menuIcons.about }
+      { title: 'dashboard', component: 'DashboardPage',icon: 'home' },
     ];
-
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.rootPage = 'LauncherPage';
+      this.rootPage = LauncherPage;
     });
   }
 
   openPage(page) {
     this.nav.setRoot(page.component);
+
   }
 
   async logOut(){
     try{
-      let user :any = await this.UserProvider.getCurrentUser();
+      let user :any = await this.userProvider.getCurrentUser();
       user.isLogin = false;
-      this.UserProvider.setCurrentUser(user).then(()=>{
-        this.dashboardServices.resetDashboards();
+      this.userProvider.setCurrentUser(user).subscribe(()=>{
         this.nav.setRoot('LoginPage');
       })
     }catch (e){

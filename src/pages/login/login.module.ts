@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { LoginPage } from './login';
-import {SharedModule} from "../../components/shared.module";
+import {TranslateModule} from "@ngx-translate/core";
+import {SharedModule} from "../../components/share.module";
 
 @NgModule({
   declarations: [
@@ -9,7 +10,8 @@ import {SharedModule} from "../../components/shared.module";
   ],
   imports: [
     IonicPageModule.forChild(LoginPage),
-    SharedModule
+    SharedModule,
+    TranslateModule.forChild({})
   ],
 })
 export class LoginPageModule {}

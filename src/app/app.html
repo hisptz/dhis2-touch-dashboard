@@ -10,14 +10,16 @@
       </ion-row>
       <ion-row>
         <ion-col >
-          <ion-list >
-            <button menuClose ion-item *ngFor="let page of pages" (click)="openPage(page)">
-              <ion-icon color="primary"><img  class="side-menu-icon" [src]="page.icon"/></ion-icon>
-              &nbsp;&nbsp;{{ page.title }}
+          <ion-list no-lines>
+            <button menuClose="left" ion-item *ngFor="let page of pages" (click)="openPage(page)">
+              <ion-icon [name]="page.icon" item-left></ion-icon>
+              {{page.title |translate }}
             </button>
-            <button menuClose ion-item  (tap)="logOut()">
-              <ion-icon color="primary"><img  class="side-menu-icon" [src]="logOutIcon"/></ion-icon>
-              &nbsp;&nbsp;Log out
+
+            <button menuClose="left" ion-item (tap)="logOut()">
+              <ion-icon item-left name="log-out">
+              </ion-icon>
+              {{'log_out'|translate}}
             </button>
           </ion-list>
         </ion-col>
@@ -27,6 +29,4 @@
   </ion-content>
 
 </ion-menu>
-
-<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
