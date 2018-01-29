@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/map';
 import { HTTP } from '@ionic-native/http';
+import {Observable} from "rxjs/Observable";
 
 /*
  Generated class for the UserProvider provider.
@@ -21,10 +22,9 @@ export class UserProvider {
   /**
    *
    * @param user
-   * @returns {Promise<T>}
+   * @returns {Observable<any>}
    */
-  getUserDataFromServer(user){
-
+  getUserDataFromServer(user) : Observable<any>{
     this.http.useBasicAuth(user.username, user.password);
     let fields = "fields=[:all],organisationUnits[id,name],dataViewOrganisationUnits[id,name],userCredentials[userRoles[name,dataSets[id,name],programs[id,name]]";
     let url = user.serverUrl.split("/dhis-web-commons")[0];
@@ -32,29 +32,29 @@ export class UserProvider {
     url = url.split("/api/apps")[0];
     user.serverUrl = url;
     url += "/api/me.json?" + fields;
-
-    return new Promise((resolve, reject)=> {
+    return new Observable(observer => {
       this.http.get(url, {}, {})
         .then((data:any)  => {
           if(data.data.indexOf('login.action') > -1){
             user.serverUrl = user.serverUrl.replace('http://','https://');
-            this.getUserDataFromServer(user).then((data:any) => {
+            this.getUserDataFromServer(user).subscribe((data:any) => {
               let url = user.serverUrl.split("/dhis-web-commons")[0];
               url = url.split("/dhis-web-dashboard-integration")[0];
               user.serverUrl = url;
-              resolve({data : data.data,user : user});
-            })
-              .catch(error => {
-                reject(error);
+              observer.next({data : data.data,user : user});
+              observer.complete();
+            },error => {
+                observer.error(error);
               });
           }else{
-            resolve({data : data.data,user : user});
+            observer.next({data : data.data,user : user});
+            observer.complete();
           }
         },error=>{
-          reject(error);
+          observer.error(error);
         })
         .catch(error => {
-          reject(error);
+          observer.error(error);
         });
     });
   }
@@ -62,9 +62,9 @@ export class UserProvider {
   /**
    *
    * @param user
-   * @returns {Promise<T>}
+   * @returns {Observable<any>}
    */
-  getUserAuthorities(user){
+  getUserAuthorities(user) : Observable<any> {
     this.http.useBasicAuth(user.username, user.password);
     let fields = "fields=authorities";
     let url = user.serverUrl;
@@ -72,15 +72,16 @@ export class UserProvider {
     if(user.dhisVersion &&(parseInt(user.dhisVersion) > 25)){
       url = url.replace("/api","/api/" + user.dhisVersion);
     }
-    return new Promise((resolve, reject)=> {
+    return new Observable(observer=> {
       this.http.get(url, {}, {})
         .then((response:any)  => {
-          resolve(JSON.parse(response.data));
+          observer.next(JSON.parse(response.data));
+          observer.complete();
         },error=>{
-          reject(error);
+          observer.error(error);
         })
         .catch(error => {
-          reject(error);
+          observer.error(error);
         });
     });
   }
@@ -88,13 +89,11 @@ export class UserProvider {
   /**
    *
    * @param user
-   * @returns {Promise<T>}
+   * @returns {Observable<any>}
    */
-  authenticateUser(user){
-
+  authenticateUser(user) : Observable<any>{
     this.http.useBasicAuth(user.username, user.password);
-
-    return new Promise((resolve, reject)=> {
+    return new Observable(observer=> {
       this.http.get(user.serverUrl + "", {}, {})
         .then((data:any)  => {
           if(data.status == 200){
@@ -115,37 +114,48 @@ export class UserProvider {
               }
               user.serverUrl = url;
             }
-            this.getUserDataFromServer(user).then((data:any) => {
-                let url = user.serverUrl.split("/dhis-web-commons")[0];
-                url = url.split("/dhis-web-dashboard-integration")[0];
-                user.serverUrl = url;
-                resolve({data : data.data,user : data.user});
-              })
-              .catch(error => {
-                reject(error);
+            this.getUserDataFromServer(user).subscribe((data:any) => {
+              let url = user.serverUrl.split("/dhis-web-commons")[0];
+              url = url.split("/dhis-web-dashboard-integration")[0];
+              user.serverUrl = url;
+              observer.next({data : data.data,user : data.user});
+              observer.complete();
+            },error => {
+                observer.error(error);
               });
           }else{
-            reject(data);
+            observer.error(data);
           }
         })
         .catch(error => {
           if(error.status == 301 || error.status == 302){
             if(error.headers && error.headers.Location){
               user.serverUrl = error.headers.Location;
-              this.authenticateUser(user).then((data:any) => {
-                  let url = user.serverUrl.split("/dhis-web-commons")[0];
-                  url = url.split("/dhis-web-dashboard-integration")[0];
-                  user.serverUrl = url;
-                  resolve({data : data,user : user});
-                })
-                .catch(error => {
-                  reject(error);
+              this.authenticateUser(user).subscribe((data:any) => {
+                let url = user.serverUrl.split("/dhis-web-commons")[0];
+                url = url.split("/dhis-web-dashboard-integration")[0];
+                user.serverUrl = url;
+                observer.next({data : data,user : user});
+                observer.complete();
+              },error => {
+                  observer.error(error);
+                });
+            }else if(error.headers && error.headers.location){
+              user.serverUrl = error.headers.location;
+              this.authenticateUser(user).subscribe((data:any) => {
+                let url = user.serverUrl.split("/dhis-web-commons")[0];
+                url = url.split("/dhis-web-dashboard-integration")[0];
+                user.serverUrl = url;
+                observer.next({data : data,user : user});
+                observer.complete();
+              },error => {
+                  observer.error(error);
                 });
             }else{
-              reject(error);
+              observer.error(error);
             }
           }else{
-            reject(error);
+            observer.error(error);
           }
         });
     });
@@ -154,15 +164,16 @@ export class UserProvider {
   /**
    *
    * @param user
-   * @returns {Promise<T>}
+   * @returns {Observable<any>}
    */
-  setCurrentUser(user : any){
+  setCurrentUser(user : any) : Observable<any> {
     user = JSON.stringify(user);
-    return  new Promise((resolve,reject) => {
+    return  new Observable((observer) => {
       this.storage.set('user', user).then(() => {
-        resolve();
+        observer.next();
+        observer.complete();
       },error=>{
-        reject();
+        observer.error(error);
       });
     });
   }
@@ -170,21 +181,21 @@ export class UserProvider {
   /**
    *
    * @param systemInformation
-   * @returns {Promise<T>}
+   * @returns {Observable<any>}
    */
-  setCurrentUserSystemInformation(systemInformation : any){
+  setCurrentUserSystemInformation(systemInformation : any) : Observable<any>{
     let dhisVersion = "22";
     if(systemInformation.version){
       let versionArray = systemInformation.version.split(".");
       dhisVersion = (versionArray.length > 0) ? versionArray[1] : dhisVersion;
     }
-
-    return  new Promise((resolve,reject) => {
+    return  new Observable(observer => {
       systemInformation = JSON.stringify(systemInformation);
       this.storage.set('systemInformation', systemInformation).then(() => {
-        resolve(dhisVersion);
+        observer.next(dhisVersion);
+        observer.complete();
       },error=>{
-        reject();
+        observer.error(error);
       });
     });
   }
@@ -194,7 +205,7 @@ export class UserProvider {
    * @param userDataResponse
    * @returns {Promise<T>}
    */
-  setUserData(userDataResponse){
+  setUserData(userDataResponse) : Observable<any>{
     this.userData ={
       "Name": userDataResponse.name,
       "Employer": userDataResponse.employer,
@@ -209,60 +220,64 @@ export class UserProvider {
       "dataViewOrganisationUnits" : userDataResponse.dataViewOrganisationUnits
     };
     let userData = JSON.stringify(this.userData);
-    return  new Promise((resolve,reject) => {
+    return  new Observable(observer => {
       this.storage.set('userData', userData).then(() => {
-        resolve(userData);
+        observer.next(JSON.parse(userData));
+        observer.complete();
       },error=>{
-        reject();
+        observer.error(error);
       });
     });
   }
 
   /**
    *
-   * @returns {Promise<T>}
+   * @returns {Observable<any>}
    */
-  getUserData(){
-    return  new Promise((resolve,reject) => {
+  getUserData() : Observable<any>{
+    return  new Observable(observer => {
       this.storage.get('userData').then(userData=>{
         userData = JSON.parse(userData);
-        resolve(userData);
-      },err=>{
-        reject();
-      }).catch(err=>{
-        reject();
+        observer.next(userData);
+        observer.complete();
+      },error=>{
+        observer.error(error);
+      }).catch(error=>{
+        observer.error(error);
       })
     });
   }
 
   /**
    *
-   * @returns {Promise<T>}
+   * @returns {Observable<any>}
    */
-  getCurrentUserSystemInformation(){
-    return  new Promise((resolve,reject) => {
+  getCurrentUserSystemInformation() : Observable<any>{
+    return  new Observable(observer => {
       this.storage.get('systemInformation').then(systemInformation=>{
         systemInformation = JSON.parse(systemInformation);
-        resolve(systemInformation);
-      },err=>{
-        reject();
-      }).catch(err=>{
-        reject();
+        observer.next(systemInformation);
+        observer.complete();
+      },error=>{
+        observer.error(error);
+      }).catch(error=>{
+        observer.error(error);
       })
     });
   }
 
   /**
    *
-   * @returns {Promise<T>}
+   * @returns {Observable<any>}
    */
-  getCurrentUser(){
-    return  new Promise((resolve,reject) => {
+  getCurrentUser() : Observable<any>{
+    return  new Observable(observer => {
       this.storage.get('user').then(user=>{
         user = JSON.parse(user);
-        resolve(user);
-      },err=>{
-        reject();
+        observer.next(user);
+        observer.complete();
+      },error=>{
+        observer.error(error);
       })
     })
   }

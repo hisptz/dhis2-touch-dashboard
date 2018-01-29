@@ -1,24 +1,43 @@
 import { Injectable } from '@angular/core';
-import { HTTP } from '@ionic-native/http';
-import { Http ,Headers } from '@angular/http';
+import {HTTP} from "@ionic-native/http";
+import {Http,Headers } from '@angular/http';
 import   'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeout';
+import {Observable} from "rxjs/Observable";
+import {ApplicationState} from "../../store/reducers/index";
+import {Store} from "@ngrx/store";
+import {getCurrentUser} from "../../store/selectors/currentUser.selectors";
+import {CurrentUser} from "../../models/currentUser";
+import {EncryptionProvider} from "../encryption/encryption";
+import * as  _ from "lodash";
 
 /*
   Generated class for the HttpClientProvider provider.
 
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
+  See https://angular.io/guide/dependency-injection for more info on providers
+  and Angular DI.
 */
 @Injectable()
 export class HttpClientProvider {
 
   public timeOutTime : number;
-  constructor(private http: HTTP, public defaultHttp : Http) {
-    this.timeOutTime = 4*60*1000;
+  constructor(private http: HTTP,
+              private store : Store<ApplicationState>,
+              private encryption : EncryptionProvider,
+              private defaultHttp : Http) {
+    this.timeOutTime = 2*60*1000;
   }
 
+  /**
+   *
+   * @param url
+   * @param user
+   * @returns {any}
+   */
   getUrlBasedOnDhisVersion(url,user){
+    if(url.indexOf("/api/") == -1){
+      url = "/api/25/" + url;
+    }
     if(user.dhisVersion &&(parseInt(user.dhisVersion) < 25)){
       url = url.replace("/api/25/","/api/");
     }
@@ -27,23 +46,130 @@ export class HttpClientProvider {
 
   /**
    *
+   * @param user
+   * @returns {Observable<any>}
+   */
+  getSanitizedUser(user) : Observable<any> {
+    return new Observable(observer=>{
+      if(!user){
+        this.store.select(getCurrentUser).subscribe((currentUser : CurrentUser )=>{
+          user = _.assign({},currentUser);
+          user.password = this.encryption.decode(user.password);
+          observer.next(user);
+          observer.complete();
+        },error=>{
+          observer.error(error);
+        });
+      }else{
+        observer.next(user);
+        observer.complete();
+      }
+    });
+  }
+
+
+  /**
+   *
    * @param url
    * @param user
-   * @returns {Promise<T>}
-     */
-  get(url,user) {
-    this.http.useBasicAuth(user.username,user.password);
-    url = user.serverUrl + this.getUrlBasedOnDhisVersion(url,user);
-    return new Promise((resolve, reject)=> {
-      this.http.get(url, {}, {})
-        .then((response:any)  => {
-          resolve(response);
-        },error=>{
-          reject(error);
-        })
-        .catch(error => {
-          reject(error);
-        });
+   * @param resourceName
+   * @param pageSize
+   * @returns {Observable<any>}
+   */
+  get(url,user?,resourceName?,pageSize?) :Observable<any>{
+    return new Observable(observer =>{
+      this.getSanitizedUser(user).subscribe((sanitizedUser : CurrentUser)=>{
+        url = sanitizedUser.serverUrl + this.getUrlBasedOnDhisVersion(url,sanitizedUser);
+        console.log(url);
+        this.http.setRequestTimeout(this.timeOutTime);
+        this.http.useBasicAuth(sanitizedUser.username,sanitizedUser.password);
+        if(resourceName && pageSize){
+          let promises = [];
+          let testUrl = user.serverUrl +"/api/25/"+resourceName+".json?fields=none&pageSize="+pageSize;
+          this.http.get(testUrl, {}, {})
+            .then((initialResponse:any)  => {
+              initialResponse = JSON.parse(initialResponse.data);
+              if(initialResponse.pager.pageCount){
+                initialResponse[resourceName] = [];
+                for(let i = 1;i <= initialResponse.pager.pageCount; i++){
+                  let paginatedUrl = url + "&pageSize="+pageSize+"&page=" + i;
+                  promises.push(
+                    this.http.get(paginatedUrl,{}, {}).then((response : any)=>{
+                      response = JSON.parse(response.data);
+                      initialResponse[resourceName] = initialResponse[resourceName].concat(response[resourceName]);
+                    }).catch((error=>{}))
+                  )
+                }
+                Observable.forkJoin(promises).subscribe(() => {
+                    observer.next(initialResponse);
+                    observer.complete();
+                  },
+                  (error) => {
+                    observer.error(error);
+                  })
+              }else{
+                this.http.get(url, {}, {})
+                  .then((response:any)  => {
+                    observer.next(response);
+                    observer.complete();
+                  },error=>{
+                    observer.error(error);
+                  })
+                  .catch(error => {
+                    observer.error(error);
+                  });
+              }
+            },error=>{
+              observer.error(error);
+            })
+            .catch(error => {
+              observer.error(error);
+            });
+        }else{
+          this.http.get(url, {}, {})
+            .then((response:any)  => {
+              observer.next(response);
+              observer.complete();
+            },error=>{
+              observer.error(error);
+            })
+            .catch(error => {
+              observer.error(error);
+            });
+        }
+      },error=>{
+        observer.error(error);
+      });
+    });
+
+  }
+
+  /**
+   *
+   * @param url
+   * @param data
+   * @param user
+   * @returns {Observable<any>}
+   */
+  post(url,data,user?) : Observable<any>{
+    return new Observable(observer=>{
+      this.getSanitizedUser(user).subscribe((sanitizedUser : CurrentUser)=>{
+        this.http.useBasicAuth(sanitizedUser.username,sanitizedUser.password);
+        this.http.setRequestTimeout(this.timeOutTime);
+        url = user.serverUrl + this.getUrlBasedOnDhisVersion(url,sanitizedUser);
+        this.http.post(url,data,{})
+          .then((response:any)  => {
+            observer.next(response);
+            observer.complete();
+          },error=>{
+            observer.error(error);
+          })
+          .catch(error => {
+            observer.error(error);
+          });
+      },error=>{
+        observer.error(error);
+      });
     });
   }
 
@@ -52,21 +178,23 @@ export class HttpClientProvider {
    * @param url
    * @param data
    * @param user
-   * @returns {Promise<T>}
-     */
-  post(url,data,user) {
-    this.http.useBasicAuth(user.username,user.password);
-    url = user.serverUrl + this.getUrlBasedOnDhisVersion(url,user);
-    return new Promise((resolve, reject)=> {
-      this.http.post(url,data,{})
-        .then((response:any)  => {
-          resolve(response);
+   * @returns {Observable<any>}
+   */
+  defaultPost(url, data, user?) : Observable<any>{
+    return new Observable(observer=>{
+      this.getSanitizedUser(user).subscribe((sanitizedUser : CurrentUser)=>{
+        url = this.getUrlBasedOnDhisVersion(url,sanitizedUser);
+        let headers = new Headers();
+        headers.append('Authorization', 'Basic ' +sanitizedUser.authorizationKey);
+        this.defaultHttp.post(user.serverUrl + url, data, { headers: headers }).timeout(this.timeOutTime).subscribe((response : any)=>{
+          observer.next();
+          observer.complete();
         },error=>{
-          reject(error);
-        })
-        .catch(error => {
-          reject(error);
+          observer.error(error);
         });
+      },error=>{
+        observer.error(error);
+      });
     });
   }
 
@@ -75,19 +203,24 @@ export class HttpClientProvider {
    * @param url
    * @param data
    * @param user
-   * @returns {Promise<T>}
-     */
-  put(url, data, user){
-    url = this.getUrlBasedOnDhisVersion(url,user);
-    let headers = new Headers();
-    headers.append('Authorization', 'Basic ' +user.authorizationKey);
-    return new Promise((resolve, reject)=> {
-      this.defaultHttp.put(user.serverUrl + url, data, { headers: headers })
-        .timeout(this.timeOutTime).map(res=>res.json())
-        .subscribe((response)=>{
-        resolve(response);
+   * @returns {Observable<any>}
+   */
+  put(url, data, user?): Observable<any>{
+    return new Observable(observer=>{
+      this.getSanitizedUser(user).subscribe((sanitizedUser : CurrentUser)=>{
+        url = this.getUrlBasedOnDhisVersion(url,sanitizedUser);
+        let headers = new Headers();
+        headers.append('Authorization', 'Basic ' +sanitizedUser.authorizationKey);
+        this.defaultHttp.put(user.serverUrl + url, data, { headers: headers })
+          .timeout(this.timeOutTime).map(res=>res.json())
+          .subscribe((response)=>{
+            observer.next(response);
+            observer.complete();
+          },error=>{
+            observer.error(error);
+          });
       },error=>{
-        reject(error);
+        observer.error(error);
       });
     });
   }
@@ -96,20 +229,24 @@ export class HttpClientProvider {
    *
    * @param url
    * @param user
-   * @returns {Promise<T>}
-     */
-  delete(url,user){
-    url = this.getUrlBasedOnDhisVersion(url,user);
-    let headers = new Headers();
-    headers.append('Authorization', 'Basic ' +user.authorizationKey);
-    return new Promise((resolve, reject)=> {
-      this.defaultHttp.delete(user.serverUrl + url,{headers: headers})
-        .timeout(this.timeOutTime).map(res=>res.json()).subscribe((response)=>{
-        resolve(response);
-      },error=>{
-        reject(error);
+   * @returns {Observable<any>}
+   */
+  delete(url,user?) : Observable<any> {
+    return new Observable(observer => {
+      this.getSanitizedUser(user).subscribe((sanitizedUser: CurrentUser) => {
+        url = this.getUrlBasedOnDhisVersion(url, sanitizedUser);
+        let headers = new Headers();
+        headers.append('Authorization', 'Basic ' + sanitizedUser.authorizationKey);
+        this.defaultHttp.delete(user.serverUrl + url, {headers: headers})
+          .timeout(this.timeOutTime).map(res => res.json()).subscribe((response) => {
+          observer.next(response);
+          observer.complete();
+        }, error => {
+          observer.error(error);
+        });
+      }, error => {
+        observer.error(error);
       });
     });
   }
-
 }

@@ -3,6 +3,8 @@ import { AppVersion } from '@ionic-native/app-version';
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import { ToastController} from 'ionic-angular';
+import {SqlLiteProvider} from "../sql-lite/sql-lite";
+import {Http} from "@angular/http";
 
 /*
   Generated class for the AppProvider provider.
@@ -15,7 +17,8 @@ export class AppProvider {
 
 
 
-  constructor(private  appVersion: AppVersion,private toastController : ToastController) {
+  constructor(private  appVersion: AppVersion,private toastController : ToastController,
+              public sqLite: SqlLiteProvider, public http: Http) {
   }
 
   /**
@@ -33,12 +36,16 @@ export class AppProvider {
   /**
    *
    * @param message
-     */
-  setNormalNotification(message){
+   * @param time
+   */
+  setNormalNotification(message,time?){
+    if(!time){
+      time = 5000;
+    }
     this.toastController.create({
       message: message,
       position : 'bottom',
-      duration: 5000
+      duration: time
     }).present();
   }
 
@@ -128,4 +135,74 @@ export class AppProvider {
     }
     return formattedBaseUrl
   }
+
+
+  /**
+   *
+   * @param resource
+   * @param resourceValues
+   * @param databaseName
+   * @returns {Promise<T>}
+   */
+  saveMetadata(resource,resourceValues,databaseName){
+
+    return new Promise((resolve, reject)=> {
+      if(resourceValues.length == 0){
+        resolve();
+      }else{
+        this.sqLite.insertBulkDataOnTable(resource,resourceValues,databaseName).subscribe(()=>{
+          resolve();
+
+        },error=>{
+          console.log(JSON.stringify(error));
+          reject(error);
+        });
+      }
+    });
+  }
+
+  /**
+   *
+   * @param user
+   * @param resource
+   * @param resourceId
+   * @param fields
+   * @param filter
+   * @returns {Promise<T>}
+   */
+  downloadMetadata(user,resource, resourceId){
+    this.setNormalNotification("Universal Downloading OrgUnit...");
+    let resourceUrl = this.getResourceUrl(resource, resourceId);
+    return new Promise((resolve, reject)=> {
+      this.http.get(resourceUrl,user).subscribe(response=>{
+        response = response.json();
+        resolve(response);
+      },error=>{
+        reject(error);
+      });
+    });
+  }
+
+
+
+  /**
+   *
+   * @param resource
+   * @param resourceId
+   * @param fields
+   * @param filter
+   * @returns {string}
+   */
+  getResourceUrl(resource, resourceId){
+    let url = '/api/25/' + resource;
+    if (resourceId || resourceId != null) {
+      url += "/" + resourceId + ".json?paging=false";
+    } else {
+      url += ".json?paging=false";
+    }
+
+    return url;
+  }
+
+
 }
