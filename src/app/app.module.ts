@@ -36,6 +36,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpModule, Http } from '@angular/http';
 import {EffectsModule} from '@ngrx/effects';
 import {reducers, effects} from '../store';
+import {PipesModule} from '../pipes/pipes.module';
 export function createTranslateLoader(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -59,6 +60,7 @@ export function createTranslateLoader(http: Http) {
         deps: [Http]
       }
     }),
+    PipesModule,
     SharedModule,
     //StoreDevtoolsModule.instrument({maxAge: 100})
   ],

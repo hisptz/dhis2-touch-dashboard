@@ -24,7 +24,10 @@ export const getCurrentDashboardSharing = createSelector(getDashboardState,
   (dashboardObject: DashboardState) => dashboardObject.dashboardSharing[dashboardObject.currentDashboard]);
 
 export const getDashboardMenuItems = createSelector(getDashboardState,
-  (dashboardObject: DashboardState) => dashboardObject.activeDashboards.length > 0 ? dashboardObject.activeDashboards.slice(
+  (dashboardObject: DashboardState) => !dashboardObject.preferPaginatedDashboards ?
+    dashboardObject.activeDashboards :
+    dashboardObject.activeDashboards.length > 0 ?
+    dashboardObject.activeDashboards.slice(
     getStartItemIndex(dashboardObject.currentDashboardPage, dashboardObject.dashboardPerPage),
     getEndItemIndex(dashboardObject.currentDashboardPage, dashboardObject.dashboardPerPage) + 1)
     .map((dashboard: Dashboard) => mapStateToDashboardMenu(dashboard)) : []);

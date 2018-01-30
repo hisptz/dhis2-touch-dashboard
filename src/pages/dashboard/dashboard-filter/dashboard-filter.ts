@@ -1,5 +1,12 @@
-import { Component , OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { IonicPage, ViewController } from 'ionic-angular';
+import {Store} from '@ngrx/store';
+import {ApplicationState} from '../../../store/reducers/index';
+import {Observable} from 'rxjs/Observable';
+import {DashboardMenuItem} from '../../../models/dashboard-menu-item';
+import * as fromDashboardSelectors from '../../../store/selectors/dashboard.selectors';
+import * as fromDashboardActions from '../../../store/actions/dashboard.actions';
+import {Dashboard} from '../../../models/dashboard';
 
 
 /**
@@ -15,29 +22,28 @@ import { IonicPage, ViewController } from 'ionic-angular';
 })
 export class DashboardFilterPage implements OnInit{
 
-  public dashboards :any = [];
-  public dashboardsCopy :any = [];
+  dashboards$: Observable<DashboardMenuItem[]>;
+  currentDashboard$: Observable<Dashboard>;
+  searchTerm: string;
 
-
-  constructor(public viewCtrl: ViewController) {
+  constructor(
+    private viewCtrl: ViewController,
+    private store: Store<ApplicationState>
+  ) {
+    this.dashboards$ = store.select(fromDashboardSelectors.getDashboardMenuItems);
+    this.currentDashboard$ = store.select(fromDashboardSelectors.getCurrentDashboard);
   }
 
   ngOnInit() {
-    //loading dashboards from store;
   }
 
   getFilteredList(event: any) {
-    let searchValue = event.target.value;
-    this.dashboards = this.dashboardsCopy;
-    if(searchValue && searchValue.trim() != ''){
-      this.dashboards = this.dashboards.filter((dashboard:any) => {
-        return (dashboard.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1);
-      })
-    }
+    this.searchTerm = event.target.value;
   }
 
   setCurrentDashboard(selectedDashboard){
-    this.viewCtrl.dismiss(selectedDashboard);
+    this.store.dispatch(new fromDashboardActions.SetCurrentAction(selectedDashboard.id));
+    this.dismiss()
   }
 
   dismiss() {

@@ -17,6 +17,7 @@ export interface DashboardState {
   showBookmarked: boolean;
   dashboardSearchItem: DashboardSearchItem;
   dashboardSearchTerm: string;
+  preferPaginatedDashboards: boolean;
 }
 
 export const INITIAL_DASHBOARD_STATE: DashboardState = {
@@ -30,7 +31,8 @@ export const INITIAL_DASHBOARD_STATE: DashboardState = {
   showBookmarked: false,
   activeDashboards: [],
   dashboardSearchItem: INITIAL_DASHBOARD_SEARCH_ITEM,
-  dashboardSearchTerm: ''
+  dashboardSearchTerm: '',
+  preferPaginatedDashboards: false
 };
 
 
