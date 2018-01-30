@@ -160,14 +160,16 @@ export class LoginPage implements OnInit{
           resource = 'Loading system information';
           if(this.isLoginProcessActive){
             this.progressTracker[currentResourceType].message = "loading_system_information";
-            this.HttpClientProvider.get('/api/system/info',this.currentUser).subscribe((response : any)=>{
+            this.HttpClientProvider.get('/api/system/info',false,this.currentUser).subscribe((response : any)=>{
               this.UserProvider.setCurrentUserSystemInformation(JSON.parse(response.data)).subscribe((dhisVersion : string)=>{
                 this.currentUser.dhisVersion = dhisVersion;
                 this.updateProgressTracker(resource);
                 if(this.isLoginProcessActive){
                   this.progressTracker[currentResourceType].message = "loading_current_user_authorities";
                   this.UserProvider.getUserAuthorities(this.currentUser).subscribe((response:any)=>{
+                    this.currentUser.id = response.id;
                     this.currentUser.authorities = response.authorities;
+                    this.currentUser.dataViewOrganisationUnits = response.dataViewOrganisationUnits;
                     resource = "Preparing local storage";
                     this.progressTracker[currentResourceType].message = "preparing_local_storage";
                     this.sqlLite.generateTables(this.currentUser.currentDatabase).subscribe(()=>{

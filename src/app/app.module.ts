@@ -8,7 +8,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { StoreModule } from "@ngrx/store";
-import {reducers} from "../store/reducers/index";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import {LauncherPage} from "../pages/launcher/launcher";
 import {SharedModule} from "../components/share.module";
@@ -35,6 +34,8 @@ import {SMS} from "@ionic-native/sms";
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpModule, Http } from '@angular/http';
+import {EffectsModule} from '@ngrx/effects';
+import {reducers, effects} from '../store';
 export function createTranslateLoader(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -47,6 +48,7 @@ export function createTranslateLoader(http: Http) {
   imports: [
     BrowserModule,
     StoreModule.forRoot(reducers),
+    EffectsModule.forRoot(effects),
     IonicModule.forRoot(MyApp),
     HttpModule,
     IonicStorageModule.forRoot(),

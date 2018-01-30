@@ -1,6 +1,8 @@
 
 export interface CurrentUser {
   username : string;
+  id? : string;
+  dataViewOrganisationUnits? : any;
   password : string; //encrypted string
   serverUrl :  string;
   currentLanguage : string;

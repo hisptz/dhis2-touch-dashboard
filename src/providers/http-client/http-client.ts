@@ -72,18 +72,19 @@ export class HttpClientProvider {
   /**
    *
    * @param url
+   * @param {boolean} dataOnly
    * @param user
    * @param resourceName
    * @param pageSize
    * @returns {Observable<any>}
    */
-  get(url,user?,resourceName?,pageSize?) :Observable<any>{
+  get(url,dataOnly : boolean = false,user?,resourceName?,pageSize?) :Observable<any>{
+    let apiUrl = "";
     return new Observable(observer =>{
       this.getSanitizedUser(user).subscribe((sanitizedUser : CurrentUser)=>{
-        url = sanitizedUser.serverUrl + this.getUrlBasedOnDhisVersion(url,sanitizedUser);
-        console.log(url);
-        this.http.setRequestTimeout(this.timeOutTime);
+        apiUrl = sanitizedUser.serverUrl + this.getUrlBasedOnDhisVersion(url,sanitizedUser);
         this.http.useBasicAuth(sanitizedUser.username,sanitizedUser.password);
+        this.http.setRequestTimeout(this.timeOutTime);
         if(resourceName && pageSize){
           let promises = [];
           let testUrl = user.serverUrl +"/api/25/"+resourceName+".json?fields=none&pageSize="+pageSize;
@@ -93,7 +94,7 @@ export class HttpClientProvider {
               if(initialResponse.pager.pageCount){
                 initialResponse[resourceName] = [];
                 for(let i = 1;i <= initialResponse.pager.pageCount; i++){
-                  let paginatedUrl = url + "&pageSize="+pageSize+"&page=" + i;
+                  let paginatedUrl = apiUrl + "&pageSize="+pageSize+"&page=" + i;
                   promises.push(
                     this.http.get(paginatedUrl,{}, {}).then((response : any)=>{
                       response = JSON.parse(response.data);
@@ -127,12 +128,14 @@ export class HttpClientProvider {
               observer.error(error);
             });
         }else{
-          this.http.get(url, {}, {})
+          this.http.get(apiUrl, {}, {})
             .then((response:any)  => {
-              observer.next(response);
+              if(dataOnly){
+                observer.next(JSON.parse(response.data));
+              }else{
+                observer.next(response);
+              }
               observer.complete();
-            },error=>{
-              observer.error(error);
             })
             .catch(error => {
               observer.error(error);

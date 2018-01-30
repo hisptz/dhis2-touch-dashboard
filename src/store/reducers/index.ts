@@ -1,15 +1,16 @@
-import {ActionReducerMap, createFeatureSelector} from "@ngrx/store";
+import {ActionReducerMap} from '@ngrx/store';
 import {currentUserReducer, CurrentUserState} from "./currentUser.reducers";
-
+import * as fromDashboardReducer from './dashboard.reducer';
 
 export interface ApplicationState{
-  currentUser : CurrentUserState
+  currentUser : CurrentUserState,
+  dashboard: fromDashboardReducer.DashboardState
 }
 
 export const reducers: ActionReducerMap<ApplicationState> = {
-  currentUser : currentUserReducer
+  currentUser : currentUserReducer,
+  dashboard: fromDashboardReducer.dashboardReducer
 };
 
-export const getCurrentUserState = createFeatureSelector<CurrentUserState>(
-  'currentUser'
-);
+
+export const getCurrentUserState = (state: ApplicationState) => state.currentUser;
