@@ -36,18 +36,18 @@ export class DashboardEffects {
     );
 
 
-  // @Effect()
-  // dashboardsLoaded$ = this.actions$
-  //   .ofType<fromDashboardActions.LoadSuccessAction>(
-  //     fromDashboardActions.DashboardActions.LOAD_SUCCESS
-  //   ).pipe(
-  //     map((action: fromDashboardActions.LoadSuccessAction) => {
-  //       const dashboards = action.payload.dashboards;
-  //
-  //       return dashboards.length > 0 ? dashboards[0].id : '';
-  //     }),
-  //     map((currentDashboardId: string) => new fromDashboardActions.SetCurrentAction(currentDashboardId))
-  //   );
+  @Effect()
+  dashboardsLoaded$ = this.actions$
+    .ofType<fromDashboardActions.LoadSuccessAction>(
+      fromDashboardActions.DashboardActions.LOAD_SUCCESS
+    ).pipe(
+      map((action: fromDashboardActions.LoadSuccessAction) => {
+        const dashboards = action.payload.dashboards;
+
+        return dashboards.length > 0 ? dashboards[0].id : '';
+      }),
+      map((currentDashboardId: string) => new fromDashboardActions.SetCurrentAction(currentDashboardId))
+    );
   //
   // @Effect()
   // createDashboard$ = this.actions$

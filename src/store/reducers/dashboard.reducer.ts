@@ -38,7 +38,6 @@ export function dashboardReducer(state: DashboardState = INITIAL_DASHBOARD_STATE
                                  action: DashboardAction) {
   switch (action.type) {
     case DashboardActions.LOAD_SUCCESS: {
-      console.log(JSON.stringify(action.payload))
       const newDashboards: Dashboard[] = _.map(
         action.payload.dashboards,
         (dashboardObject: any) =>
