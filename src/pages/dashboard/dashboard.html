@@ -28,12 +28,12 @@
       </div>
 
       <!--cards for visualization -->
-      <div class="dashboard-card " *ngFor="let visualization of visualizationObjects$ | async">
+      <div class="dashboard-card " *ngFor="let visualizationObject of visualizationObjects$ | async">
 
         <ion-row >
           <ion-col col-11>
-            <ion-icon color="primary"><img  class="dashboard-item-icon" [src]="icons[visualization.details.currentVisualization]"/></ion-icon>
-            {{ visualization.name }}
+            <ion-icon color="primary"><img  class="dashboard-item-icon" [src]="icons[visualizationObject.details.currentVisualization]"/></ion-icon>
+            {{ visualizationObject.name }}
           </ion-col>
           <ion-col col-1 item>
             <div style="text-align: center;">
@@ -43,8 +43,24 @@
             </div>
           </ion-col>
         </ion-row>
-        <loading [loadingSize]="'large'"></loading>
+        <ion-row>
+          <ion-col>
+            <!--chart visualization-->
+            <app-chart-list
+              *ngIf="visualizationObject.details.currentVisualization === 'CHART'"
+              [visualizationLayers]="visualizationObject.layers"
+              [visualizationId]="visualizationObject.id"
+              [chartHeight]="visualizationObject.details.itemHeight"></app-chart-list>
+            <!--end of chart visualization-->
 
+            <!--table block-->
+            <app-table-list
+              *ngIf="visualizationObject.details.currentVisualization === 'TABLE'"
+              [visualizationType]="visualizationObject.type"
+              [visualizationLayers]="visualizationObject.layers"></app-table-list>
+            <!--end of table block-->
+          </ion-col>
+        </ion-row>
       </div>
     </div>
 
