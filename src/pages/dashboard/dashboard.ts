@@ -3,8 +3,11 @@ import {IonicPage, MenuController, NavController, ModalController } from 'ionic-
 import {ApplicationState} from "../../store/reducers/index";
 import {Store} from "@ngrx/store";
 import {Observable} from "rxjs/Observable";
-import {CurrentUser} from "../../models/currentUser";
-import {getCurrentUser} from "../../store/selectors/currentUser.selectors";
+import {Dashboard} from '../../models/dashboard';
+import {Visualization} from '../../models/visualization';
+import * as fromDashboardSelectors from '../../store/selectors/dashboard.selectors';
+import * as fromVisualizationSelectors from '../../store/selectors/visualization.selectors';
+import * as fromDashboardActions from '../../store/actions/dashboard.actions';
 
 /**
  * Generated class for the DashboardPage page.
@@ -20,16 +23,34 @@ import {getCurrentUser} from "../../store/selectors/currentUser.selectors";
 })
 export class DashboardPage implements OnInit{
 
-  menuIcon : String;
+  currentDashboard$: Observable<Dashboard>;
+  visualizationObjects$: Observable<Visualization[]>;
+  loading$: Observable<boolean>;
+  icons : any = {};
+
   constructor(public navCtrl: NavController,
               public modalCtrl:ModalController,
               private store : Store<ApplicationState>,
               private menu : MenuController) {
+    this.currentDashboard$ = store.select(fromDashboardSelectors.getCurrentDashboard);
+    this.loading$ = store.select(fromDashboardSelectors.getDashboardLoadingStatus);
+    this.visualizationObjects$ = store.select(fromVisualizationSelectors.getCurrentDashboardVisualizationObjects);
   }
 
   ngOnInit(){
     this.menu.enable(true);
-    this.menuIcon = "assets/icon/menu.png";
+    this.icons = {
+      menu :  "assets/icon/menu.png",
+      MAP : "assets/icon/map.png",
+      CHART : "assets/icon/column.png",
+      TABLE : "assets/icon/table.png",
+      APP : "assets/icon/app.png",
+      RESOURCES : "assets/icon/resource.png",
+      REPORTS : "assets/icon/report.png",
+      USERS : "assets/icon/users.png",
+      MESSAGES : "assets/icon/filled-chat.png",
+    }
+
   }
 
   openDashboardListFilter() {

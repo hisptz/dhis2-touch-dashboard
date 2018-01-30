@@ -35,6 +35,9 @@ export const getDashboardMenuItems = createSelector(getDashboardState,
 export const getShowBookmarkedStatus = createSelector(getDashboardState,
   (dashboardObject: DashboardState) => dashboardObject.showBookmarked);
 
+export const getDashboardLoadingStatus = createSelector(getDashboardState,
+  (dashboardObject: DashboardState) => dashboardObject.loading);
+
 function getStartItemIndex(pageNumber: number, pageSize: number) {
   return (pageSize * pageNumber) - pageSize;
 }

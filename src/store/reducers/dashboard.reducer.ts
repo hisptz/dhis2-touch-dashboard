@@ -10,6 +10,7 @@ export interface DashboardState {
   dashboardPageNumber: number;
   dashboardPerPage: number;
   currentDashboard: string;
+  loading: boolean;
   dashboardsLoaded: boolean;
   dashboards: Dashboard[];
   activeDashboards: Dashboard[];
@@ -25,6 +26,7 @@ export const INITIAL_DASHBOARD_STATE: DashboardState = {
   dashboardPageNumber: 0,
   dashboardPerPage: 8,
   currentDashboard: undefined,
+  loading: true,
   dashboardsLoaded: false,
   dashboards: [],
   dashboardSharing: null,
@@ -39,6 +41,11 @@ export const INITIAL_DASHBOARD_STATE: DashboardState = {
 export function dashboardReducer(state: DashboardState = INITIAL_DASHBOARD_STATE,
                                  action: DashboardAction) {
   switch (action.type) {
+    case DashboardActions.LOAD_FAIL:
+      return {
+        ...state,
+        loading: false
+      };
     case DashboardActions.LOAD_SUCCESS: {
       const newDashboards: Dashboard[] = _.map(
         action.payload.dashboards,
@@ -55,6 +62,8 @@ export function dashboardReducer(state: DashboardState = INITIAL_DASHBOARD_STATE
       return {
         ...state,
         dashboards: [...newDashboards],
+        dashboardsLoaded: true,
+        loading: false,
         activeDashboards: [...filteredDashboards],
         dashboardPageNumber: Math.ceil(
           filteredDashboards.length / state.dashboardPerPage
