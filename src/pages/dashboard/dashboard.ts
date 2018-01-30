@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {IonicPage, MenuController, NavController } from 'ionic-angular';
+import {IonicPage, MenuController, NavController, ModalController } from 'ionic-angular';
 import {ApplicationState} from "../../store/reducers/index";
 import {Store} from "@ngrx/store";
 import {Observable} from "rxjs/Observable";
@@ -20,16 +20,26 @@ import {getCurrentUser} from "../../store/selectors/currentUser.selectors";
 })
 export class DashboardPage implements OnInit{
 
-  currentUser$ : Observable<CurrentUser>;
-
+  menuIcon : String;
   constructor(public navCtrl: NavController,
+              public modalCtrl:ModalController,
               private store : Store<ApplicationState>,
               private menu : MenuController) {
   }
 
   ngOnInit(){
     this.menu.enable(true);
-    this.currentUser$ = this.store.select(getCurrentUser);
+    this.menuIcon = "assets/icon/menu.png";
+  }
+
+  openDashboardListFilter() {
+    let modal = this.modalCtrl.create('DashboardFilterPage', {
+
+    });
+    modal.onDidDismiss((dashboard:any)=> {
+
+    });
+    modal.present();
   }
 
 }

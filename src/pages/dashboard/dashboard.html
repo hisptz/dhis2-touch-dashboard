@@ -10,8 +10,40 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content >
+  <ion-grid>
 
-  {{ currentUser$|async |json }}
+    <div class="entry-selection-container " (tap)="openDashboardListFilter()">
+      <ion-row>
+        <ion-col col-11>
+          Dashboard name
+        </ion-col>
+        <ion-col col-1>
+          <img [src]="menuIcon" width="20" height="20">
+        </ion-col>
+      </ion-row>
+    </div>
 
+
+    <!--cards for visualization -->
+    <div class="dashboard-card " >
+
+      <ion-row >
+        <ion-col col-11>
+          <!--<ion-icon color="primary"><img  class="dashboard-item-icon" [src]="dashboardItem.icon"/></ion-icon>-->
+          visualization charts
+        </ion-col>
+        <ion-col col-1 item>
+          <div style="text-align: center;">
+            <ion-icon  name="ios-arrow-down"
+                      item-right></ion-icon>
+            <!--<ion-icon *ngIf="openedDashboardItemIds[dashboardItem.id]" name="ios-arrow-up" item-right></ion-icon>-->
+          </div>
+        </ion-col>
+      </ion-row>
+        <loading [loadingSize]="'large'"></loading>
+
+    </div>
+
+  </ion-grid>
 </ion-content>
