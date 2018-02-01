@@ -27,6 +27,9 @@
         </ion-row>
       </div>
 
+      <div *ngIf="(visualizationObjects$ | async).length == 0">
+        <empty-list-notification [emptyListMessage]="'there_no_dashboard_item_found'|translate"></empty-list-notification>
+      </div>
       <!--cards for visualization -->
       <div class="dashboard-card " *ngFor="let visualizationObject of visualizationObjects$ | async">
 
@@ -54,10 +57,10 @@
             <!--end of chart visualization-->
 
             <!--table block-->
-            <app-table-list
-              *ngIf="visualizationObject.details.currentVisualization === 'TABLE'"
-              [visualizationType]="visualizationObject.type"
-              [visualizationLayers]="visualizationObject.layers"></app-table-list>
+            <!--<app-table-list-->
+              <!--*ngIf="visualizationObject.details.currentVisualization === 'TABLE'"-->
+              <!--[visualizationType]="visualizationObject.type"-->
+              <!--[visualizationLayers]="visualizationObject.layers"></app-table-list>-->
             <!--end of table block-->
           </ion-col>
         </ion-row>
