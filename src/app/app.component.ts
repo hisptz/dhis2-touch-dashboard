@@ -44,11 +44,13 @@ export class MyApp {
 
   async logOut(){
     try{
-      let user :any = await this.userProvider.getCurrentUser();
-      user.isLogin = false;
-      this.userProvider.setCurrentUser(user).subscribe(()=>{
-        this.nav.setRoot('LoginPage');
+      this.userProvider.getCurrentUser().subscribe(user=>{
+        user.isLogin = false;
+        this.userProvider.setCurrentUser(user).subscribe(()=>{
+          this.nav.setRoot('LoginPage');
+        })
       })
+     
     }catch (e){
       console.log(JSON.stringify(e));
     }
