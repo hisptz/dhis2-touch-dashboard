@@ -1,27 +1,39 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+##Prerequisites
+Make sure you have the following installed on your pc
 
-## How to use this template
+1. npm and node
+2. git
+3. Ionic CLI
+4. Cordova CLI
+5. Emulator (android studio etc.) or android phone for testing
+6. Android in your environment path
 
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
-
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
-
-### With the Ionic CLI:
-
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
+## How to get stated with installation
 
 ```bash
 $ sudo npm install -g ionic cordova
-$ ionic start mySideMenu sidemenu
+$ git clone https://github.com/hisptz/hisptz-touch-dashboard.git
+$ cd hisptz-touch-dashboard
 ```
 
-Then, to run it, cd into `mySideMenu` and run:
+To install all dependencies for android while inside project directory
 
 ```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
+$ sh install-android.sh
 ```
 
-Substitute ios for android if not on a Mac.
+To install all dependencies for iOS while inside project directory
+
+```bash
+$ sh install-iso.sh
+```
+
+## To run on emulator
+
+For android
+
+```bash
+$ ionic cordova run android
+```
 
 # hisptz-ios-dashboard
