@@ -45,7 +45,7 @@
                         </div>
                     </ion-col>
                 </ion-row>
-                <ion-row>
+                <ion-row *ngIf="visualizationObject.details.expanded">
                     <ion-col>
                         <div class="dashboard-card-body" [style.height]="visualizationObject.details.itemHeight">
                             <!--chart visualization-->
