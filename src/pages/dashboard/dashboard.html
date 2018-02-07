@@ -31,7 +31,7 @@
                 <empty-list-notification [emptyListMessage]="'there_no_dashboard_item_found'|translate"></empty-list-notification>
             </div>
             <!--cards for visualization -->
-            <div class="dashboard-card " *ngFor="let visualizationObject of visualizationObjects$ | async">
+            <div class="dashboard-card" *ngFor="let visualizationObject of visualizationObjects$ | async">
 
                 <ion-row>
                     <ion-col col-11>
@@ -47,14 +47,21 @@
                 </ion-row>
                 <ion-row>
                     <ion-col>
-                        <!--chart visualization-->
-                        <app-chart-list *ngIf="visualizationObject.details.currentVisualization === 'CHART'" [visualizationLayers]="visualizationObject.layers" [visualizationId]="visualizationObject.id" [chartHeight]="visualizationObject.details.itemHeight"></app-chart-list>
-                        <!--end of chart visualization-->
+                        <div class="dashboard-card-body" [style.height]="visualizationObject.details.itemHeight">
+                            <!--chart visualization-->
+                            <div class="chart-visualization">
+                                <app-chart-list *ngIf="visualizationObject.details.currentVisualization === 'CHART'" [visualizationLayers]="visualizationObject.layers" [visualizationId]="visualizationObject.id" [chartHeight]="visualizationObject.details.itemHeight"></app-chart-list>
+                            </div>
+                            <!--end of chart visualization-->
 
-                        <!--table block-->
-                        <app-table-list *ngIf="visualizationObject.details.currentVisualization === 'TABLE'" [visualizationType]="visualizationObject.type" [visualizationLayers]="visualizationObject.layers">
-                        </app-table-list>
-                        <!--end of table block-->
+                            <!--table block-->
+                            <div class="table-visualization">
+                                <app-table-list *ngIf="visualizationObject.details.currentVisualization === 'TABLE'" [visualizationType]="visualizationObject.type" [visualizationLayers]="visualizationObject.layers">
+
+                                </app-table-list>
+                            </div>
+                            <!--end of table block-->
+                        </div>
                     </ion-col>
                 </ion-row>
             </div>
