@@ -135,8 +135,7 @@ export class VisualizationEffects {
       return new Observable(observer => {
         Observable.forkJoin(analyticsPromises).subscribe(
           (analyticsResponse: any[]) => {
-            visualizationDetails.loaded =
-              visualizationObject.details.currentVisualization === 'MAP' ? false : true;
+            visualizationDetails.loaded = true;
             visualizationObject.layers = [
               ..._.map(
                 visualizationLayers,

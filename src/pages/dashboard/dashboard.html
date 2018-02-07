@@ -74,7 +74,7 @@
                         </div>
                         <!-- end of visualization card error message section -->
 
-                        <div class="dashboard-card-body" [style.height]="visualizationObject.details.itemHeight">
+                        <div *ngIf="visualizationObject.details.loaded && !visualizationObject.details.hasError" class="dashboard-card-body" [style.height]="visualizationObject.details.itemHeight">
                             <!--chart visualization-->
                             <div class="chart-visualization">
                                 <app-chart-list *ngIf="visualizationObject.details.currentVisualization === 'CHART'" [visualizationLayers]="visualizationObject.layers" [visualizationId]="visualizationObject.id" [chartHeight]="visualizationObject.details.itemHeight"></app-chart-list>
