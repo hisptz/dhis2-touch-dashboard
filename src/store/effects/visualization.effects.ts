@@ -61,17 +61,19 @@ export class VisualizationEffects {
         /**
          * Update store with initial visualization objects
          */
-        this.store.dispatch(
-          new fromVisualizationActions.SetInitialAction(initialVisualizations)
-        );
+        if (initialVisualizations.length > 0) {
+          this.store.dispatch(
+            new fromVisualizationActions.SetInitialAction(initialVisualizations)
+          );
 
-        /**
-         * Update first visualization with favorites
-         */
-        const firstVisualizationObject: Visualization = initialVisualizations[0];
-        this.store.dispatch(
-          new fromVisualizationActions.LoadFavoriteAction(initialVisualizations[0])
-        );
+          /**
+           * Update first visualization with favorites
+           */
+          const firstVisualizationObject: Visualization = initialVisualizations[0];
+          this.store.dispatch(
+            new fromVisualizationActions.LoadFavoriteAction(initialVisualizations[0])
+          );
+        }
       }
     })
     );
