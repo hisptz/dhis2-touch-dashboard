@@ -60,5 +60,4 @@
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <engine name="android" spec="~6.3.0" />
     <plugin name="cordova.plugins.diagnostic" spec="^3.9.2" />
-    <allow-navigation href="http://172.16.45.228:8100" />
 </widget>
