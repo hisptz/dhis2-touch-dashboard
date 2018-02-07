@@ -36,7 +36,7 @@ export class HttpClientProvider {
    */
   getUrlBasedOnDhisVersion(url,user){
     if(url.indexOf("/api/") == -1){
-      url = "/api/" + url;
+      url = "/api/25/" + url;
     }
     if(user.dhisVersion &&(parseInt(user.dhisVersion) < 25)){
       let pattern = "/api/" + user.dhisVersion;
