@@ -78,6 +78,26 @@ export class VisualizationEffects {
     })
     );
 
+  @Effect({ dispatch: false })
+  toggleVisualization$ = this.actions$
+    .ofType<fromVisualizationActions.ToggleVisualizationAction>(
+    fromVisualizationActions.VisualizationActions.TOGGLE_VISUALIZATION)
+    .pipe(
+    tap((action: fromVisualizationActions.ToggleVisualizationAction) => {
+      const toggledVisualization: Visualization = action.payload;
+      if (toggledVisualization && !toggledVisualization.details.loaded && !toggledVisualization.details.expanded) {
+        console.log('favorite called')
+        this.store.dispatch(new fromVisualizationActions.LoadFavoriteAction({
+          ...toggledVisualization,
+          details: {
+            ...toggledVisualization.details,
+            expanded: !toggledVisualization.details.expanded
+          }
+        }))
+      }
+    })
+    )
+
   @Effect()
   laodFavorite$ = this.actions$
     .ofType<fromVisualizationActions.LoadFavoriteAction>(

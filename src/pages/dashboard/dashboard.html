@@ -43,7 +43,7 @@
             <div class="dashboard-card" *ngFor="let visualizationObject of visualizationObjects$ | async">
 
                 <!-- visualization card title section -->
-                <ion-row>
+                <ion-row (tap)="toggleVisualization(visualizationObject)">
                     <ion-col col-11>
                         <ion-icon color="primary">
                             <img class="dashboard-item-icon" [src]="icons[visualizationObject.details.currentVisualization]" />
@@ -53,7 +53,6 @@
                     <ion-col col-1 item>
                         <div style="text-align: center;">
                             <ion-icon name="ios-arrow-down" item-right></ion-icon>
-
                         </div>
                     </ion-col>
                 </ion-row>

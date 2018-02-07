@@ -16,7 +16,7 @@ page-dashboard {
         overflow: hidden;
     }
     .table-visualization {
-        overflow: auto;
+        overflow: auto !important;
     }
     .item-md.item-block .item-inner {
         padding-right: 5px;
