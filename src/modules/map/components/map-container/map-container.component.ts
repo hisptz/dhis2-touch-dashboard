@@ -1,25 +1,31 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, AfterViewInit } from '@angular/core';
-import { VisualizationObject } from '../../models/visualization-object.model';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import * as fromStore from '../../store';
-import { Layer } from '../../models/layer.model';
-import * as fromUtils from '../../utils';
-import { getTileLayer } from '../../constants/tile-layer.constant';
-import { MapConfiguration } from '../../models/map-configuration.model';
-import { GeoFeature } from '../../models/geo-feature.model';
-import * as fromLib from '../../lib';
-import * as L from 'leaflet';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  Input,
+  AfterViewInit
+} from "@angular/core";
+import { VisualizationObject } from "../../models/visualization-object.model";
+import { Store } from "@ngrx/store";
+import { Observable } from "rxjs/Observable";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import * as fromStore from "../../store";
+import { Layer } from "../../models/layer.model";
+import * as fromUtils from "../../utils";
+import { getTileLayer } from "../../constants/tile-layer.constant";
+import { MapConfiguration } from "../../models/map-configuration.model";
+import { GeoFeature } from "../../models/geo-feature.model";
+import * as fromLib from "../../lib";
+import * as L from "leaflet";
 
-import { of } from 'rxjs/observable/of';
-import { interval } from 'rxjs/observable/interval';
-import { map, filter, tap, flatMap } from 'rxjs/operators';
+import { of } from "rxjs/observable/of";
+import { interval } from "rxjs/observable/interval";
+import { map, filter, tap, flatMap } from "rxjs/operators";
 
 @Component({
-  selector: 'app-map-container',
+  selector: "app-map-container",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './map-container.component.html',
+  templateUrl: "./map-container.component.html",
   styles: [
     `:host {
       display: block;
@@ -36,7 +42,7 @@ export class MapContainerComponent implements OnInit, AfterViewInit {
   public visualizationLegendIsOpen$: Observable<boolean>;
   public map: any;
 
-  constructor(private store: Store<fromStore.MapState>) { }
+  constructor(private store: Store<fromStore.MapState>) {}
 
   ngOnInit() {
     this.visualizationLegendIsOpen$ = this.store.select(
@@ -85,7 +91,7 @@ export class MapContainerComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onLayerAdd(index, optionsLayer) { }
+  onLayerAdd(index, optionsLayer) {}
 
   setLayerVisibility(isVisible, layer) {
     if (isVisible && this.map.hasLayer(layer) === false) {
@@ -108,12 +114,18 @@ export class MapContainerComponent implements OnInit, AfterViewInit {
   }
 
   recenterMap(event) {
-    this.map.eachLayer(layer => console.log(layer.getBounds()));
+    try {
+      this.map.eachLayer(layer => console.log(layer.getBounds()));
+    } catch (e) {
+      console.log(JSON.stringify(e));
+    }
   }
 
   toggleLegendContainerView() {
     this.store.dispatch(
-      new fromStore.ToggleOpenVisualizationLegend(this.visualizationObject.componentId)
+      new fromStore.ToggleOpenVisualizationLegend(
+        this.visualizationObject.componentId
+      )
     );
   }
   initializeMapBaseLayer(mapConfiguration: MapConfiguration) {
@@ -152,7 +164,9 @@ export class MapContainerComponent implements OnInit, AfterViewInit {
     }
     if (legendSets.length) {
       this.store.dispatch(
-        new fromStore.AddLegendSet({ [this.visualizationObject.componentId]: legendSets })
+        new fromStore.AddLegendSet({
+          [this.visualizationObject.componentId]: legendSets
+        })
       );
     }
   }
