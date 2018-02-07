@@ -20,7 +20,6 @@ import { map, filter, tap, flatMap } from 'rxjs/operators';
   selector: 'app-map-container',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './map-container.component.html',
-  styleUrls: ['./map-container.component.css'],
   styles: [
     `:host {
       display: block;
@@ -37,7 +36,7 @@ export class MapContainerComponent implements OnInit, AfterViewInit {
   public visualizationLegendIsOpen$: Observable<boolean>;
   public map: any;
 
-  constructor(private store: Store<fromStore.MapState>) {}
+  constructor(private store: Store<fromStore.MapState>) { }
 
   ngOnInit() {
     this.visualizationLegendIsOpen$ = this.store.select(
@@ -86,7 +85,7 @@ export class MapContainerComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onLayerAdd(index, optionsLayer) {}
+  onLayerAdd(index, optionsLayer) { }
 
   setLayerVisibility(isVisible, layer) {
     if (isVisible && this.map.hasLayer(layer) === false) {

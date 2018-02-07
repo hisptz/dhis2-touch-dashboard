@@ -9,8 +9,7 @@ import { LegendSet } from '../../models/Legend-set.model';
 
 @Component({
   selector: 'app-visualization-legend',
-  templateUrl: './visualization-legend.component.html',
-  styleUrls: ['./visualization-legend.component.css']
+  templateUrl: './visualization-legend.component.html'
 })
 export class VisualizationLegendComponent implements OnInit {
   @Input() mapVisualizationObject: any;
@@ -34,7 +33,7 @@ export class VisualizationLegendComponent implements OnInit {
   showTransparent: boolean = false;
   displayNone: boolean = false;
 
-  constructor(private store: Store<fromStore.MapState>) {}
+  constructor(private store: Store<fromStore.MapState>) { }
 
   ngOnInit() {
     this.sticky$ = this.store.select(
@@ -101,5 +100,5 @@ export class VisualizationLegendComponent implements OnInit {
     );
   }
 
-  toggleLayerView(e) {}
+  toggleLayerView(e) { }
 }

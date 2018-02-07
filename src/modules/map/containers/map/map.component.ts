@@ -19,7 +19,6 @@ import { map, filter, tap, flatMap } from 'rxjs/operators';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css'],
   styles: [
     `:host {
       display: block;
@@ -185,7 +184,7 @@ export class MapComponent implements OnInit {
     }
   }
 
-  onLayerAdd(index, optionsLayer) {}
+  onLayerAdd(index, optionsLayer) { }
 
   setLayerVisibility(isVisible, layer) {
     if (isVisible && this.map.hasLayer(layer) === false) {

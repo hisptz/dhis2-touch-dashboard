@@ -61,6 +61,12 @@
                                 </app-table-list>
                             </div>
                             <!--end of table block-->
+
+                            <!-- map block -->
+                            <div class="map-container" *ngIf="visualizationObject.details.currentVisualization === 'MAP'">
+                                <app-map [vizObject]="visualizationObject"></app-map>
+                            </div>
+                            <!-- end of map block -->
                         </div>
                     </ion-col>
                 </ion-row>
