@@ -11,11 +11,16 @@
 
 
 <ion-content>
+
     <ion-grid>
+        <!-- loading area -->
         <div *ngIf="loading$ | async">
             <loading [loadingMessage]="'loading_dashboard'|translate" [loadingSize]="'large'"></loading>
         </div>
+        <!-- end of loading area -->
+
         <div *ngIf="!(loading$ |async)">
+            <!-- header section -->
             <div class="entry-selection-container " (tap)="openDashboardListFilter()">
                 <ion-row>
                     <ion-col col-11>
@@ -26,34 +31,55 @@
                     </ion-col>
                 </ion-row>
             </div>
+            <!-- end of header section -->
 
+            <!-- no dashboard section -->
             <div *ngIf="(visualizationObjects$ | async).length == 0">
                 <empty-list-notification [emptyListMessage]="'there_no_dashboard_item_found'|translate"></empty-list-notification>
             </div>
+            <!-- end of no dashboard section -->
+
             <!--cards for visualization -->
             <div class="dashboard-card" *ngFor="let visualizationObject of visualizationObjects$ | async">
 
+                <!-- visualization card title section -->
                 <ion-row>
                     <ion-col col-11>
-                        <ion-icon color="primary"><img class="dashboard-item-icon" [src]="icons[visualizationObject.details.currentVisualization]" /></ion-icon>
+                        <ion-icon color="primary">
+                            <img class="dashboard-item-icon" [src]="icons[visualizationObject.details.currentVisualization]" />
+                        </ion-icon>
                         {{ visualizationObject.name }}
                     </ion-col>
                     <ion-col col-1 item>
                         <div style="text-align: center;">
                             <ion-icon name="ios-arrow-down" item-right></ion-icon>
-                            <!--<ion-icon *ngIf="openedDashboardItemIds[dashboardItem.id]" name="ios-arrow-up" item-right></ion-icon>-->
+
                         </div>
                     </ion-col>
                 </ion-row>
+                <!-- end of visualization card title section -->
+
+                <!-- visualization card body section -->
                 <ion-row *ngIf="visualizationObject.details.expanded">
                     <ion-col>
+                        <!-- visualization card loading section -->
+                        <div *ngIf="!visualizationObject.details.loaded">
+                            <loading [loadingSize]="'large'" [loadingMessage]="'loading_visualization'|translate"></loading>
+                        </div>
+                        <!-- end of visualization card loading section -->
+
+                        <!-- visualization card error message section -->
+                        <div *ngIf="visualizationObject.details.loaded && visualizationObject.details.hasError">
+                            <warning [warningMessage]="visualizationObject.details.ErrorMessage"></warning>
+                        </div>
+                        <!-- end of visualization card error message section -->
+
                         <div class="dashboard-card-body" [style.height]="visualizationObject.details.itemHeight">
                             <!--chart visualization-->
                             <div class="chart-visualization">
                                 <app-chart-list *ngIf="visualizationObject.details.currentVisualization === 'CHART'" [visualizationLayers]="visualizationObject.layers" [visualizationId]="visualizationObject.id" [chartHeight]="visualizationObject.details.itemHeight"></app-chart-list>
                             </div>
                             <!--end of chart visualization-->
-
                             <!--table block-->
                             <div class="table-visualization">
                                 <app-table-list *ngIf="visualizationObject.details.currentVisualization === 'TABLE'" [visualizationType]="visualizationObject.type" [visualizationLayers]="visualizationObject.layers">
@@ -72,6 +98,5 @@
                 </ion-row>
             </div>
         </div>
-
     </ion-grid>
 </ion-content>
