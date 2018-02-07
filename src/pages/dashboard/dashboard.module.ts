@@ -7,6 +7,7 @@ import { SharedModule } from "../../components/share.module";
 import { ChartModule } from "../../modules/chart/chart.module";
 import { TableModule } from "../../modules/table/table.module";
 import { DashboardModule } from "./components/dashboard.module";
+import {DictionaryModule} from "../../modules/dictionary/dictionary.module";
 
 @NgModule({
   declarations: [DashboardPage],
@@ -17,6 +18,7 @@ import { DashboardModule } from "./components/dashboard.module";
     MapModule,
     SharedModule,
     DashboardModule,
+    DictionaryModule,
     TranslateModule.forChild()
   ]
 })

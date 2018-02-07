@@ -61,7 +61,8 @@ export class DashboardPage implements OnInit {
       RESOURCES: "assets/icon/resource.png",
       REPORTS: "assets/icon/report.png",
       USERS: "assets/icon/users.png",
-      MESSAGES: "assets/icon/filled-chat.png"
+      MESSAGES: "assets/icon/filled-chat.png",
+      INFO: "assets/icon/info.png",
     };
   }
 

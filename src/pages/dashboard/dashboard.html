@@ -119,6 +119,12 @@
                             </div>
                             <!-- end of app block -->
 
+                            <!--dictionary block-->
+                            <div class="dictionary-container" [style.height]="visualizationObject.details.cardHeight" *ngIf="currentVisualization === 'INFO'">
+                                <app-dictionary-list [metadataIdentifiers]="visualizationObject.details.metadataIdentifiers"></app-dictionary-list>
+                            </div>
+                            <!--end of dictionary block-->
+
                         </div>
                     </ion-col>
 
