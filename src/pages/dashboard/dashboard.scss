@@ -33,4 +33,17 @@ page-dashboard {
         justify-content: space-between;
         width: 100%;
     }
+    .table-container-block,
+    .users-container-block,
+    .resources-container-block {
+        padding: 20px 10px 10px 10px;
+        overflow: auto;
+    }
+    .map-container {
+        overflow: hidden;
+    }
+    .dictionary-container {
+        overflow: auto;
+        padding: 50px 10px 10px 10px;
+    }
 }

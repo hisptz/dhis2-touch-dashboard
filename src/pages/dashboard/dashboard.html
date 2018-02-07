@@ -95,6 +95,30 @@
                                 <app-map [vizObject]="visualizationObject"></app-map>
                             </div>
                             <!-- end of map block -->
+                            <!-- users block -->
+                            <div class="users-container-block" *ngIf="visualizationObject.details.currentVisualization === 'USERS'">
+                                <app-users-container [visualizationLayers]="visualizationObject.layers"></app-users-container>
+                            </div>
+                            <!-- end of users block -->
+
+                            <!-- resources block -->
+                            <div class="resources-container-block" *ngIf="visualizationObject.details.currentVisualization === 'RESOURCES'">
+                                <app-resources-container [visualizationLayers]="visualizationObject.layers"></app-resources-container>
+                            </div>
+                            <!-- end of resources block -->
+
+                            <!-- resources block -->
+                            <div class="resources-container-block" *ngIf="visualizationObject.details.currentVisualization === 'REPORTS'">
+                                <app-reports-container [visualizationLayers]="visualizationObject.layers"></app-reports-container>
+                            </div>
+                            <!-- end of resources block -->
+
+                            <!-- app block -->
+                            <div class="app-container-block" *ngIf="visualizationObject.details.currentVisualization === 'APP'">
+                                <app-app-container [height]="visualizationObject.details.itemHeight" [appUrl]="'api/apps/' + visualizationObject.details.appKey + '/index.html?dashboardItemId=' + visualizationObject.id"></app-app-container>
+                            </div>
+                            <!-- end of app block -->
+
                         </div>
                     </ion-col>
 
