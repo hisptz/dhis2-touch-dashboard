@@ -1,7 +1,4 @@
 page-dashboard {
-    .dashboard {
-        background-color: #F4F4F4;
-    }
     .list-separator {
         height: 1.7rem;
     }
@@ -25,5 +22,15 @@ page-dashboard {
     .item-ios.item-block .item-inner {
         padding-right: 5px;
         border-bottom: 0px solid #dedede;
+    }
+    .visualization-card-footer {
+        position: relative;
+        left: 0;
+        bottom: 0;
+        padding: 5px;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
     }
 }

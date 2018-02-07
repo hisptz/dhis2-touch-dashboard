@@ -1,14 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, MenuController, NavController, ModalController } from 'ionic-angular';
+import { Component, OnInit } from "@angular/core";
+import {
+  IonicPage,
+  MenuController,
+  NavController,
+  ModalController
+} from "ionic-angular";
 import { ApplicationState } from "../../store/reducers/index";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs/Observable";
-import { Dashboard } from '../../models/dashboard';
-import { Visualization } from '../../models/visualization';
-import * as fromDashboardSelectors from '../../store/selectors/dashboard.selectors';
-import * as fromVisualizationSelectors from '../../store/selectors/visualization.selectors';
-import * as fromDashboardActions from '../../store/actions/dashboard.actions';
-import * as fromVisualizationActions from '../../store/actions/visualization.actions';
+import { Dashboard } from "../../models/dashboard";
+import { Visualization } from "../../models/visualization";
+import * as fromDashboardSelectors from "../../store/selectors/dashboard.selectors";
+import * as fromVisualizationSelectors from "../../store/selectors/visualization.selectors";
+import * as fromDashboardActions from "../../store/actions/dashboard.actions";
+import * as fromVisualizationActions from "../../store/actions/visualization.actions";
 
 /**
  * Generated class for the DashboardPage page.
@@ -19,23 +24,30 @@ import * as fromVisualizationActions from '../../store/actions/visualization.act
 
 @IonicPage()
 @Component({
-  selector: 'page-dashboard',
-  templateUrl: 'dashboard.html',
+  selector: "page-dashboard",
+  templateUrl: "dashboard.html"
 })
 export class DashboardPage implements OnInit {
-
   currentDashboard$: Observable<Dashboard>;
   visualizationObjects$: Observable<Visualization[]>;
   loading$: Observable<boolean>;
   icons: any = {};
 
-  constructor(public navCtrl: NavController,
+  constructor(
+    public navCtrl: NavController,
     public modalCtrl: ModalController,
     private store: Store<ApplicationState>,
-    private menu: MenuController) {
-    this.currentDashboard$ = store.select(fromDashboardSelectors.getCurrentDashboard);
-    this.loading$ = store.select(fromDashboardSelectors.getDashboardLoadingStatus);
-    this.visualizationObjects$ = store.select(fromVisualizationSelectors.getCurrentDashboardVisualizationObjects);
+    private menu: MenuController
+  ) {
+    this.currentDashboard$ = store.select(
+      fromDashboardSelectors.getCurrentDashboard
+    );
+    this.loading$ = store.select(
+      fromDashboardSelectors.getDashboardLoadingStatus
+    );
+    this.visualizationObjects$ = store.select(
+      fromVisualizationSelectors.getCurrentDashboardVisualizationObjects
+    );
   }
 
   ngOnInit() {
@@ -49,23 +61,38 @@ export class DashboardPage implements OnInit {
       RESOURCES: "assets/icon/resource.png",
       REPORTS: "assets/icon/report.png",
       USERS: "assets/icon/users.png",
-      MESSAGES: "assets/icon/filled-chat.png",
-    }
-
+      MESSAGES: "assets/icon/filled-chat.png"
+    };
   }
 
   openDashboardListFilter() {
-    let modal = this.modalCtrl.create('DashboardFilterPage', {
-
-    });
-    modal.onDidDismiss((dashboard: any) => {
-
-    });
+    let modal = this.modalCtrl.create("DashboardFilterPage", {});
+    modal.onDidDismiss((dashboard: any) => {});
     modal.present();
   }
 
   toggleVisualization(visualizationObject: Visualization) {
-    this.store.dispatch(new fromVisualizationActions.ToggleVisualizationAction(visualizationObject))
+    this.store.dispatch(
+      new fromVisualizationActions.ToggleVisualizationAction(
+        visualizationObject
+      )
+    );
   }
 
+  currentVisualizationChange(
+    visualizationType: string,
+    visualizationObject: Visualization
+  ) {
+    if(visualizationType != "MAP"){
+      this.store.dispatch(
+        new fromVisualizationActions.VisualizationChangeAction({
+          type: visualizationType,
+          id: visualizationObject.id
+        })
+      );
+    }else{
+      console.log("Change to maps have issues");
+    }
+
+  }
 }
