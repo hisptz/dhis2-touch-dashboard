@@ -244,7 +244,7 @@ export class HttpClientProvider {
             "Basic " + sanitizedUser.authorizationKey
           );
           this.defaultHttp
-            .post(user.serverUrl + url, data, { headers: headers })
+            .post(sanitizedUser.serverUrl + url, data, { headers: headers })
             .timeout(this.timeOutTime)
             .subscribe(
               (response: any) => {
@@ -281,7 +281,7 @@ export class HttpClientProvider {
             "Basic " + sanitizedUser.authorizationKey
           );
           this.defaultHttp
-            .put(user.serverUrl + url, data, { headers: headers })
+            .put(sanitizedUser.serverUrl + url, data, { headers: headers })
             .timeout(this.timeOutTime)
             .map(res => res.json())
             .subscribe(
@@ -318,7 +318,7 @@ export class HttpClientProvider {
             "Basic " + sanitizedUser.authorizationKey
           );
           this.defaultHttp
-            .delete(user.serverUrl + url, { headers: headers })
+            .delete(sanitizedUser.serverUrl + url, { headers: headers })
             .timeout(this.timeOutTime)
             .map(res => res.json())
             .subscribe(

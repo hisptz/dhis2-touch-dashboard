@@ -48,10 +48,6 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <allow-navigation href="http://192.168.8.100:8100" />
-    <allow-navigation href="http://192.168.1.11:8100" />
-    <allow-navigation href="http://192.168.43.247:8100" />
-    <allow-navigation href="http://192.168.1.8:8100" />
     <plugin name="cordova-plugin-device" spec="^1.1.7" />
     <plugin name="cordova-plugin-background-mode" spec="^0.7.2" />
     <plugin name="cordova-plugin-advanced-http" spec="^1.9.1" />

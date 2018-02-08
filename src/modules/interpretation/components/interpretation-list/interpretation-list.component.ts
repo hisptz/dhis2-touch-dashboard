@@ -1,14 +1,21 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
-import * as _ from 'lodash';
-import * as moment from 'moment';
-import { InterpretationService } from '../../services/interpretation.service';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output
+} from "@angular/core";
+import * as _ from "lodash";
+import * as moment from "moment";
+import { InterpretationService } from "../../services/interpretation.service";
 
 @Component({
-  selector: 'app-interpretation-list',
-  templateUrl: './interpretation-list.component.html'
+  selector: "app-interpretation-list",
+  templateUrl: "./interpretation-list.component.html"
 })
 export class InterpretationListComponent implements OnInit {
-
   @Input() interpretations: any[];
   @Input() rootUrl: string;
   @Input() itemHeight: string;
@@ -16,13 +23,14 @@ export class InterpretationListComponent implements OnInit {
   @Output() onInterpretationUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Input() visualizationTypeObject: any;
   interpretationTerm: string;
-  constructor(private interpretationService: InterpretationService) { }
+  constructor(private interpretationService: InterpretationService) {}
 
   ngOnInit() {
-    console.log(JSON.stringify(this.currentUser))
     if (this.interpretations) {
-
-      this.interpretations = this.interpretations.map((interpretation: any, index: number) => this._sanitizeInterpretation(interpretation, index));
+      this.interpretations = this.interpretations.map(
+        (interpretation: any, index: number) =>
+          this._sanitizeInterpretation(interpretation, index)
+      );
     }
   }
 
@@ -45,20 +53,29 @@ export class InterpretationListComponent implements OnInit {
     }
 
     if (!newInterpretation.showDeleteButton) {
-      newInterpretation.showDeleteButton = newInterpretation.user.id === this.currentUser.id;
+      newInterpretation.showDeleteButton =
+        newInterpretation.user.id === this.currentUser.id;
     }
 
-    newInterpretation.lastUpdated = moment(newInterpretation.lastUpdated).fromNow();
+    newInterpretation.lastUpdated = moment(
+      newInterpretation.lastUpdated
+    ).fromNow();
 
     return newInterpretation;
   }
 
-  toggleInterpretationOptions(interpretation: any, e, mouseEnter: boolean = false) {
+  toggleInterpretationOptions(
+    interpretation: any,
+    e,
+    mouseEnter: boolean = false
+  ) {
     e.stopPropagation();
-    const interpretationIndex = _.findIndex(this.interpretations, _.find(this.interpretations, ['id', interpretation.id]));
+    const interpretationIndex = _.findIndex(
+      this.interpretations,
+      _.find(this.interpretations, ["id", interpretation.id])
+    );
 
     if (interpretationIndex !== -1) {
-
       if (mouseEnter) {
         interpretation.showDate = false;
         interpretation.showMoreButton = true;
@@ -93,17 +110,24 @@ export class InterpretationListComponent implements OnInit {
 
   updateInterpretationList(interpretationList) {
     if (interpretationList) {
-      const newInterpretationList = interpretationList.filter((interpretation) => !_.find(this.interpretations, ['id', interpretation.id]));
+      const newInterpretationList = interpretationList.filter(
+        interpretation =>
+          !_.find(this.interpretations, ["id", interpretation.id])
+      );
 
-      this.interpretations = [...newInterpretationList, ...this.interpretations]
-        .map((interpretation: any, index: number) => this._sanitizeInterpretation(interpretation, index));
+      this.interpretations = [
+        ...newInterpretationList,
+        ...this.interpretations
+      ].map((interpretation: any, index: number) =>
+        this._sanitizeInterpretation(interpretation, index)
+      );
 
-      this.interpretations = this.interpretations.map((interpretation) => {
+      this.interpretations = this.interpretations.map(interpretation => {
         if (newInterpretationList[0].id !== interpretation.id) {
           interpretation.showCommentBlock = false;
         }
         return interpretation;
-      })
+      });
     }
 
     this.emitInterpretationUpdates();
@@ -116,20 +140,19 @@ export class InterpretationListComponent implements OnInit {
     if (toggleInterpretation) {
       toggleInterpretation.showCommentBlock = !toggleInterpretation.showCommentBlock;
 
-      this.interpretations = this.interpretations.map((interpretation) => {
+      this.interpretations = this.interpretations.map(interpretation => {
         if (toggleInterpretation.id !== interpretation.id) {
           interpretation.showCommentBlock = false;
         }
         return interpretation;
-      })
-
+      });
     }
 
     this.emitInterpretationUpdates();
   }
 
   updateInterpretationLikeStatus(interpretation: any) {
-    this.interpretations = this.interpretations.map((interpretationObject) => {
+    this.interpretations = this.interpretations.map(interpretationObject => {
       const newInterpretationObject: any = { ...interpretationObject };
       if (interpretationObject.id === interpretation.id) {
         newInterpretationObject.likes = interpretation.likes;
@@ -143,7 +166,7 @@ export class InterpretationListComponent implements OnInit {
   }
 
   updateInterpretationComment(interpretation: any) {
-    this.interpretations = this.interpretations.map((interpretationObject) => {
+    this.interpretations = this.interpretations.map(interpretationObject => {
       const newInterpretationObject: any = { ...interpretationObject };
       if (interpretationObject.id === interpretation.id) {
         newInterpretationObject.comments = [...interpretation.comments];
@@ -152,19 +175,31 @@ export class InterpretationListComponent implements OnInit {
       return newInterpretationObject;
     });
 
-    this.emitInterpretationUpdates()
+    this.emitInterpretationUpdates();
   }
 
   deleteInterpretationComment(interpretation, deletedComment) {
-    const correspondinginterpretation: any = _.find(this.interpretations, ['id', interpretation.id]);
+    const correspondinginterpretation: any = _.find(this.interpretations, [
+      "id",
+      interpretation.id
+    ]);
 
     if (correspondinginterpretation) {
-      const interpretationIndex = _.findIndex(this.interpretations, correspondinginterpretation);
+      const interpretationIndex = _.findIndex(
+        this.interpretations,
+        correspondinginterpretation
+      );
 
-      const availableComment = _.find(correspondinginterpretation.comments, ['id', deletedComment.id]);
+      const availableComment = _.find(correspondinginterpretation.comments, [
+        "id",
+        deletedComment.id
+      ]);
 
       if (availableComment) {
-        const deletedCommentIndex = _.findIndex(correspondinginterpretation.comments, availableComment);
+        const deletedCommentIndex = _.findIndex(
+          correspondinginterpretation.comments,
+          availableComment
+        );
 
         const newComments = [
           ...correspondinginterpretation.comments.slice(0, deletedCommentIndex),
@@ -175,13 +210,13 @@ export class InterpretationListComponent implements OnInit {
           ...this.interpretations.slice(0, interpretationIndex),
           { ...correspondinginterpretation, comments: newComments },
           ...this.interpretations.slice(interpretationIndex + 1)
-        ]
+        ];
       }
     }
   }
 
   updateInterpretationText(interpretation: any) {
-    this.interpretations = this.interpretations.map((interpretationObject) => {
+    this.interpretations = this.interpretations.map(interpretationObject => {
       const newInterpretationObject: any = { ...interpretationObject };
       if (interpretationObject.id === interpretation.id) {
         newInterpretationObject.text = interpretation.text;
@@ -198,7 +233,7 @@ export class InterpretationListComponent implements OnInit {
   openInterpretationEditForm(interpretation, e) {
     e.stopPropagation();
 
-    this.interpretations = this.interpretations.map((interpretationObject) => {
+    this.interpretations = this.interpretations.map(interpretationObject => {
       const newInterpretationObject: any = { ...interpretationObject };
       if (interpretationObject.id === interpretation.id) {
         newInterpretationObject.showEditForm = true;
@@ -214,7 +249,7 @@ export class InterpretationListComponent implements OnInit {
   toggleDeleteConfirmationDialog(interpretation, e) {
     e.stopPropagation();
 
-    this.interpretations = this.interpretations.map((interpretationObject) => {
+    this.interpretations = this.interpretations.map(interpretationObject => {
       const newInterpretationObject: any = { ...interpretationObject };
       if (interpretationObject.id === interpretation.id) {
         newInterpretationObject.showDeleteDialog = !newInterpretationObject.showDeleteDialog;
@@ -229,7 +264,7 @@ export class InterpretationListComponent implements OnInit {
 
   deleteInterpretation(interpretation, e) {
     e.stopPropagation();
-    this.interpretations = this.interpretations.map((interpretationObject) => {
+    this.interpretations = this.interpretations.map(interpretationObject => {
       const newInterpretationObject: any = { ...interpretationObject };
       if (interpretationObject.id === interpretation.id) {
         newInterpretationObject.showDeleteDialog = false;
@@ -239,33 +274,38 @@ export class InterpretationListComponent implements OnInit {
       return newInterpretationObject;
     });
 
-    this.interpretationService.delete(interpretation, this.rootUrl).subscribe(() => {
-      const interpretationIndex = _.findIndex(this.interpretations,
-        _.find(this.interpretations, ['id', interpretation.id]));
+    this.interpretationService.delete(interpretation, this.rootUrl).subscribe(
+      () => {
+        const interpretationIndex = _.findIndex(
+          this.interpretations,
+          _.find(this.interpretations, ["id", interpretation.id])
+        );
 
-      if (interpretationIndex !== -1) {
-        this.interpretations = [
-          ...this.interpretations.slice(0, interpretationIndex),
-          ...this.interpretations.slice(interpretationIndex + 1)
-        ];
-      }
-
-      this.emitInterpretationUpdates();
-    }, deleteError => {
-      this.interpretations = this.interpretations.map((interpretationObject) => {
-        const newInterpretationObject: any = { ...interpretationObject };
-        if (interpretationObject.id === interpretation.id) {
-          newInterpretationObject.deleting = false;
+        if (interpretationIndex !== -1) {
+          this.interpretations = [
+            ...this.interpretations.slice(0, interpretationIndex),
+            ...this.interpretations.slice(interpretationIndex + 1)
+          ];
         }
 
-        return newInterpretationObject;
-      });
-    })
+        this.emitInterpretationUpdates();
+      },
+      deleteError => {
+        this.interpretations = this.interpretations.map(
+          interpretationObject => {
+            const newInterpretationObject: any = { ...interpretationObject };
+            if (interpretationObject.id === interpretation.id) {
+              newInterpretationObject.deleting = false;
+            }
 
+            return newInterpretationObject;
+          }
+        );
+      }
+    );
   }
 
   emitInterpretationUpdates() {
     this.onInterpretationUpdate.emit(this.interpretations);
   }
-
 }
