@@ -1,7 +1,7 @@
-import * as _ from 'lodash';
-import { VisualizationObject } from '../models/visualization-object.model';
-import { MapConfiguration } from '../models/map-configuration.model';
-import { Layer } from '../models/layer.model';
+import * as _ from "lodash";
+import { VisualizationObject } from "../models/visualization-object.model";
+import { MapConfiguration } from "../models/map-configuration.model";
+import { Layer } from "../models/layer.model";
 
 export function transformVisualizationObject(visualizationObject) {
   let visObject = {};
@@ -9,13 +9,13 @@ export function transformVisualizationObject(visualizationObject) {
   let analytics = {};
   const mapconfig = visualizationObject.details;
   const mapConfiguration: MapConfiguration = _.pick(mapconfig, [
-    'id',
-    'name',
-    'subtitle',
-    'latitude',
-    'longitude',
-    'basemap',
-    'zoom'
+    "id",
+    "name",
+    "subtitle",
+    "latitude",
+    "longitude",
+    "basemap",
+    "zoom"
   ]);
 
   let layers: Layer[] = [];
@@ -33,44 +33,50 @@ export function transformVisualizationObject(visualizationObject) {
       displayName: settings.displayName,
       opacity: settings.opacity,
       hidden: settings.hidden,
-      type: settings.layer ? settings.layer.replace(/\d$/, ''): 'thematic'; // Replace number in thematic layers
+      type: settings.layer ? settings.layer.replace(/\d$/, "") : "thematic" // Replace number in thematic layers
     };
 
     const layerOptions = _.pick(settings, [
-      'eventClustering',
-      'eventPointRadius',
-      'eventPointColor',
-      'radiusHigh',
-      'radiusLow'
+      "eventClustering",
+      "eventPointRadius",
+      "eventPointColor",
+      "radiusHigh",
+      "radiusLow"
     ]);
 
-    const legendProperties = _.pick(settings, ['colorLow', 'colorHigh', 'colorScale', 'classes', 'method']);
+    const legendProperties = _.pick(settings, [
+      "colorLow",
+      "colorHigh",
+      "colorScale",
+      "classes",
+      "method"
+    ]);
 
     const displaySettings = _.pick(settings, [
-      'labelFontColor',
-      'labelFontSize',
-      'labelFontStyle',
-      'labelFontWeight',
-      'labels',
-      'hideTitle',
-      'hideSubtitle'
+      "labelFontColor",
+      "labelFontSize",
+      "labelFontStyle",
+      "labelFontWeight",
+      "labels",
+      "hideTitle",
+      "hideSubtitle"
     ]);
 
     const dataSelections = _.pick(settings, [
-      'config',
-      'parentLevel',
-      'completedOnly',
-      'translations',
-      'interpretations',
-      'program',
-      'programStage',
-      'columns',
-      'rows',
-      'filters',
-      'aggregationType',
-      'organisationUnitGroupSet',
-      'startDate',
-      'endDate'
+      "config",
+      "parentLevel",
+      "completedOnly",
+      "translations",
+      "interpretations",
+      "program",
+      "programStage",
+      "columns",
+      "rows",
+      "filters",
+      "aggregationType",
+      "organisationUnitGroupSet",
+      "startDate",
+      "endDate"
     ]);
 
     const legendSet = settings.legendSet;
