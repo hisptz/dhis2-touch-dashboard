@@ -14,7 +14,6 @@ import { Visualization } from "../../models/visualization";
 import * as fromDashboardSelectors from "../../store/selectors/dashboard.selectors";
 import * as fromVisualizationSelectors from "../../store/selectors/visualization.selectors";
 import * as fromCurrentUserSelectors from "../../store/selectors/currentUser.selectors";
-import * as fromDashboardActions from "../../store/actions/dashboard.actions";
 import * as fromVisualizationActions from "../../store/actions/visualization.actions";
 
 /**

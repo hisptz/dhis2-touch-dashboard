@@ -344,7 +344,7 @@ export class LoginPage implements OnInit {
     let defaultSetting = this.settingsProvider.getDefaultSettings();
     this.settingsProvider
       .getSettingsForTheApp(currentUser)
-      .then((appSettings: any) => {
+      .subscribe((appSettings: any) => {
         if (!appSettings) {
           let time = defaultSetting.synchronization.time;
           let timeType = defaultSetting.synchronization.timeType;
@@ -354,7 +354,7 @@ export class LoginPage implements OnInit {
           );
           this.settingsProvider
             .setSettingsForTheApp(currentUser, defaultSetting)
-            .then(() => {}, error => {});
+            .subscribe(() => {}, error => {});
         }
       });
   }

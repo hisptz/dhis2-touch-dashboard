@@ -24,5 +24,11 @@
   "there_no_dashboard_item_found": "There are no dashboard items found",
   "loading_visualization": "Discovering visualization data",
   "about": "About",
-  "settings": "Settings"
+  "system_info": "System info",
+  "loading_app_information": "Discovering app information",
+  "settings": "Settings",
+  "loading_current_user_information": "Discovering user information",
+  "loading_settings": "Discovering settings",
+  "app_settings": "App setting",
+  "current_language": "Current language"
 }
