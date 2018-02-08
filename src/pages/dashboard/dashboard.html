@@ -54,8 +54,10 @@
                     </ion-col>
                     <ion-col col-1 item>
                         <div style="text-align: center;">
-                            <ion-icon *ngIf="!visualizationObject.details.expanded" name="ios-arrow-down" item-right></ion-icon>
-                            <ion-icon *ngIf="visualizationObject.details.expanded" name="ios-arrow-up" item-right></ion-icon>
+                            <ion-icon *ngIf="!visualizationObject.details.expanded" name="ios-arrow-down" [color]="(visualizationObject.details.expanded) ?'current' : 'font-color'"
+                                item-right></ion-icon>
+                            <ion-icon *ngIf="visualizationObject.details.expanded" name="ios-arrow-up" [color]="(visualizationObject.details.expanded) ?'current' : 'font-color'"
+                                item-right></ion-icon>
                         </div>
                     </ion-col>
                 </ion-row>
@@ -119,7 +121,7 @@
 
                                 <!-- app block -->
                                 <div class="app-container-block" *ngIf="visualizationObject.details.currentVisualization === 'APP'">
-                                    <app-app-container [height]="visualizationObject.details.itemHeight" [appUrl]="'api/apps/' + visualizationObject.details.appKey + '/index.html?dashboardItemId=' + visualizationObject.id"></app-app-container>
+                                    <app-app-container [height]="visualizationObject.details.itemHeight" [currentUser]="currentUser$ | async" [appUrl]="'api/apps/' + visualizationObject.details.appKey + '/index.html?dashboardItemId=' + visualizationObject.id"></app-app-container>
                                 </div>
                                 <!-- end of app block -->
 

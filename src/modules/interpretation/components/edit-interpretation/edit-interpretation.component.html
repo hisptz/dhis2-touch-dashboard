@@ -2,8 +2,8 @@
   <textarea cols="100" rows="1" Autosize autofocus required minlength="10" [(ngModel)]="interpretation.text" name="text" #text="ngModel"
     placeholder="Write new interpretation" class="interpretation-edit-input"></textarea>
   <div class="pull-right" [hidden]="text.invalid || interpretation.text === ''">
-    <button ion-button color="light" outline (click)="cancel($event)">CANCEL</button>
-    <button ion-button color="light" outline [disabled]="creating" (click)="editInterpretation($event)">
+    <button class="dashboard-border dashboard-btn " (click)="cancel($event)">CANCEL</button>
+    <button class="dashboard-border dashboard-btn " [disabled]="creating" (click)="editInterpretation($event)">
       {{creating ? 'POSTING' : 'POST'}}
     </button>
   </div>

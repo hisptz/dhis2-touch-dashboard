@@ -2,8 +2,8 @@
   <textarea type="text" cols="100" rows="1" Autosize autofocus required minlength="3" [(ngModel)]="commentFormData.comment"
     name="comment" #comment="ngModel" placeholder="Write your comment" class="interpretation-comment-input"></textarea>
   <div class="pull-right" [hidden]="comment.invalid || commentFormData.comment === ''">
-    <button ion-button color="light" outline (click)="cancel($event)">CANCEL</button>
-    <button ion-button color="light" outline [disabled]="creating" (click)="postComment($event)">
+    <button class="dashboard-border dashboard-btn " (click)="cancel($event)">CANCEL</button>
+    <button class="dashboard-border dashboard-btn " [disabled]="creating" (click)="postComment($event)">
       {{creating ? 'POSTING' : 'POST'}}
     </button>
   </div>
