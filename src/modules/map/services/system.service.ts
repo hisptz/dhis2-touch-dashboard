@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { catchError } from "rxjs/operators";
+import { HttpClientProvider } from "../../../providers/http-client/http-client";
 
 @Injectable()
 export class SystemService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClientProvider) {}
 
   getSystemInfo() {
-    return this.httpClient.get('../../../api/system/info.json');
+    return this.httpClient.get("system/info.json", true);
   }
 }
