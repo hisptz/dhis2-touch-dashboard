@@ -3,7 +3,7 @@
     #message="ngModel" placeholder="Write new interpretation" class="interpretation-write-input"></textarea>
   <div class="add-interpretation-btns-d" [hidden]="message.invalid || interpretation.message === ''">
     <button class="dashboard-border dashboard-btn " (click)="cancel($event)">CANCEL</button>
-    <button ion-button color="primary" outline [disabled]="creating" (click)="postInterpretation($event)">
+    <button class="dashboard-border dashboard-btn " [disabled]="creating" (click)="postInterpretation($event)">
       {{creating ? 'POSTING' : 'POST'}}
     </button>
   </div>

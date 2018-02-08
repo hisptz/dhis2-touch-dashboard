@@ -147,7 +147,7 @@
 
                     <div class="visualization-card-footer" *ngIf="visualizationObject.details.loaded">
                         <div *ngIf="visualizationObject.details.nonVisualizable">&nbsp;</div>
-                        <div class="visualization-card-footer-left animated fadeInLeft" *ngIf="!visualizationObject.details.nonVisualizable">
+                        <div class="visualization-card-footer-left" *ngIf="!visualizationObject.details.nonVisualizable">
                             <app-visualization-types-section (onToggleInterpretation)="toggleInterpretation(visualizationObject)" [currentVisualization]="visualizationObject.details.currentVisualization"
                                 (onCurrentVisualizationChange)="currentVisualizationChange($event,visualizationObject)"></app-visualization-types-section>
                         </div>

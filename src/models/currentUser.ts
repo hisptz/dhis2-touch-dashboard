@@ -1,7 +1,7 @@
 
 export interface CurrentUser {
   username: string;
-  name: string;
+  name?: string;
   id?: string;
   dataViewOrganisationUnits?: any;
   password: string; //encrypted string

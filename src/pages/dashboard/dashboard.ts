@@ -103,6 +103,6 @@ export class DashboardPage implements OnInit {
         id: visualizationObject.id
       })
     );
-    this.toggleInterpretation(visualizationObject);
+    this.opendeInterpreationsMapper[visualizationObject.id] = false;
   }
 }
