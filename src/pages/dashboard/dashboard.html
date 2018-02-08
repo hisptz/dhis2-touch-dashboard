@@ -48,11 +48,14 @@
                         <ion-icon color="primary">
                             <img class="dashboard-item-icon" [src]="icons[visualizationObject.details.currentVisualization]" />
                         </ion-icon>
-                        {{ visualizationObject.name }}
+                        <span ion-text [color]="(visualizationObject.details.expanded) ?'current' : 'font-color'">
+                            {{ visualizationObject.name }}
+                        </span>
                     </ion-col>
                     <ion-col col-1 item>
                         <div style="text-align: center;">
-                            <ion-icon name="ios-arrow-down" item-right></ion-icon>
+                            <ion-icon *ngIf="!visualizationObject.details.expanded" name="ios-arrow-down" item-right></ion-icon>
+                            <ion-icon *ngIf="visualizationObject.details.expanded" name="ios-arrow-up" item-right></ion-icon>
                         </div>
                     </ion-col>
                 </ion-row>
