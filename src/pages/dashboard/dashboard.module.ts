@@ -1,17 +1,18 @@
-import { InterpretationModule } from './../../modules/interpretation/interpretation.module';
-import { MapModule } from './../../modules/map/map.module';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { DashboardPage } from './dashboard';
-import { TranslateModule } from "@ngx-translate/core";
-import { SharedModule } from "../../components/share.module";
+import { TranslateModule } from '@ngx-translate/core';
+
 import { ChartModule } from '../../modules/chart/chart.module';
 import { TableModule } from '../../modules/table/table.module';
+import { DashboardModule } from './components/dashboard.module';
+import { InterpretationModule } from './../../modules/interpretation/interpretation.module';
+import { MapModule } from './../../modules/map/map.module';
+import { DictionaryModule } from './../../modules/dictionary/dictionary.module';
+import { SharedModule } from '../../components/share.module';
 
 @NgModule({
-  declarations: [
-    DashboardPage,
-  ],
+  declarations: [DashboardPage],
   imports: [
     IonicPageModule.forChild(DashboardPage),
     ChartModule,
@@ -19,7 +20,9 @@ import { TableModule } from '../../modules/table/table.module';
     MapModule,
     InterpretationModule,
     SharedModule,
+    DashboardModule,
+    DictionaryModule,
     TranslateModule.forChild()
-  ],
+  ]
 })
-export class DashboardPageModule { }
+export class DashboardPageModule {}

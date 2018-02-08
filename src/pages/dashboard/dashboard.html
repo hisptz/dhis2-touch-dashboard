@@ -2,8 +2,8 @@
 
     <ion-navbar color="primary">
         <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+            <ion-icon name="menu"></ion-icon>
+        </button>
         <ion-title>{{'dashboard'|translate}}</ion-title>
     </ion-navbar>
 
@@ -73,7 +73,7 @@
                         </div>
                         <!-- end of visualization card error message section -->
 
-                        <div *ngIf="visualizationObject.details.loaded && !visualizationObject.details.hasError" class="dashboard-card-body" [style.height]="visualizationObject.details.itemHeight">
+                        <div *ngIf="visualizationObject.details.loaded && !visualizationObject.details.hasError" class="dashboard-card-body" [style.minHeight]="'200px'" [style.maxHeight]="visualizationObject.details.itemHeight">
                             <!--chart visualization-->
                             <div class="chart-visualization">
                                 <app-chart-list *ngIf="visualizationObject.details.currentVisualization === 'CHART'" [visualizationLayers]="visualizationObject.layers" [visualizationId]="visualizationObject.id" [chartHeight]="visualizationObject.details.itemHeight"></app-chart-list>
@@ -92,17 +92,58 @@
                                 <app-map [vizObject]="visualizationObject"></app-map>
                             </div>
                             <!-- end of map block -->
+                            <!-- users block -->
+                            <div class="users-container-block" *ngIf="visualizationObject.details.currentVisualization === 'USERS'">
+                                <app-users-container [visualizationLayers]="visualizationObject.layers"></app-users-container>
+                            </div>
+                            <!-- end of users block -->
+
+                            <!-- resources block -->
+                            <div class="resources-container-block" *ngIf="visualizationObject.details.currentVisualization === 'RESOURCES'">
+                                <app-resources-container [visualizationLayers]="visualizationObject.layers"></app-resources-container>
+                            </div>
+                            <!-- end of resources block -->
+
+                            <!-- resources block -->
+                            <div class="resources-container-block" *ngIf="visualizationObject.details.currentVisualization === 'REPORTS'">
+                                <app-reports-container [visualizationLayers]="visualizationObject.layers"></app-reports-container>
+                            </div>
+                            <!-- end of resources block -->
+
+                            <!-- app block -->
+                            <div class="app-container-block" *ngIf="visualizationObject.details.currentVisualization === 'APP'">
+                                <app-app-container [height]="visualizationObject.details.itemHeight" [appUrl]="'api/apps/' + visualizationObject.details.appKey + '/index.html?dashboardItemId=' + visualizationObject.id"></app-app-container>
+                            </div>
+                            <!-- end of app block -->
+
+                            <!--dictionary block-->
+                            <div class="dictionary-container" [style.height]="visualizationObject.details.cardHeight" *ngIf="visualizationObject.details.currentVisualization === 'INFO'">
+                                <app-dictionary-list [metadataIdentifiers]="visualizationObject.details.metadataIdentifiers"></app-dictionary-list>
+                            </div>
+                            <!--end of dictionary block-->
+
                         </div>
 
                         <!-- visualization interpretation -->
-                        <div class="interpretation-container" *ngIf="visualizationObject.details.loaded && !visualizationObject.details.hasError">
+                        <div class="interpretation-container" *ngIf="visualizationObject.details.loaded && !visualizationObject.details.hasError && !visualizationObject.details.nonVisualizable">
                             <div class="interpretation-list" *ngFor="let layer of visualizationObject.layers">
                                 <app-interpretation-list [interpretations]="layer.interpretation.interpretations" [visualizationTypeObject]="{id: layer.interpretation.id, type: layer.interpretation.type}" [currentUser]="currentUser$ | async" [rootUrl]="''" [itemHeight]="itemHeight"></app-interpretation-list>
                             </div>
                         </div>
                         <!-- end of visualization interpretation -->
                     </ion-col>
+
+                    <div class="visualization-card-footer" *ngIf=visualizationObject.details.loaded>
+                        <div *ngIf="visualizationObject.details.nonVisualizable">&nbsp;</div>
+                        <div class="visualization-card-footer-left animated fadeInLeft" *ngIf="!visualizationObject.details.nonVisualizable">
+                            <app-visualization-types-section [currentVisualization]="visualizationObject.details.currentVisualization" (onCurrentVisualizationChange)="currentVisualizationChange($event,visualizationObject)"></app-visualization-types-section>
+                        </div>
+                    </div>
                 </ion-row>
+                <!-- end of visualization card body section -->
+
+
+
             </div>
         </div>
     </ion-grid>
