@@ -1,14 +1,10 @@
-import * as L from "leaflet";
-import * as _ from "lodash";
-import {
-  getOrgUnitsFromRows,
-  getPeriodFromFilters,
-  getDataItemsFromColumns
-} from "../utils/analytics";
-import { getLegendItems, getColorsByRgbInterpolation } from "../utils/classify";
-import { toGeoJson } from "./GeoJson";
-import { GeoJson } from "leaflet";
-import { Feature, GeometryObject } from "geojson";
+import * as L from 'leaflet';
+import * as _ from 'lodash';
+import { getOrgUnitsFromRows, getPeriodFromFilters, getDataItemsFromColumns } from '../utils/analytics';
+import { getLegendItems, getColorsByRgbInterpolation } from '../utils/classify';
+import { toGeoJson } from './GeoJson';
+import { GeoJson } from 'leaflet';
+import { Feature, GeometryObject } from 'geojson';
 
 export const thematic = options => {
   const {
@@ -28,11 +24,10 @@ export const thematic = options => {
   const otherOptions = thematicLayerOptions(options.id, opacity);
   let geoJsonLayer = L.geoJSON(features, otherOptions);
   let legend = null;
+
   if (analyticsData && analyticsData.rows.length) {
     const valueById = getValueById(analyticsData);
-    const valueFeatures = features.filter(
-      ({ id }) => valueById[id] !== undefined
-    );
+    const valueFeatures = features.filter(({ id }) => valueById[id] !== undefined);
     const orderedValues = getOrderedValues(analyticsData);
     const minValue = orderedValues[0];
     const maxValue = orderedValues[orderedValues.length - 1];
@@ -41,35 +36,22 @@ export const thematic = options => {
     const name = options.name || dataItem.name;
     legend = legendSet
       ? createLegendFromLegendSet(legendSet, options.displayName, options.type)
-      : createLegendFromConfig(
-          orderedValues,
-          legendProperties,
-          options.displayName,
-          options.type
-        );
+      : createLegendFromConfig(orderedValues, legendProperties, options.displayName, options.type);
     const getLegendItem = _.curry(getLegendItemForValue)(legend.items);
-    legend["period"] =
-      (analyticsData.metaData.dimensions &&
-        analyticsData.metaData.dimensions.pe[0]) ||
-      analyticsData.metaData.pe[0];
+    legend['period'] =
+      (analyticsData.metaData.dimensions && analyticsData.metaData.dimensions.pe[0]) || analyticsData.metaData.pe[0];
 
     valueFeatures.forEach(({ id, properties }) => {
       const value = valueById[id];
       const item = getLegendItem(value);
 
-      item.count === undefined ? (item.count = 1) : item.count++;
+      item && item.count === undefined ? (item.count = 1) : item.count++;
 
       properties.value = value;
       properties.label = name;
       properties.color = item && item.color;
-      properties.percentage = (
-        valueFrequencyPair[value] /
-        orderedValues.length *
-        100
-      ).toFixed(1);
-      properties.radius =
-        (value - minValue) / (maxValue - minValue) * (radiusHigh - radiusLow) +
-        radiusLow;
+      properties.percentage = (valueFrequencyPair[value] / orderedValues.length * 100).toFixed(1);
+      properties.radius = (value - minValue) / (maxValue - minValue) * (radiusHigh - radiusLow) + radiusLow;
     });
     geoJsonLayer = L.geoJSON(valueFeatures, otherOptions);
     const thematicEvents = thematicLayerEvents(columns, legend);
@@ -102,8 +84,8 @@ export const thematic = options => {
 // Returns an object mapping org. units and values
 const getValueById = data => {
   const { headers, rows } = data;
-  const ouIndex = _.findIndex(headers, ["name", "ou"]);
-  const valueIndex = _.findIndex(headers, ["name", "value"]);
+  const ouIndex = _.findIndex(headers, ['name', 'ou']);
+  const valueIndex = _.findIndex(headers, ['name', 'value']);
 
   return rows.reduce((obj, row) => {
     obj[row[ouIndex]] = parseFloat(row[valueIndex]);
@@ -114,17 +96,15 @@ const getValueById = data => {
 // Returns an array of ordered values
 const getOrderedValues = data => {
   const { headers, rows } = data;
-  const valueIndex = _.findIndex(headers, ["name", "value"]);
+  const valueIndex = _.findIndex(headers, ['name', 'value']);
 
   return rows.map(row => parseFloat(row[valueIndex])).sort((a, b) => a - b);
 };
 
 const createLegendFromLegendSet = (legendSet, displayName, type) => {
   const { name, legends } = legendSet;
-  const pickSome = ["name", "startValue", "endValue", "color"];
-  const items = _.sortBy(legends, "startValues").map(legend =>
-    _.pick(legend, pickSome)
-  );
+  const pickSome = ['name', 'startValue', 'endValue', 'color'];
+  const items = _.sortBy(legends, 'startValues').map(legend => _.pick(legend, pickSome));
   return {
     title: name || displayName,
     type,
@@ -142,7 +122,7 @@ const createLegendFromConfig = (data, config, displayName, type) => {
   if (Array.isArray(colorScale)) {
     colors = colorScale;
   } else if (_.isString(colorScale)) {
-    colors = colorScale.split(",");
+    colors = colorScale.split(',');
   } else {
     colors = getColorsByRgbInterpolation(colorLow, colorHigh, classes);
   }
@@ -161,9 +141,7 @@ const createLegendFromConfig = (data, config, displayName, type) => {
 const getLegendItemForValue = (legendItems, value) => {
   const isLast = index => index === legendItems.length - 1;
   return legendItems.find(
-    (item, index) =>
-      value >= item.startValue &&
-      (value < item.endValue || (isLast(index) && value === item.endValue))
+    (item, index) => value >= item.startValue && (value < item.endValue || (isLast(index) && value === item.endValue))
   );
 };
 
@@ -171,7 +149,7 @@ export const thematicLayerOptions = (id, opacity) => {
   const style = feature => {
     const pop = feature.properties;
     return {
-      color: "#333",
+      color: '#333',
       fillColor: pop.color,
       fillOpacity: opacity,
       opacity,
@@ -188,8 +166,8 @@ export const thematicLayerOptions = (id, opacity) => {
     const geojsonMarkerOptions = {
       pane,
       radius: feature.properties.radius || 6,
-      fillColor: feature.properties.color || "#fff",
-      color: feature.properties.color || "#333",
+      fillColor: feature.properties.color || '#fff',
+      color: feature.properties.color || '#333',
       opacity: opacity || 0.8,
       weight: 1,
       fillOpacity: opacity || 0.8
@@ -209,7 +187,7 @@ export const thematicLayerEvents = (columns, legend) => {
   const onClick = evt => {
     const { name, value, percentage } = evt.layer.feature.properties;
     const indicator = columns[0].items[0].name;
-    const period = legend.period;
+    const period = legend ? legend.period : undefined;
     const content = `<div class="leaflet-popup-orgunit">${name}<br>
                     ${indicator}<br>
                     ${period}: ${value}</div>`;
@@ -232,7 +210,7 @@ export const thematicLayerEvents = (columns, legend) => {
     evt.layer.closeTooltip();
     evt.layer
       .bindTooltip(`${name}(${value})(${percentage}%)`, {
-        direction: "auto",
+        direction: 'auto',
         permanent: false,
         sticky: true,
         interactive: true,

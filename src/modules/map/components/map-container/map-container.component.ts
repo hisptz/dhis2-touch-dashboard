@@ -114,11 +114,7 @@ export class MapContainerComponent implements OnInit, AfterViewInit {
   }
 
   recenterMap(event) {
-    try {
-      this.map.eachLayer(layer => console.log(layer.getBounds()));
-    } catch (e) {
-      console.log(JSON.stringify(e));
-    }
+    this.map.eachLayer(layer => {});
   }
 
   toggleLegendContainerView() {
@@ -129,11 +125,14 @@ export class MapContainerComponent implements OnInit, AfterViewInit {
     );
   }
   initializeMapBaseLayer(mapConfiguration: MapConfiguration) {
-    const center: L.LatLngExpression = [
+    let center: L.LatLngExpression = [
       Number(fromLib._convertLatitudeLongitude(mapConfiguration.latitude)),
       Number(fromLib._convertLatitudeLongitude(mapConfiguration.longitude))
     ];
-    const zoom = mapConfiguration.zoom;
+    if (!mapConfiguration.latitude && !mapConfiguration.longitude) {
+      center = [6.489, 21.885];
+    }
+    const zoom = mapConfiguration.zoom ? mapConfiguration.zoom : 6;
 
     const mapTileLayer = getTileLayer(mapConfiguration.basemap);
     const baseMapLayer = fromLib.LayerType[mapTileLayer.type](mapTileLayer);

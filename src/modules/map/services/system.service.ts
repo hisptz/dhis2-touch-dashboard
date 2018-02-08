@@ -9,4 +9,12 @@ export class SystemService {
   getSystemInfo() {
     return this.httpClient.get("system/info.json", true);
   }
+
+  getGoogleEarthToken() {
+    return this.httpClient.get("tokens/google", true);
+  }
+
+  getMapID() {
+    return this.httpClient.get("tokens/google", true);
+  }
 }

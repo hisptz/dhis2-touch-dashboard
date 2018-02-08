@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
+import { IonicPage } from "ionic-angular";
 import { AboutProvider } from "../../providers/about/about";
 import { AppProvider } from "../../providers/app/app";
 import { UserProvider } from "../../providers/user/user";
@@ -28,7 +28,6 @@ export class AboutPage implements OnInit {
   isAboutContentOpen: any = {};
 
   constructor(
-    public navCtrl: NavController,
     private appProvider: AppProvider,
     private aboutProvider: AboutProvider,
     private userProvider: UserProvider
