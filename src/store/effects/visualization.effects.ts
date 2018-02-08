@@ -86,7 +86,6 @@ export class VisualizationEffects {
     tap((action: fromVisualizationActions.ToggleVisualizationAction) => {
       const toggledVisualization: Visualization = action.payload;
       if (toggledVisualization && !toggledVisualization.details.loaded && !toggledVisualization.details.expanded) {
-        console.log('favorite called')
         this.store.dispatch(new fromVisualizationActions.LoadFavoriteAction({
           ...toggledVisualization,
           details: {

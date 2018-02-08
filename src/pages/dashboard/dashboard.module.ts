@@ -1,3 +1,4 @@
+import { InterpretationModule } from './../../modules/interpretation/interpretation.module';
 import { MapModule } from './../../modules/map/map.module';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
@@ -16,6 +17,7 @@ import { TableModule } from '../../modules/table/table.module';
     ChartModule,
     TableModule,
     MapModule,
+    InterpretationModule,
     SharedModule,
     TranslateModule.forChild()
   ],

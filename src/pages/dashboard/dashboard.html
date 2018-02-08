@@ -93,6 +93,14 @@
                             </div>
                             <!-- end of map block -->
                         </div>
+
+                        <!-- visualization interpretation -->
+                        <div class="interpretation-container" *ngIf="visualizationObject.details.loaded && !visualizationObject.details.hasError">
+                            <div class="interpretation-list" *ngFor="let layer of visualizationObject.layers">
+                                <app-interpretation-list [interpretations]="layer.interpretation.interpretations" [visualizationTypeObject]="{id: layer.interpretation.id, type: layer.interpretation.type}" [currentUser]="currentUser$ | async" [rootUrl]="''" [itemHeight]="itemHeight"></app-interpretation-list>
+                            </div>
+                        </div>
+                        <!-- end of visualization interpretation -->
                     </ion-col>
                 </ion-row>
             </div>

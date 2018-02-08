@@ -1,3 +1,4 @@
+import { CurrentUser } from './../../models/currentUser';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, MenuController, NavController, ModalController } from 'ionic-angular';
 import { ApplicationState } from "../../store/reducers/index";
@@ -7,6 +8,7 @@ import { Dashboard } from '../../models/dashboard';
 import { Visualization } from '../../models/visualization';
 import * as fromDashboardSelectors from '../../store/selectors/dashboard.selectors';
 import * as fromVisualizationSelectors from '../../store/selectors/visualization.selectors';
+import * as fromCurrentUserSelectors from '../../store/selectors/currentUser.selectors';
 import * as fromDashboardActions from '../../store/actions/dashboard.actions';
 import * as fromVisualizationActions from '../../store/actions/visualization.actions';
 
@@ -27,6 +29,7 @@ export class DashboardPage implements OnInit {
   currentDashboard$: Observable<Dashboard>;
   visualizationObjects$: Observable<Visualization[]>;
   loading$: Observable<boolean>;
+  currentUser$: Observable<CurrentUser>;
   icons: any = {};
 
   constructor(public navCtrl: NavController,
@@ -36,6 +39,7 @@ export class DashboardPage implements OnInit {
     this.currentDashboard$ = store.select(fromDashboardSelectors.getCurrentDashboard);
     this.loading$ = store.select(fromDashboardSelectors.getDashboardLoadingStatus);
     this.visualizationObjects$ = store.select(fromVisualizationSelectors.getCurrentDashboardVisualizationObjects);
+    this.currentUser$ = store.select(fromCurrentUserSelectors.getCurrentUser);
   }
 
   ngOnInit() {
