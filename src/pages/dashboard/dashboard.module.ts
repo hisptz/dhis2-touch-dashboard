@@ -10,6 +10,10 @@ import { InterpretationModule } from './../../modules/interpretation/interpretat
 import { MapModule } from './../../modules/map/map.module';
 import { DictionaryModule } from './../../modules/dictionary/dictionary.module';
 import { SharedModule } from '../../components/share.module';
+import {DataFilterModule} from "../../modules/data-filter/data-filter.module";
+import {LayoutModule} from "../../modules/layout/layout.module";
+import {OrgUnitFilterModule} from "../../modules/org-unit-filter/org-unit-filter.module";
+import {PeriodFilterModule} from "../../modules/period-filter/period-filter.module";
 
 @NgModule({
   declarations: [DashboardPage],
@@ -22,6 +26,10 @@ import { SharedModule } from '../../components/share.module';
     SharedModule,
     DashboardModule,
     DictionaryModule,
+    DataFilterModule,
+    LayoutModule,
+    OrgUnitFilterModule,
+    PeriodFilterModule,
     TranslateModule.forChild()
   ]
 })
