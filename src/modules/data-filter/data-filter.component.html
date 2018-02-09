@@ -1,7 +1,7 @@
 <div class="data-filter-container">
   <div class="data-filter-options">
     <ul class="data-filter-options-icon">
-      <li *ngFor="let option of dataFilterOptions">
+      <li *ngFor="let option of dataFilterOptions" >
         <a (click)="toggleDataFilterOption(option, $event)"
            [ngClass]="{
             'btn': true,
@@ -11,7 +11,7 @@
            }"
            title="Click to see {{option.name}}"
         >
-          {{option.name}}
+          <span padding-top>{{option.name}}</span>
         </a>
       </li>
     </ul>

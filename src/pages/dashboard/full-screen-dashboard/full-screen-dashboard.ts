@@ -1,24 +1,17 @@
-import { CurrentUser } from "./../../models/currentUser";
 import { Component, OnInit } from "@angular/core";
-import {
-  IonicPage,
-  MenuController,
-  NavController,
-  ModalController
-} from "ionic-angular";
+import { IonicPage, NavController, NavParams } from "ionic-angular";
 import * as _ from "lodash";
-import { ApplicationState } from "../../store/reducers/index";
+import { ApplicationState } from "../../../store";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs/Observable";
-import { Dashboard } from "../../models/dashboard";
-import { Visualization } from "../../models/visualization";
-import * as fromDashboardSelectors from "../../store/selectors/dashboard.selectors";
-import * as fromVisualizationSelectors from "../../store/selectors/visualization.selectors";
-import * as fromCurrentUserSelectors from "../../store/selectors/currentUser.selectors";
-import * as fromVisualizationActions from "../../store/actions/visualization.actions";
+import { Visualization } from "../../../models/visualization";
+import * as fromCurrentUserSelectors from "../../../store/selectors/currentUser.selectors";
+import * as fromVisualizationActions from "../../../store/actions/visualization.actions";
+import { UnSetCurrentAction } from "../../../store/actions/visualization.actions";
+import { CurrentUser } from "../../../models/currentUser";
 
 /**
- * Generated class for the DashboardPage page.
+ * Generated class for the FullScreenDashboardPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -26,37 +19,22 @@ import * as fromVisualizationActions from "../../store/actions/visualization.act
 
 @IonicPage()
 @Component({
-  selector: "page-dashboard",
-  templateUrl: "dashboard.html"
+  selector: "page-full-screen-dashboard",
+  templateUrl: "./full-screen-dashboard.html"
 })
-export class DashboardPage implements OnInit {
-  currentDashboard$: Observable<Dashboard>;
-  visualizationObjects$: Observable<Visualization[]>;
-  loading$: Observable<boolean>;
+export class FullScreenDashboardPage implements OnInit {
   currentUser$: Observable<CurrentUser>;
   icons: any = {};
-  opendeInterpreationsMapper: any = {};
 
   constructor(
-    public navCtrl: NavController,
-    public modalCtrl: ModalController,
-    private store: Store<ApplicationState>,
-    private menu: MenuController
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private store: Store<ApplicationState>
   ) {
-    this.currentDashboard$ = store.select(
-      fromDashboardSelectors.getCurrentDashboard
-    );
-    this.loading$ = store.select(
-      fromDashboardSelectors.getDashboardLoadingStatus
-    );
-    this.visualizationObjects$ = store.select(
-      fromVisualizationSelectors.getCurrentDashboardVisualizationObjects
-    );
     this.currentUser$ = store.select(fromCurrentUserSelectors.getCurrentUser);
   }
 
   ngOnInit() {
-    this.menu.enable(true);
     this.icons = {
       menu: "assets/icon/menu.png",
       MAP: "assets/icon/map.png",
@@ -71,34 +49,10 @@ export class DashboardPage implements OnInit {
     };
   }
 
-  openDashboardListFilter() {
-    let modal = this.modalCtrl.create("DashboardFilterPage", {});
-    modal.onDidDismiss((dashboard: any) => {});
-    modal.present();
-  }
-
-  openDashboardInFullScreen(visualizationObject: Visualization) {
-    let modal = this.modalCtrl.create("FullScreenDashboardPage", {
-      currentVisualizationObject: visualizationObject
-    });
-    modal.onDidDismiss((dashboard: any) => {});
-    modal.present();
-  }
-
-  toggleVisualization(visualizationObject: Visualization) {
-    this.store.dispatch(
-      new fromVisualizationActions.ToggleVisualizationAction(
-        visualizationObject
-      )
-    );
-  }
-
-  toggleInterpretation(visualizationObject: Visualization) {
-    if (!this.opendeInterpreationsMapper[visualizationObject.id]) {
-      this.opendeInterpreationsMapper[visualizationObject.id] = false;
-    }
-    this.opendeInterpreationsMapper[visualizationObject.id] = !this
-      .opendeInterpreationsMapper[visualizationObject.id];
+  closeDashboardItem(event) {
+    event.stopPropagation();
+    this.store.dispatch(new UnSetCurrentAction());
+    this.navCtrl.pop();
   }
 
   currentVisualizationChange(
@@ -111,7 +65,6 @@ export class DashboardPage implements OnInit {
         id: visualizationObject.id
       })
     );
-    this.opendeInterpreationsMapper[visualizationObject.id] = false;
   }
 
   getSelectedDimensions(visualizationObject) {

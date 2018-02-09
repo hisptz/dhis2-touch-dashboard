@@ -3,7 +3,7 @@
     <name>Interactive Dashboard</name>
     <description>Interactive dashboard experience on mobile</description>
     <author email="profschingal@gamil.com" href="">Joseph Chingalo</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.100.37:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -49,6 +49,8 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <allow-navigation href="http://192.168.111.204:8100" />
+    <allow-navigation href="http://192.168.111.159:8100" />
+    <allow-navigation href="http://192.168.100.37:8100" />
     <engine name="android" spec="~6.3.0" />
     <plugin name="cordova-plugin-device" spec="^1.1.7" />
     <plugin name="cordova-plugin-background-mode" spec="^0.7.2" />
@@ -61,5 +63,4 @@
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova.plugins.diagnostic" spec="^3.9.2" />
-    <allow-navigation href="http://192.168.111.159:8100" />
 </widget>
