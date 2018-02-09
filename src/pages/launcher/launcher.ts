@@ -3,7 +3,6 @@ import { NavController } from 'ionic-angular';
 import {UserProvider} from "../../providers/user/user";
 import {NetworkAvailabilityProvider} from "../../providers/network-availability/network-availability";
 import {AppTranslationProvider} from "../../providers/app-translation/app-translation";
-import {BackgroundMode} from "@ionic-native/background-mode";
 import {ApplicationState} from "../../store/reducers/index";
 import {Store} from "@ngrx/store";
 import { LoadedCurrentUser} from "../../store/actions/currentUser.actons";
@@ -27,13 +26,11 @@ export class LauncherPage implements OnInit{
               private store : Store<ApplicationState>,
               private UserProvider : UserProvider,
               private NetworkAvailabilityProvider : NetworkAvailabilityProvider,
-              private appTranslationProvider : AppTranslationProvider,
-              private backgroundMode: BackgroundMode) {
+              private appTranslationProvider : AppTranslationProvider) {
   }
 
   ngOnInit(){
     this.logoUrl = 'assets/img/logo.png';
-    this.backgroundMode.enable();
     this.NetworkAvailabilityProvider.setNetworkStatusDetection();
     this.UserProvider.getCurrentUser().subscribe((user : any)=>{
       let currentLanguage = "en";
