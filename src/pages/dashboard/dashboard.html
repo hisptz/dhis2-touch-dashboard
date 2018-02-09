@@ -80,7 +80,7 @@
 
                         <!-- visualization card loading section -->
                         <div *ngIf="!visualizationObject.details.loaded">
-                            <loading [loadingSize]="'large'" [loadingMessage]="'loading_visualization'"></loading>
+                            <loading [loadingSize]="'large'" [loadingMessage]="'loading_visualization'|translate"></loading>
                             <!-- <app-visualization-card-loader [visualizationType]="visualizationObject.details.currentVisualization"></app-visualization-card-loader> -->
                         </div>
                         <!-- end of visualization card loading section -->
