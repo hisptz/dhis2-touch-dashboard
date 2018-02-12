@@ -121,7 +121,7 @@ ion-modal.inset-modal {
     font-size: 1.7rem !important;
 }
 
-.tabs-md .tab-button[aria-selected="true"] {
+.tabs-md .tab-button[aria-selected='true'] {
     font-size: 1.7rem !important;
 }
 
@@ -222,7 +222,6 @@ ion-modal.inset-modal {
     -o-transition: all 0.2s ease-in-out;
     -ms-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
-    border-radius: 15px;
 }
 
 .dashboard-btn:hover {
