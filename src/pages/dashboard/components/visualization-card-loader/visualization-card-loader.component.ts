@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 @Component({
@@ -6,15 +6,13 @@ import * as _ from 'lodash';
   templateUrl: './visualization-card-loader.component.html'
 })
 export class VisualizationCardLoaderComponent implements OnInit {
-
   @Input() visualizationType: string;
   tableCellCounts: any[];
   constructor() {
-    this.tableCellCounts = _.range(56);
+    this.tableCellCounts = _.range(20);
   }
 
   ngOnInit() {
-    console.log("visualizationType : " + this.visualizationType);
+    console.log('visualizationType : ' + this.visualizationType);
   }
-
 }

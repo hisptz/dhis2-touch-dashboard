@@ -54,10 +54,8 @@
                     </ion-col>
                     <ion-col col-1 item>
                         <div style="text-align: center;">
-                            <ion-icon *ngIf="!visualizationObject.details.expanded" name="ios-arrow-down" [color]="(visualizationObject.details.expanded) ?'current' : 'font-color'"
-                                item-right></ion-icon>
-                            <ion-icon *ngIf="visualizationObject.details.expanded" name="ios-arrow-up" [color]="(visualizationObject.details.expanded) ?'current' : 'font-color'"
-                                item-right></ion-icon>
+                            <ion-icon *ngIf="!visualizationObject.details.expanded" name="ios-arrow-down" [color]="(visualizationObject.details.expanded) ?'current' : 'font-color'" item-right></ion-icon>
+                            <ion-icon *ngIf="visualizationObject.details.expanded" name="ios-arrow-up" [color]="(visualizationObject.details.expanded) ?'current' : 'font-color'" item-right></ion-icon>
                         </div>
                     </ion-col>
                 </ion-row>
@@ -70,8 +68,7 @@
                             <div class="visualization-card-header" *ngIf="!visualizationObject.details.nonVisualizable">
                                 <div class="visualization-card-header-left">
                                     <div class="visualization-filter-section-container">
-                                        <app-visualization-filter-section [selectedDimensions]="getSelectedDimensions(visualizationObject)" [visualizationType]="visualizationObject.details.currentVisualization"
-                                            [loaded]="visualizationObject.details.loaded" (onFilterUpdate)="onFilterUpdate($event,visualizationObject)"
+                                        <app-visualization-filter-section [selectedDimensions]="getSelectedDimensions(visualizationObject)" [visualizationType]="visualizationObject.details.currentVisualization" [loaded]="visualizationObject.details.loaded" (onFilterUpdate)="onFilterUpdate($event,visualizationObject)"
                                             (onLayoutUpdate)="onLayoutUpdate($event,visualizationObject)"></app-visualization-filter-section>
                                     </div>
                                 </div>
@@ -92,8 +89,8 @@
                                 <div class="visualization-block" [style.flex]="'2'">
                                     <!-- visualization card loading section -->
                                     <div *ngIf="!visualizationObject.details.loaded">
-                                        <loading [loadingSize]="'large'" [loadingMessage]="'loading_visualization'|translate"></loading>
-                                        <!-- <app-visualization-card-loader [visualizationType]="visualizationObject.details.currentVisualization"></app-visualization-card-loader> -->
+                                        <!-- <loading [loadingSize]="'large'" [loadingMessage]="'loading_visualization'|translate"></loading> -->
+                                        <app-visualization-card-loader [visualizationType]="visualizationObject.details.currentVisualization"></app-visualization-card-loader>
                                     </div>
                                     <!-- end of visualization card loading section -->
 
@@ -108,14 +105,12 @@
                                         <div [style.minHeight]="'200px'" [style.maxHeight]="visualizationObject.details.itemHeight">
                                             <!--chart visualization-->
                                             <div class="chart-visualization">
-                                                <app-chart-list *ngIf="visualizationObject.details.currentVisualization === 'CHART'" [visualizationLayers]="visualizationObject.layers"
-                                                    [visualizationId]="visualizationObject.id" [chartHeight]="visualizationObject.details.itemHeight"></app-chart-list>
+                                                <app-chart-list *ngIf="visualizationObject.details.currentVisualization === 'CHART'" [visualizationLayers]="visualizationObject.layers" [visualizationId]="visualizationObject.id" [chartHeight]="visualizationObject.details.itemHeight"></app-chart-list>
                                             </div>
                                             <!--end of chart visualization-->
                                             <!--table block-->
                                             <div class="table-visualization">
-                                                <app-table-list *ngIf="visualizationObject.details.currentVisualization === 'TABLE'" [visualizationType]="visualizationObject.type"
-                                                    [visualizationLayers]="visualizationObject.layers">
+                                                <app-table-list *ngIf="visualizationObject.details.currentVisualization === 'TABLE'" [visualizationType]="visualizationObject.type" [visualizationLayers]="visualizationObject.layers">
 
                                                 </app-table-list>
                                             </div>
@@ -162,8 +157,7 @@
                                     <div *ngIf="opendeInterpreationsMapper[visualizationObject.id]">
                                         <div class="interpretation-container" *ngIf="visualizationObject.details.loaded && !visualizationObject.details.hasError && !visualizationObject.details.nonVisualizable">
                                             <div class="interpretation-list" *ngFor="let layer of visualizationObject.layers">
-                                                <app-interpretation-list [interpretations]="layer.interpretation.interpretations" [visualizationTypeObject]="{id: layer.interpretation.id, type: layer.interpretation.type}"
-                                                    [currentUser]="currentUser$ | async" [rootUrl]="''" [itemHeight]="'100px'"></app-interpretation-list>
+                                                <app-interpretation-list [interpretations]="layer.interpretation.interpretations" [visualizationTypeObject]="{id: layer.interpretation.id, type: layer.interpretation.type}" [currentUser]="currentUser$ | async" [rootUrl]="''" [itemHeight]="'100px'"></app-interpretation-list>
                                             </div>
                                         </div>
                                     </div>
@@ -175,8 +169,7 @@
                         <div class="visualization-card-footer" *ngIf="visualizationObject.details.loaded">
                             <div *ngIf="visualizationObject.details.nonVisualizable">&nbsp;</div>
                             <div class="visualization-card-footer-left" *ngIf="!visualizationObject.details.nonVisualizable">
-                                <app-visualization-types-section (onToggleInterpretation)="toggleInterpretation(visualizationObject)" [currentVisualization]="visualizationObject.details.currentVisualization"
-                                    (onCurrentVisualizationChange)="currentVisualizationChange($event,visualizationObject)"></app-visualization-types-section>
+                                <app-visualization-types-section (onToggleInterpretation)="toggleInterpretation(visualizationObject)" [currentVisualization]="visualizationObject.details.currentVisualization" (onCurrentVisualizationChange)="currentVisualizationChange($event,visualizationObject)"></app-visualization-types-section>
                             </div>
                         </div>
                     </ion-row>
