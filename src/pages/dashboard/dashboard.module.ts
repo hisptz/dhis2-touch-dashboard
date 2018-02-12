@@ -6,7 +6,6 @@ import { TranslateModule } from "@ngx-translate/core";
 import { ChartModule } from "../../modules/chart/chart.module";
 import { TableModule } from "../../modules/table/table.module";
 import { DashboardModule } from "./components/dashboard.module";
-import { InterpretationModule } from "./../../modules/interpretation/interpretation.module";
 import { MapModule } from "./../../modules/map/map.module";
 import { DictionaryModule } from "./../../modules/dictionary/dictionary.module";
 import { SharedModule } from "../../components/share.module";
@@ -15,7 +14,6 @@ import { SharedModule } from "../../components/share.module";
   declarations: [DashboardPage],
   imports: [
     IonicPageModule.forChild(DashboardPage),
-    InterpretationModule,
     SharedModule,
     DashboardModule,
     TranslateModule.forChild()

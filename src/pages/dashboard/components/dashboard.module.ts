@@ -22,6 +22,7 @@ import { ChartModule } from "../../../modules/chart/chart.module";
 import { TableModule } from "../../../modules/table/table.module";
 import { MapModule } from "../../../modules/map/map.module";
 import { DictionaryModule } from "../../../modules/dictionary/dictionary.module";
+import { InterpretationModule } from "../../../modules/interpretation/interpretation.module";
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { DictionaryModule } from "../../../modules/dictionary/dictionary.module"
     ChartModule,
     TableModule,
     MapModule,
-    DictionaryModule
+    DictionaryModule,
+    InterpretationModule
   ],
   exports: [
     VisualizationTypesSectionComponent,

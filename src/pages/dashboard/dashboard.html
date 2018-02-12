@@ -65,74 +65,10 @@
 
                 <!-- visualization card body section -->
                 <div *ngIf="visualizationObject.details.expanded">
-                    <ion-row *ngIf="visualizationObject.details.loaded">
-                        <ion-col>
-                            <div class="visualization-card-header" *ngIf="!visualizationObject.details.nonVisualizable">
-                                <div class="visualization-card-header-left">
-                                    <div class="visualization-filter-section-container">
-                                        <app-visualization-filter-section [selectedDimensions]="getSelectedDimensions(visualizationObject)" [visualizationType]="visualizationObject.details.currentVisualization"
-                                            [loaded]="visualizationObject.details.loaded" (onFilterUpdate)="onFilterUpdate($event,visualizationObject)"
-                                            (onLayoutUpdate)="onLayoutUpdate($event,visualizationObject)"></app-visualization-filter-section>
-                                    </div>
-                                </div>
-                                <div style="right:1" (click)="openDashboardInFullScreen(visualizationObject)">
-                                    <button class="dashboard-btn full-screen-dashboard-item-resize">
-                                        <img src="assets/icon/full-screen.png" alt="">
-                                    </button>
-                                </div>
-                            </div>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col></ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col>
-                            <div class="visualization-card-body">
-                                <div class="visualization-block" [style.flex]="'2'">
-                                    <!-- visualization card loading section -->
-                                    <div *ngIf="!visualizationObject.details.loaded">
-                                        <!-- <loading [loadingSize]="'large'" [loadingMessage]="'loading_visualization'|translate"></loading> -->
-                                        <app-visualization-card-loader [visualizationType]="visualizationObject.details.currentVisualization"></app-visualization-card-loader>
-                                    </div>
-                                    <!-- end of visualization card loading section -->
 
-                                    <!-- visualization card error message section -->
-                                    <div *ngIf="visualizationObject.details.loaded && visualizationObject.details.hasError">
-                                        <warning [warningMessage]="visualizationObject.details.ErrorMessage"></warning>
-                                    </div>
-                                    <!-- end of visualization card error message section -->
+                    <dashboard-visualization-card [visualizationObject]="visualizationObject" (onOpeningFullScreen)="openDashboardInFullScreen()"
+                        [currentUser]="currentUser$ | async "></dashboard-visualization-card>
 
-                                    <div *ngIf="visualizationObject.details.loaded && !visualizationObject.details.hasError" class="dashboard-card-body">
-                                        <dashboard-visualization-card [visualizationObject]="visualizationObject"></dashboard-visualization-card>
-                                    </div>
-
-                                    <!-- visualization interpretation -->
-                                    <div *ngIf="opendeInterpreationsMapper[visualizationObject.id] ">
-                                        <div class="interpretation-container " *ngIf="visualizationObject.details.loaded
-                                            && !visualizationObject.details.hasError && !visualizationObject.details.nonVisualizable ">
-                                            <div class="interpretation-list " *ngFor="let layer of visualizationObject.layers ">
-                                                <app-interpretation-list [interpretations]="layer.interpretation.interpretations
-                                            " [visualizationTypeObject]="{id: layer.interpretation.id, type: layer.interpretation.type} "
-                                                    [currentUser]="currentUser$ | async " [rootUrl]=" ''
-                                            " [itemHeight]=" '100px' "></app-interpretation-list>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end of visualization interpretation -->
-                                </div>
-                            </div>
-                        </ion-col>
-
-                        <div class="visualization-card-footer " *ngIf="visualizationObject.details.loaded ">
-                            <div *ngIf="visualizationObject.details.nonVisualizable ">&nbsp;</div>
-                            <div class="visualization-card-footer-left " *ngIf="!visualizationObject.details.nonVisualizable ">
-                                <app-visualization-types-section (onToggleInterpretation)="toggleInterpretation(visualizationObject)
-                                            " [currentVisualization]="visualizationObject.details.currentVisualization "
-                                    (onCurrentVisualizationChange)="currentVisualizationChange($event,visualizationObject) "></app-visualization-types-section>
-                            </div>
-                        </div>
-                    </ion-row>
                     <!-- end of visualization card body section -->
                 </div>
 
