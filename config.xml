@@ -3,7 +3,7 @@
     <name>Interactive Dashboard</name>
     <description>Interactive dashboard experience on mobile</description>
     <author email="profschingal@gamil.com" href="">Joseph Chingalo</author>
-    <content original-src="index.html" src="http://192.168.1.9:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -64,4 +64,5 @@
     <plugin name="cordova.plugins.diagnostic" spec="^3.9.2" />
     <allow-navigation href="http://192.168.1.9:8100" />
     <engine name="android" spec="~6.3.0" />
+    <allow-navigation href="http://192.168.1.10:8100" />
 </widget>
