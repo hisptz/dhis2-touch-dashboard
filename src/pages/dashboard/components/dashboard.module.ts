@@ -16,7 +16,13 @@ import { OrgUnitFilterModule } from "../../../modules/org-unit-filter/org-unit-f
 import { LayoutModule } from "../../../modules/layout/layout.module";
 import { PeriodFilterModule } from "../../../modules/period-filter/period-filter.module";
 import { SharedModule } from "../../../components/share.module";
-import {CommonModule} from "@angular/common";
+import { CommonModule } from "@angular/common";
+import { DashboardVisualizationCardComponent } from "./dashboard-visualization-card/dashboard-visualization-card";
+import { ChartModule } from "../../../modules/chart/chart.module";
+import { TableModule } from "../../../modules/table/table.module";
+import { MapModule } from "../../../modules/map/map.module";
+import { DictionaryModule } from "../../../modules/dictionary/dictionary.module";
+import { InterpretationModule } from "../../../modules/interpretation/interpretation.module";
 
 @NgModule({
   declarations: [
@@ -26,6 +32,7 @@ import {CommonModule} from "@angular/common";
     ResourcesContainerComponent,
     UsersContainerComponent,
     VisualizationCardLoaderComponent,
+    DashboardVisualizationCardComponent,
     VisualizationFilterSectionComponent
   ],
   imports: [
@@ -39,7 +46,12 @@ import {CommonModule} from "@angular/common";
     PeriodFilterModule,
     SharedModule,
     ReportsModule,
-    PipesModule
+    PipesModule,
+    ChartModule,
+    TableModule,
+    MapModule,
+    DictionaryModule,
+    InterpretationModule
   ],
   exports: [
     VisualizationTypesSectionComponent,
@@ -47,6 +59,7 @@ import {CommonModule} from "@angular/common";
     VisualizationFilterSectionComponent,
     ReportsContainerComponent,
     VisualizationCardLoaderComponent,
+    DashboardVisualizationCardComponent,
     ResourcesContainerComponent,
     UsersContainerComponent
   ]
