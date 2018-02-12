@@ -35,12 +35,10 @@
     <div class="" [ngClass]="{'hiddenTree':showOrgTree}" id="tree_view">
         <div class="org-unit-selection-options">
             <div appClickOutside (clickOutside)="showOrgUnitSettings = false" style="position:relative;">
-                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="toggleOrgUnitSettings($event)">
+                <button type="button" class="org-unit-option-btn" (click)="toggleOrgUnitSettings($event)">
         Options
           <img
             src="assets/icon/arrow-down.png"
-            class="float-right group-image"
-            style="padding-top: 5px; padding-left: 5px;"
             alt="">
         </button>
                 <ul class="multiselect-dropdown" *ngIf="showOrgUnitSettings">
@@ -94,8 +92,10 @@
 
     </div>
 
-    <div class="org-unit-actions float-right">
-        <button (click)="close($event)" class="dashboard-border dashboard-btn">Cancel</button>
-        <button (click)="emit($event)" class="dashboard-border dashboard-btn">Update</button>
+    <div class="org-unit-actions">
+        <div>
+            <button (click)="emit($event)" class="org-unit-action-btn">Update</button>
+            <button (click)="close($event)" class="org-unit-action-btn">Cancel</button>
+        </div>
     </div>
 </div>

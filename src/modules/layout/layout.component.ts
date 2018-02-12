@@ -1,12 +1,11 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {INITIAL_LAYOUT_MODEL} from './model/layout-model';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { INITIAL_LAYOUT_MODEL } from './model/layout-model';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html'
 })
 export class LayoutComponent implements OnInit {
-
   @Input() layoutModel = INITIAL_LAYOUT_MODEL;
   @Input() visualizationType: string;
   @Output() onLayoutUpdate = new EventEmitter();
@@ -31,15 +30,15 @@ export class LayoutComponent implements OnInit {
       columnDimension: [],
       rowDimension: []
     };
-    this.columnName = 'Column dimensions';
-    this.rowName = 'Row dimensions';
+    this.columnName = 'Column';
+    this.rowName = 'Row';
   }
 
   ngOnInit() {
     this.updateLayoutDimensions();
     if (this.visualizationType === 'CHART') {
-      this.rowName = 'Categories dimensions';
-      this.columnName = 'Series dimensions';
+      this.rowName = 'Categories';
+      this.columnName = 'Series';
     }
   }
 
