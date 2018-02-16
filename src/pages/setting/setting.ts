@@ -42,7 +42,7 @@ export class SettingPage implements OnInit {
   ngOnInit() {
     this.settingObject = {};
     this.translationCodes = this.appTranslationProvider.getSupportedTranslationObjects();
-    this.loadingMessage = "loading_current_user_information";
+    this.loadingMessage = "loading current user information";
     this.isLoading = true;
     this.isSettingContentOpen = {};
     this.settingContents = this.settingsProvider.getSettingContentDetails();
@@ -53,7 +53,7 @@ export class SettingPage implements OnInit {
       (currentUser: any) => {
         this.currentUser = currentUser;
         this.currentLanguage = currentUser.currentLanguage;
-        this.loadingMessage = "loading_settings";
+        this.loadingMessage = "loading settings";
         this.localInstanceProvider.getLocalInstances().subscribe(
           (instances: any) => {
             this.localInstances = instances;
@@ -62,7 +62,7 @@ export class SettingPage implements OnInit {
           error => {
             this.isLoading = false;
             this.appProvider.setNormalNotification(
-              "Fail to load available local instances"
+              "fail to load available local instances"
             );
           }
         );
@@ -71,7 +71,7 @@ export class SettingPage implements OnInit {
         console.log(error);
         this.isLoading = false;
         this.appProvider.setNormalNotification(
-          "Fail to load current user information"
+          "fail to load current user information"
         );
       }
     );
@@ -94,7 +94,7 @@ export class SettingPage implements OnInit {
         )
         .subscribe(() => {});
     } catch (e) {
-      this.appProvider.setNormalNotification("Fail to set translation");
+      this.appProvider.setNormalNotification("fail to set translation");
       console.log(JSON.stringify(e));
     }
   }

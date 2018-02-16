@@ -4,7 +4,9 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>{{'dashboard'|translate}}</ion-title>
+        <ion-title>
+            <span [translate]="'dashboard'"></span>
+        </ion-title>
     </ion-navbar>
 
 </ion-header>
@@ -15,7 +17,7 @@
     <ion-grid>
         <!-- loading area -->
         <div *ngIf="loading$ | async">
-            <loading [loadingMessage]="'loading_dashboard'|translate" [loadingSize]="'large'"></loading>
+            <loading [loadingMessage]="'loading dashboard'" [loadingSize]="'large'"></loading>
         </div>
         <!-- end of loading area -->
 
@@ -35,7 +37,7 @@
 
             <!-- no dashboard section -->
             <div *ngIf="(visualizationObjects$ | async).length == 0">
-                <empty-list-notification [emptyListMessage]="'there_no_dashboard_item_found'|translate"></empty-list-notification>
+                <empty-list-notification [emptyListMessage]="'there no dashboard item found'"></empty-list-notification>
             </div>
             <!-- end of no dashboard section -->
 

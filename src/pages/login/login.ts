@@ -162,7 +162,7 @@ export class LoginPage implements OnInit {
           .subscribe(() => {});
       }
     } catch (e) {
-      this.AppProvider.setNormalNotification("Fail to set translation ");
+      this.AppProvider.setNormalNotification("fail to set translation");
       console.log(JSON.stringify(e));
     }
   }
@@ -189,7 +189,7 @@ export class LoginPage implements OnInit {
       this.loggedInInInstance = this.currentUser.serverUrl;
       this.reInitiateProgressTrackerObject(this.currentUser);
       this.progressTracker[currentResourceType].message =
-        "establishing_connection_to_server";
+        "establishing connection to server";
       this.UserProvider.authenticateUser(this.currentUser).subscribe(
         (response: any) => {
           response = this.getResponseData(response);
@@ -214,7 +214,7 @@ export class LoginPage implements OnInit {
               resource = "Loading system information";
               if (this.isLoginProcessActive) {
                 this.progressTracker[currentResourceType].message =
-                  "loading_system_information";
+                  "loading system information";
                 this.HttpClientProvider.get(
                   "/api/system/info",
                   false,
@@ -229,7 +229,7 @@ export class LoginPage implements OnInit {
                         this.updateProgressTracker(resource);
                         if (this.isLoginProcessActive) {
                           this.progressTracker[currentResourceType].message =
-                            "loading_current_user_authorities";
+                            "loading current user authorities";
                           this.UserProvider.getUserAuthorities(
                             this.currentUser
                           ).subscribe(
@@ -244,7 +244,7 @@ export class LoginPage implements OnInit {
                               this.progressTracker[
                                 currentResourceType
                               ].message =
-                                "preparing_local_storage";
+                                "preparing local storage";
                               this.sqlLite
                                 .generateTables(
                                   this.currentUser.currentDatabase
@@ -260,7 +260,7 @@ export class LoginPage implements OnInit {
                                       this.cancelLoginProcessData
                                     );
                                     this.AppProvider.setNormalNotification(
-                                      "Fail to prepare local storage"
+                                      "fail to prepare local storage"
                                     );
                                     console.error(
                                       "error : " + JSON.stringify(error)
@@ -273,7 +273,7 @@ export class LoginPage implements OnInit {
                                 this.cancelLoginProcessData
                               );
                               this.AppProvider.setNormalNotification(
-                                "Fail to load user authorities"
+                                "fail to load user authorities"
                               );
                               console.error("error : " + JSON.stringify(error));
                             }
@@ -283,7 +283,7 @@ export class LoginPage implements OnInit {
                       error => {
                         this.cancelLoginProcess(this.cancelLoginProcessData);
                         this.AppProvider.setNormalNotification(
-                          "Fail to load user authorities"
+                          "fail to load user authorities"
                         );
                         console.error("error : " + JSON.stringify(error));
                       }
@@ -292,7 +292,7 @@ export class LoginPage implements OnInit {
                   error => {
                     this.cancelLoginProcess(this.cancelLoginProcessData);
                     this.AppProvider.setNormalNotification(
-                      "Fail to load system information"
+                      "fail to load system information"
                     );
                     console.error("error : " + JSON.stringify(error));
                   }
@@ -302,7 +302,7 @@ export class LoginPage implements OnInit {
             error => {
               this.cancelLoginProcess(this.cancelLoginProcessData);
               this.AppProvider.setNormalNotification(
-                "Fail to save current user information"
+                "fail to save current user information"
               );
               console.error("error : " + JSON.stringify(error));
             }
@@ -311,16 +311,16 @@ export class LoginPage implements OnInit {
         (error: any) => {
           if (error.status == 0) {
             this.AppProvider.setNormalNotification(
-              "Please check your network connectivity"
+              "please check your network connectivity"
             );
           } else if (error.status == 401) {
             this.AppProvider.setNormalNotification(
-              "You have enter wrong username or password or server address"
+              "you have enter wrong username or password or server address"
             );
           } else if (error.status == 404) {
             console.log(JSON.stringify(error));
             this.AppProvider.setNormalNotification(
-              "Please check server address"
+              "please check server address"
             );
           } else if (error.error) {
             this.AppProvider.setNormalNotification(error.error);

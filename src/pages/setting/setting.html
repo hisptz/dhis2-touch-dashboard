@@ -10,7 +10,9 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{'settings'|translate}}</ion-title>
+    <ion-title>
+      <span [translate]="'settings'"></span>
+    </ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -21,7 +23,7 @@
   <ion-grid>
 
     <div *ngIf="isLoading">
-      <loading [loadingMessage]="loadingMessage|translate" [loadingSize]="'large'"></loading>
+      <loading [loadingMessage]="loadingMessage" [loadingSize]="'large'"></loading>
     </div>
     <div *ngIf="!isLoading">
 
@@ -30,7 +32,7 @@
           <ion-col col-11>
             <img class="side-menu-icon" [src]="settingContent.icon" />&nbsp;&nbsp;
             <span ion-text [color]="(isSettingContentOpen[settingContent.id]) ?'current' : 'font-color'">
-              {{ settingContent.name|translate }}
+              <span [translate]="settingContent.name"></span>
             </span>
           </ion-col>
           <ion-col col-1 item>
@@ -53,7 +55,9 @@
               <ion-row>
                 <ion-col>
                   <ion-item>
-                    <ion-label>{{'current_language'|translate}} </ion-label>
+                    <ion-label>
+                      <span [translate]="'current language'"></span>
+                    </ion-label>
                     <ion-select (ionChange)="updateCurrentLanguage()" [(ngModel)]="currentLanguage" interface="action-sheet">
                       <ion-option *ngFor="let translationCode of translationCodes" value="{{translationCode.code}}">{{translationCode.name}}</ion-option>
                     </ion-select>

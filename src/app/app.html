@@ -4,22 +4,22 @@
       <ion-row>
         <ion-col class="topSLogan side-menu-logo-container">
           <div class="logo-inside-app">
-            <img [src]="logoUrl" >
+            <img [src]="logoUrl">
           </div>
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col >
+        <ion-col>
           <ion-list no-lines>
             <button menuClose="left" ion-item *ngFor="let page of pages" (click)="openPage(page)">
               <ion-icon [name]="page.icon" item-left></ion-icon>
-              {{page.title |translate }}
+              <span [translate]="page.title"></span>
             </button>
 
             <button menuClose="left" ion-item (tap)="logOut()">
               <ion-icon item-left name="log-out">
               </ion-icon>
-              {{'log_out'|translate}}
+              <span [translate]="'log out'"></span>
             </button>
           </ion-list>
         </ion-col>

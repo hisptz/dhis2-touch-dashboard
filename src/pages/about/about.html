@@ -10,7 +10,9 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{'about'|translate}}</ion-title>
+    <ion-title>
+      <span [translate]="'about'"></span>
+    </ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -20,7 +22,7 @@
 
   <ion-grid>
     <div *ngIf="isLoading">
-      <loading [loadingSize]="'large'" [loadingMessage]="loadingMessage|translate"></loading>
+      <loading [loadingSize]="'large'" [loadingMessage]="loadingMessage"></loading>
     </div>
     <div *ngIf="!isLoading" class="about-details">
       <ion-row>
@@ -40,7 +42,7 @@
           <ion-col col-11>
             <img class="side-menu-icon" [src]="aboutContent.icon" />&nbsp;&nbsp;
             <span ion-text [color]="(isAboutContentOpen[aboutContent.id]) ?'current' : 'font-color'">
-              {{ aboutContent.name|translate }}
+              <span [translate]="aboutContent.name"></span>
             </span>
           </ion-col>
           <ion-col col-1 item>

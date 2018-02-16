@@ -6,7 +6,7 @@
         <div class="logo">
           <img [src]="logoUrl">
         </div>
-        <p>{{'innovation_in_every_dimension'|translate }}</p>
+        <p [translate]="'innovation in every dimension'"></p>
       </ion-col>
     </ion-row>
     <ion-row *ngIf="isLoginProcessActive">
@@ -31,50 +31,12 @@
               {{ progressTracker.communication.message|translate}}
             </span>
             <span text-wrap *ngIf="progressTracker.communication.message ==''">
-              {{'establishing_connection_to_server'|translate}}
+              <span [translate]="'establishing connection to server'"></span>
             </span>
             <div style="text-align: center" item-right>
               {{ progressTracker.communication.passStepCount}}/{{ progressTracker.communication.count}}
             </div>
           </ion-item>
-          <!--<ion-item>-->
-          <!--<div style="text-align: center" item-left >-->
-          <!--<div *ngIf="progressTracker.entryForm.passStepCount == progressTracker.entryForm.count">-->
-          <!--<ion-icon name="done-all" color="favorite"></ion-icon>-->
-          <!--</div>-->
-          <!--<div *ngIf="hasUserAuthenticated && progressTracker.entryForm.passStepCount != progressTracker.entryForm.count ">-->
-          <!--<loading loadingSize="small"></loading>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<span text-wrap *ngIf="progressTracker.entryForm.message !=''">-->
-          <!--{{ progressTracker.entryForm.message|translate}}-->
-          <!--</span>-->
-          <!--<span text-wrap *ngIf="progressTracker.entryForm.message ==''">-->
-          <!--{{'aggregate_metadata'|translate}}-->
-          <!--</span>-->
-          <!--<div style="text-align: center" item-right >-->
-          <!--{{ progressTracker.entryForm.passStepCount}}/{{ progressTracker.entryForm.count}}-->
-          <!--</div>-->
-          <!--</ion-item>-->
-          <!--<ion-item>-->
-          <!--<div style="text-align: center" item-left  >-->
-          <!--<div *ngIf="progressTracker.event.passStepCount == progressTracker.event.count">-->
-          <!--<ion-icon name="done-all" color="favorite"></ion-icon>-->
-          <!--</div>-->
-          <!--<div *ngIf="hasUserAuthenticated && progressTracker.event.passStepCount != progressTracker.event.count">-->
-          <!--<page-loading loadingSize="small"></page-loading>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<span text-wrap *ngIf="progressTracker.event.message !=''">-->
-          <!--{{ progressTracker.event.message|translate}}-->
-          <!--</span>-->
-          <!--<span text-wrap *ngIf="progressTracker.event.message ==''">-->
-          <!--{{'Event_and_tracker_metadata'|translate}}-->
-          <!--</span>-->
-          <!--<div style="text-align: center" item-right >-->
-          <!--{{ progressTracker.event.passStepCount}}/{{ progressTracker.event.count}}-->
-          <!--</div>-->
-          <!--</ion-item>-->
         </ion-list>
       </ion-col>
     </ion-row>
@@ -107,7 +69,7 @@
             <ion-col>
               <div class="round-form-container">
                 <ion-item>
-                  <ion-input [(ngModel)]="currentUser.serverUrl" type="text" name="serverUrl" placeholder="{{'enter server_address'|translate}}"></ion-input>
+                  <ion-input [(ngModel)]="currentUser.serverUrl" type="text" name="serverUrl" placeholder="{{'enter server address'|translate}}"></ion-input>
                 </ion-item>
 
                 <ion-item>
@@ -124,17 +86,18 @@
           <ion-row>
             <ion-col>
               <button type="submit" class="normalButton" ion-button full text-capitalize>
-                {{'login'|translate}}
+                <span [translate]="'login'"></span>
               </button>
             </ion-col>
           </ion-row>
         </form>
         <div *ngIf="localInstances && localInstances.length > 1">
           <div class="strike">
-            <span>{{'or'|translate}}</span>
+            <span [translate]="'or'"></span>
           </div>
           <button ion-button block clear color="light" text-capitalize (click)="toggleLocalInstancesList()">
-            <img class="side-menu-icon" [src]="offlineIcon" />&nbsp;&nbsp; {{'offline_instances'|translate}}
+            <img class="side-menu-icon" [src]="offlineIcon" />&nbsp;&nbsp;
+            <span [translate]="'offline instances'"></span>
           </button>
         </div>
       </div>
@@ -164,7 +127,8 @@
           </span>
         </p>
         <p>
-          <span class="bottom-sLogan-title">{{'powered_by'|translate}} HISPTZ </span>
+          <span class="bottom-sLogan-title">
+            <span [translate]="'powered by'"></span> HISPTZ </span>
         </p>
       </ion-col>
     </ion-row>

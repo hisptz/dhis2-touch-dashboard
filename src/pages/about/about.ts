@@ -34,7 +34,7 @@ export class AboutPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadingMessage = "loading_app_information";
+    this.loadingMessage = "loading app information";
     this.isLoading = true;
     this.logoUrl = "assets/img/logo.png";
     this.aboutContents = this.aboutProvider.getAboutContentDetails();
@@ -45,7 +45,7 @@ export class AboutPage implements OnInit {
       },
       error => {
         this.isLoading = false;
-        this.appProvider.setNormalNotification("Fail to load user information");
+        this.appProvider.setNormalNotification("fail to load user information");
       }
     );
   }
@@ -55,7 +55,7 @@ export class AboutPage implements OnInit {
     this.aboutProvider.getAppInformation().subscribe(
       appInformation => {
         this.appInformation = appInformation;
-        this.loadingMessage = "loading_system_information";
+        this.loadingMessage = "loading system information";
         this.aboutProvider.getSystemInformation().subscribe(
           systemInfo => {
             this.systemInfo = systemInfo;
@@ -73,7 +73,7 @@ export class AboutPage implements OnInit {
             this.isLoading = false;
             console.log(JSON.stringify(error));
             this.appProvider.setNormalNotification(
-              "Fail to load system information"
+              "fail to load system information"
             );
           }
         );
@@ -81,7 +81,7 @@ export class AboutPage implements OnInit {
       error => {
         this.isLoading = false;
         console.log(JSON.stringify(error));
-        this.appProvider.setNormalNotification("Fail to load app information");
+        this.appProvider.setNormalNotification("fail to load app information");
       }
     );
   }

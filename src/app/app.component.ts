@@ -30,7 +30,7 @@ export class MyApp {
     this.pages = [
       { title: "dashboard", component: "DashboardPage", icon: "home" },
       { title: "about", component: "AboutPage", icon: "information-circle" },
-      { title: "setting", component: "SettingPage", icon: "construct" }
+      { title: "settings", component: "SettingPage", icon: "construct" }
     ];
   }
 
