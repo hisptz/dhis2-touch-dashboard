@@ -1,21 +1,17 @@
-
-<ion-content  class="login">
+<ion-content class="login">
 
   <ion-grid>
     <ion-row>
       <ion-col class="topSLogan animated bounceIn">
         <div class="logo">
-          <img [src]="logoUrl" >
+          <img [src]="logoUrl">
         </div>
-        <p >{{'innovation_in_every_dimension'|translate }}</p>
+        <p>{{'innovation_in_every_dimension'|translate }}</p>
       </ion-col>
     </ion-row>
     <ion-row *ngIf="isLoginProcessActive">
       <ion-col [ngClass]="animationEffect.progressBar">
-        <progress-bar
-          [progressBarTitle] = "loggedInInInstance"
-          [progressBar] = "progressBar"
-          (isProcessActive)="cancelLoginProcess($event)">
+        <progress-bar [progressBarTitle]="loggedInInInstance" [progressBar]="progressBar" (isProcessActive)="cancelLoginProcess($event)">
         </progress-bar>
       </ion-col>
     </ion-row>
@@ -23,7 +19,7 @@
       <ion-col>
         <ion-list>
           <ion-item>
-            <div style="text-align: center" item-left >
+            <div style="text-align: center" item-left>
               <div *ngIf="progressTracker.communication.passStepCount == progressTracker.communication.count">
                 <ion-icon name="done-all" color="favorite"></ion-icon>
               </div>
@@ -37,47 +33,47 @@
             <span text-wrap *ngIf="progressTracker.communication.message ==''">
               {{'establishing_connection_to_server'|translate}}
             </span>
-            <div style="text-align: center" item-right >
+            <div style="text-align: center" item-right>
               {{ progressTracker.communication.passStepCount}}/{{ progressTracker.communication.count}}
             </div>
           </ion-item>
           <!--<ion-item>-->
-            <!--<div style="text-align: center" item-left >-->
-              <!--<div *ngIf="progressTracker.entryForm.passStepCount == progressTracker.entryForm.count">-->
-                <!--<ion-icon name="done-all" color="favorite"></ion-icon>-->
-              <!--</div>-->
-              <!--<div *ngIf="hasUserAuthenticated && progressTracker.entryForm.passStepCount != progressTracker.entryForm.count ">-->
-                <!--<loading loadingSize="small"></loading>-->
-              <!--</div>-->
-            <!--</div>-->
-            <!--<span text-wrap *ngIf="progressTracker.entryForm.message !=''">-->
-              <!--{{ progressTracker.entryForm.message|translate}}-->
-            <!--</span>-->
-            <!--<span text-wrap *ngIf="progressTracker.entryForm.message ==''">-->
-              <!--{{'aggregate_metadata'|translate}}-->
-            <!--</span>-->
-            <!--<div style="text-align: center" item-right >-->
-              <!--{{ progressTracker.entryForm.passStepCount}}/{{ progressTracker.entryForm.count}}-->
-            <!--</div>-->
+          <!--<div style="text-align: center" item-left >-->
+          <!--<div *ngIf="progressTracker.entryForm.passStepCount == progressTracker.entryForm.count">-->
+          <!--<ion-icon name="done-all" color="favorite"></ion-icon>-->
+          <!--</div>-->
+          <!--<div *ngIf="hasUserAuthenticated && progressTracker.entryForm.passStepCount != progressTracker.entryForm.count ">-->
+          <!--<loading loadingSize="small"></loading>-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--<span text-wrap *ngIf="progressTracker.entryForm.message !=''">-->
+          <!--{{ progressTracker.entryForm.message|translate}}-->
+          <!--</span>-->
+          <!--<span text-wrap *ngIf="progressTracker.entryForm.message ==''">-->
+          <!--{{'aggregate_metadata'|translate}}-->
+          <!--</span>-->
+          <!--<div style="text-align: center" item-right >-->
+          <!--{{ progressTracker.entryForm.passStepCount}}/{{ progressTracker.entryForm.count}}-->
+          <!--</div>-->
           <!--</ion-item>-->
           <!--<ion-item>-->
-            <!--<div style="text-align: center" item-left  >-->
-              <!--<div *ngIf="progressTracker.event.passStepCount == progressTracker.event.count">-->
-                <!--<ion-icon name="done-all" color="favorite"></ion-icon>-->
-              <!--</div>-->
-              <!--<div *ngIf="hasUserAuthenticated && progressTracker.event.passStepCount != progressTracker.event.count">-->
-                <!--<page-loading loadingSize="small"></page-loading>-->
-              <!--</div>-->
-            <!--</div>-->
-            <!--<span text-wrap *ngIf="progressTracker.event.message !=''">-->
-              <!--{{ progressTracker.event.message|translate}}-->
-            <!--</span>-->
-            <!--<span text-wrap *ngIf="progressTracker.event.message ==''">-->
-              <!--{{'Event_and_tracker_metadata'|translate}}-->
-            <!--</span>-->
-            <!--<div style="text-align: center" item-right >-->
-              <!--{{ progressTracker.event.passStepCount}}/{{ progressTracker.event.count}}-->
-            <!--</div>-->
+          <!--<div style="text-align: center" item-left  >-->
+          <!--<div *ngIf="progressTracker.event.passStepCount == progressTracker.event.count">-->
+          <!--<ion-icon name="done-all" color="favorite"></ion-icon>-->
+          <!--</div>-->
+          <!--<div *ngIf="hasUserAuthenticated && progressTracker.event.passStepCount != progressTracker.event.count">-->
+          <!--<page-loading loadingSize="small"></page-loading>-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--<span text-wrap *ngIf="progressTracker.event.message !=''">-->
+          <!--{{ progressTracker.event.message|translate}}-->
+          <!--</span>-->
+          <!--<span text-wrap *ngIf="progressTracker.event.message ==''">-->
+          <!--{{'Event_and_tracker_metadata'|translate}}-->
+          <!--</span>-->
+          <!--<div style="text-align: center" item-right >-->
+          <!--{{ progressTracker.event.passStepCount}}/{{ progressTracker.event.count}}-->
+          <!--</div>-->
           <!--</ion-item>-->
         </ion-list>
       </ion-col>
@@ -86,38 +82,46 @@
 
     <div *ngIf="!isLoginProcessActive">
 
-      <div *ngIf="isLocalInstancesListOpen">
+      <div *ngIf="isLocalInstancesListOpen && !isTranslationListOpen">
         <ion-row>
           <ion-col>
             <div class="round-form-container">
-              <available-local-instance
-                (onClose)="toggleLoginFormAndLocalInstances()"
-                (onSelectCurrentUser)="changeCurrentUser($event)" ></available-local-instance>
+              <available-local-instance (onClose)="toggleLocalInstancesList()" (onSelectCurrentUser)="changeCurrentUser($event)"></available-local-instance>
             </div>
           </ion-col>
         </ion-row>
       </div>
-      <div *ngIf="!isLocalInstancesListOpen">
-        <form (ngSubmit)="startLoginProcess()" [ngClass]="animationEffect.loginForm" >
-          <ion-row >
-            <ion-col >
+      <div *ngIf="!isLocalInstancesListOpen && isTranslationListOpen">
+        <ion-row>
+          <ion-col>
+            <div class="round-form-container">
+              <language-translation-selection [currentLanguage]="currentLanguage" (onSelectLanguage)="changeLanguageFromList($event)" (onClose)="toggleTransalationCodesSelectionList()"
+                [translationCodes]="translationCodes"></language-translation-selection>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div *ngIf="!isLocalInstancesListOpen && !isTranslationListOpen">
+        <form (ngSubmit)="startLoginProcess()" [ngClass]="animationEffect.loginForm">
+          <ion-row>
+            <ion-col>
               <div class="round-form-container">
                 <ion-item>
-                  <ion-input [(ngModel)]="currentUser.serverUrl" type="text" name ="serverUrl" placeholder="{{'enter_server_address'|translate}}"></ion-input>
+                  <ion-input [(ngModel)]="currentUser.serverUrl" type="text" name="serverUrl" placeholder="{{'enter server_address'|translate}}"></ion-input>
                 </ion-item>
 
                 <ion-item>
-                  <ion-input [(ngModel)]="currentUser.username" type="text" name ="username" placeholder="{{'enter_username'|translate}}"></ion-input>
+                  <ion-input [(ngModel)]="currentUser.username" type="text" name="username" placeholder="{{'enter username'|translate}}"></ion-input>
                 </ion-item>
 
                 <ion-item>
-                  <ion-input [(ngModel)]="currentUser.password" name ="password" type="password" placeholder="{{'enter_password'|translate}}"></ion-input>
+                  <ion-input [(ngModel)]="currentUser.password" name="password" type="password" placeholder="{{'enter password'|translate}}"></ion-input>
                 </ion-item>
               </div>
             </ion-col>
           </ion-row>
 
-          <ion-row >
+          <ion-row>
             <ion-col>
               <button type="submit" class="normalButton" ion-button full text-capitalize>
                 {{'login'|translate}}
@@ -127,11 +131,10 @@
         </form>
         <div *ngIf="localInstances && localInstances.length > 1">
           <div class="strike">
-            <span >{{'or'|translate}}</span>
+            <span>{{'or'|translate}}</span>
           </div>
-          <button ion-button block clear color="light" text-capitalize (click)="toggleLoginFormAndLocalInstances()" >
-            <img  class="side-menu-icon" [src]="offlineIcon"/>&nbsp;&nbsp;
-            {{'offline_instances'|translate}}
+          <button ion-button block clear color="light" text-capitalize (click)="toggleLocalInstancesList()">
+            <img class="side-menu-icon" [src]="offlineIcon" />&nbsp;&nbsp; {{'offline_instances'|translate}}
           </button>
         </div>
       </div>
@@ -146,12 +149,23 @@
       <ion-col class="bottomSLogan">
         <p>
           <span class="translation-codes">
-          <span (click)="updateTranslationLanguage('en')" [ngClass]="(currentLanguage == 'en') ?'currentLang' : ''">En</span>&nbsp;|&nbsp;
-          <span (click)="updateTranslationLanguage('fr')" [ngClass]="(currentLanguage == 'fr') ?'currentLang' : ''">Fr</span>&nbsp;|&nbsp;
-          <span (click)="updateTranslationLanguage('pt')"[ngClass]="(currentLanguage == 'pt') ?'currentLang' : ''">Pt</span>
-        </span>
+            <span *ngFor="let code of topThreeTranslationCodes; let currentIndex = index">
+              <span (click)="updateTranslationLanguage(code)" [ngClass]="(currentLanguage == code) ?'currentLang' : ''">{{ code }}</span>
+              <span *ngIf="currentIndex < 3">&nbsp;|&nbsp;</span>
+            </span>
+            <span *ngIf="topThreeTranslationCodes.indexOf(currentLanguage) == -1">
+              &nbsp;|&nbsp;
+              <span (click)="updateTranslationLanguage(currentLanguage)" [ngClass]="'currentLang'">{{ currentLanguage }}</span>
+            </span>
+            <span (click)="toggleTransalationCodesSelectionList()">
+              &nbsp;
+              <ion-icon name="ios-more"></ion-icon>
+            </span>
+          </span>
         </p>
-        <p><span class="bottom-sLogan-title">{{'powered_by'|translate}} HISPTZ </span></p>
+        <p>
+          <span class="bottom-sLogan-title">{{'powered_by'|translate}} HISPTZ </span>
+        </p>
       </ion-col>
     </ion-row>
   </ion-grid>
