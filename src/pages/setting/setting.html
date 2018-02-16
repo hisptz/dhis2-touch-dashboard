@@ -55,9 +55,7 @@
                   <ion-item>
                     <ion-label>{{'current_language'|translate}} </ion-label>
                     <ion-select (ionChange)="updateCurrentLanguage()" [(ngModel)]="currentLanguage" interface="action-sheet">
-                      <ion-option value="en">en</ion-option>
-                      <ion-option value="fr">fr</ion-option>
-                      <ion-option value="pt">pt</ion-option>
+                      <ion-option *ngFor="let translationCode of translationCodes" value="{{translationCode.code}}">{{translationCode.name}}</ion-option>
                     </ion-select>
                   </ion-item>
                 </ion-col>
