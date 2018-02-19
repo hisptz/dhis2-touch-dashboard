@@ -1,33 +1,12 @@
 <div class="full-screen-dashboard-item-view">
-  <div class="full-screen-dashboard-item-card">
-    <div class="full-screen-dashboard-item-header">
-      <a (click)="closeDashboardItem($event)" class="full-screen-dashboard-item-close">
-        <img src="assets/icon/close.png" alt="Close">
-      </a>
+    <div class="full-screen-dashboard-item-card">
+        <div class="full-screen-dashboard-item-header">
+            <a (click)="closeDashboardItem($event)" class="full-screen-dashboard-item-close">
+                <img src="assets/icon/close.png" alt="Close">
+            </a>
+        </div>
+        <div class="full-screen-dashboard-item-body" *ngIf="currentVisualization$ | async">
+            <dashboard-visualization-card [visualizationObject]="currentVisualization$ | async" [currentUser]="currentUser$ | async "></dashboard-visualization-card>
+        </div>
     </div>
-    <div class="full-screen-dashboard-item-body">
-      <div class="dashboard-card">
-        <!-- <ion-row >
-          <ion-col>
-            <div class="visualization-card-header" *ngIf="!visualizationObject.details.nonVisualizable">
-              <div class="visualization-card-header-left">
-                <div class="visualization-filter-section-container">
-                  <app-visualization-filter-section [selectedDimensions]="getSelectedDimensions(visualizationObject)" [visualizationType]="visualizationObject.details.currentVisualization"
-                    [loaded]="'true'" (onFilterUpdate)="onFilterUpdate($event,visualizationObject)" (onLayoutUpdate)="onLayoutUpdate($event,visualizationObject)"></app-visualization-filter-section>
-                </div>
-              </div>
-            </div>
-          </ion-col>
-        </ion-row> -->
-        <ion-row>
-          <ion-col></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Visualization here
-          </ion-col>
-        </ion-row>
-      </div>
-    </div>
-  </div>
 </div>

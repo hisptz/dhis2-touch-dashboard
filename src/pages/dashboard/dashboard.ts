@@ -1,21 +1,21 @@
-import { CurrentUser } from "./../../models/currentUser";
-import { Component, OnInit } from "@angular/core";
+import { CurrentUser } from './../../models/currentUser';
+import { Component, OnInit } from '@angular/core';
 import {
   IonicPage,
   MenuController,
   NavController,
   ModalController
-} from "ionic-angular";
-import * as _ from "lodash";
-import { ApplicationState } from "../../store/reducers/index";
-import { Store } from "@ngrx/store";
-import { Observable } from "rxjs/Observable";
-import { Dashboard } from "../../models/dashboard";
-import { Visualization } from "../../models/visualization";
-import * as fromDashboardSelectors from "../../store/selectors/dashboard.selectors";
-import * as fromVisualizationSelectors from "../../store/selectors/visualization.selectors";
-import * as fromCurrentUserSelectors from "../../store/selectors/currentUser.selectors";
-import * as fromVisualizationActions from "../../store/actions/visualization.actions";
+} from 'ionic-angular';
+import * as _ from 'lodash';
+import { ApplicationState } from '../../store/reducers/index';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import { Dashboard } from '../../models/dashboard';
+import { Visualization } from '../../models/visualization';
+import * as fromDashboardSelectors from '../../store/selectors/dashboard.selectors';
+import * as fromVisualizationSelectors from '../../store/selectors/visualization.selectors';
+import * as fromCurrentUserSelectors from '../../store/selectors/currentUser.selectors';
+import * as fromVisualizationActions from '../../store/actions/visualization.actions';
 
 /**
  * Generated class for the DashboardPage page.
@@ -26,8 +26,8 @@ import * as fromVisualizationActions from "../../store/actions/visualization.act
 
 @IonicPage()
 @Component({
-  selector: "page-dashboard",
-  templateUrl: "dashboard.html"
+  selector: 'page-dashboard',
+  templateUrl: 'dashboard.html'
 })
 export class DashboardPage implements OnInit {
   currentDashboard$: Observable<Dashboard>;
@@ -58,27 +58,30 @@ export class DashboardPage implements OnInit {
   ngOnInit() {
     this.menu.enable(true);
     this.icons = {
-      menu: "assets/icon/menu.png",
-      MAP: "assets/icon/map.png",
-      CHART: "assets/icon/column.png",
-      TABLE: "assets/icon/table.png",
-      APP: "assets/icon/app.png",
-      RESOURCES: "assets/icon/resource.png",
-      REPORTS: "assets/icon/report.png",
-      USERS: "assets/icon/users.png",
-      MESSAGES: "assets/icon/filled-chat.png",
-      INFO: "assets/icon/info.png"
+      menu: 'assets/icon/menu.png',
+      MAP: 'assets/icon/map.png',
+      CHART: 'assets/icon/column.png',
+      TABLE: 'assets/icon/table.png',
+      APP: 'assets/icon/app.png',
+      RESOURCES: 'assets/icon/resource.png',
+      REPORTS: 'assets/icon/report.png',
+      USERS: 'assets/icon/users.png',
+      MESSAGES: 'assets/icon/filled-chat.png',
+      INFO: 'assets/icon/info.png'
     };
   }
 
   openDashboardListFilter() {
-    let modal = this.modalCtrl.create("DashboardFilterPage", {});
+    let modal = this.modalCtrl.create('DashboardFilterPage', {});
     modal.onDidDismiss((dashboard: any) => {});
     modal.present();
   }
 
-  openDashboardInFullScreen() {
-    let modal = this.modalCtrl.create("FullScreenDashboardPage", {});
+  openDashboardInFullScreen(visualizationId: string) {
+    this.store.dispatch(
+      new fromVisualizationActions.ToggleFullScreenAction(visualizationId)
+    );
+    let modal = this.modalCtrl.create('FullScreenDashboardPage', {});
     modal.onDidDismiss((dashboard: any) => {});
     modal.present();
   }
