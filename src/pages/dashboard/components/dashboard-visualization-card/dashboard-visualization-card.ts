@@ -1,10 +1,10 @@
-import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
-import { Visualization } from "../../../../models/visualization";
-import { CurrentUser } from "../../../../models/currentUser";
-import { Store } from "@ngrx/store";
-import { ApplicationState } from "../../../../store";
-import * as _ from "lodash";
-import * as fromVisualizationActions from "../../../../store/actions/visualization.actions";
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Visualization } from '../../../../models/visualization';
+import { CurrentUser } from '../../../../models/currentUser';
+import { Store } from '@ngrx/store';
+import { ApplicationState } from '../../../../store';
+import * as _ from 'lodash';
+import * as fromVisualizationActions from '../../../../store/actions/visualization.actions';
 
 /**
  * Generated class for the DashboardVisualizationCardComponent component.
@@ -13,8 +13,8 @@ import * as fromVisualizationActions from "../../../../store/actions/visualizati
  * Components.
  */
 @Component({
-  selector: "dashboard-visualization-card",
-  templateUrl: "dashboard-visualization-card.html"
+  selector: 'dashboard-visualization-card',
+  templateUrl: 'dashboard-visualization-card.html'
 })
 export class DashboardVisualizationCardComponent implements OnInit {
   @Input() visualizationObject: Visualization;
@@ -33,7 +33,7 @@ export class DashboardVisualizationCardComponent implements OnInit {
   }
 
   openDashboardInFullScreen() {
-    this.onOpeningFullScreen.emit({});
+    this.onOpeningFullScreen.emit(this.visualizationObject.id);
   }
 
   currentVisualizationChange(
@@ -56,14 +56,14 @@ export class DashboardVisualizationCardComponent implements OnInit {
       ? {
           selectedDataItems: this.getSelectedItems(
             visualizationObject.details.filters,
-            "dx"
+            'dx'
           ),
           selectedPeriods: this.getSelectedItems(
             visualizationObject.details.filters,
-            "pe"
+            'pe'
           ),
           orgUnitModel: this._getSelectedOrgUnitModel(
-            this.getSelectedItems(visualizationObject.details.filters, "ou")
+            this.getSelectedItems(visualizationObject.details.filters, 'ou')
           ),
           layoutModel: visualizationObject.details.layouts[0].layout
         }
@@ -73,7 +73,7 @@ export class DashboardVisualizationCardComponent implements OnInit {
   getSelectedItems(filters: any[], dimension: string) {
     // todo take data items based on the current layer
     if (filters && filters[0]) {
-      const dataItemObject = _.find(filters[0].filters, ["name", dimension]);
+      const dataItemObject = _.find(filters[0].filters, ['name', dimension]);
 
       if (dataItemObject) {
         return _.map(dataItemObject.items, (dataItem: any) => {
@@ -90,23 +90,23 @@ export class DashboardVisualizationCardComponent implements OnInit {
 
   private _getSelectedOrgUnitModel(orgUnitArray): any {
     const selectedOrgUnitLevels = orgUnitArray.filter(
-      orgunit => orgunit.id.indexOf("LEVEL") !== -1
+      orgunit => orgunit.id.indexOf('LEVEL') !== -1
     );
     const selectedUserOrgUnits = orgUnitArray.filter(
-      orgunit => orgunit.id.indexOf("USER") !== -1
+      orgunit => orgunit.id.indexOf('USER') !== -1
     );
     const selectedOrgUnitGroups = orgUnitArray.filter(
-      orgunit => orgunit.id.indexOf("OU_GROUP") !== -1
+      orgunit => orgunit.id.indexOf('OU_GROUP') !== -1
     );
 
     return {
       selectionMode:
         selectedOrgUnitLevels.length > 0
-          ? "Level"
-          : selectedOrgUnitGroups.length > 0 ? "Group" : "orgUnit",
+          ? 'Level'
+          : selectedOrgUnitGroups.length > 0 ? 'Group' : 'orgUnit',
       selectedLevels: selectedOrgUnitLevels.map(orgunitlevel => {
         return {
-          level: orgunitlevel.id.split("-")[1]
+          level: orgunitlevel.id.split('-')[1]
         };
       }),
       showUpdateButton: true,
@@ -114,10 +114,10 @@ export class DashboardVisualizationCardComponent implements OnInit {
       orgUnitLevels: [],
       orgUnitGroups: [],
       selectedOrgUnits: orgUnitArray.filter(
-        (orgUnit: any) => orgUnit.type === "ORGANISATION_UNIT"
+        (orgUnit: any) => orgUnit.type === 'ORGANISATION_UNIT'
       ),
       userOrgUnits: [],
-      type: "report",
+      type: 'report',
       selectedUserOrgUnits: selectedUserOrgUnits.map(userorgunit => {
         return {
           id: userorgunit.id,
@@ -173,7 +173,7 @@ export class DashboardVisualizationCardComponent implements OnInit {
           },
           layers: visualizationLayers
         },
-        placementPreference: "normal"
+        placementPreference: 'normal'
       })
     );
   }
