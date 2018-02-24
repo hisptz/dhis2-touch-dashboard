@@ -7,8 +7,10 @@ import { EmptyListNotificationComponent } from "./empty-list-notification/empty-
 import { AvailableLocalInstanceComponent } from "./available-local-instance/available-local-instance";
 import { ProgressLoaderComponent } from "./progress-loader/progress-loader.component";
 import { LanguageTranslationSelectionComponent } from "./language-translation-selection/language-translation-selection";
+import { MultiOrganisationUnitComponent } from "./multi-organisation-unit/multi-organisation-unit";
 @NgModule({
   declarations: [
+    MultiOrganisationUnitComponent,
     LoadingComponent,
     ProgressLoaderComponent,
     LanguageTranslationSelectionComponent,
@@ -25,7 +27,8 @@ import { LanguageTranslationSelectionComponent } from "./language-translation-se
     ProgressBarComponent,
     EmptyListNotificationComponent,
     AvailableLocalInstanceComponent,
-    WarningComponent
+    WarningComponent,
+    MultiOrganisationUnitComponent
   ]
 })
 export class SharedModule {}

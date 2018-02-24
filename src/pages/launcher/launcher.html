@@ -6,9 +6,9 @@
         <div class="logo">
           <img [src]="logoUrl">
         </div>
-        <p>{{'innovation in every dimension'|translate }}</p>
+        <p [translate]="'Innovation in every dimension'"></p>
       </ion-col>
     </ion-row>
   </ion-grid>
-  <loading [loadingSize]="'large'" [loadingMessage]="'loading'|translate"></loading>
+  <loading [loadingSize]="'large'" [loadingMessage]="''"></loading>
 </ion-content>
