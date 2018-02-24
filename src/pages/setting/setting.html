@@ -11,7 +11,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      <span [translate]="'settings'"></span>
+      <span [translate]="'Settings'"></span>
     </ion-title>
   </ion-navbar>
 
@@ -56,7 +56,7 @@
                 <ion-col>
                   <ion-item>
                     <ion-label>
-                      <span [translate]="'current language'"></span>
+                      <span [translate]="'Current language'"></span>
                     </ion-label>
                     <ion-select (ionChange)="updateCurrentLanguage()" [(ngModel)]="currentLanguage" interface="action-sheet">
                       <ion-option *ngFor="let translationCode of translationCodes" value="{{translationCode.code}}">{{translationCode.name}}</ion-option>

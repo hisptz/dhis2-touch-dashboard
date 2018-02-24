@@ -1,8 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { IonicPage } from "ionic-angular";
-import { AboutProvider } from "../../providers/about/about";
-import { AppProvider } from "../../providers/app/app";
-import { UserProvider } from "../../providers/user/user";
+import { Component, OnInit } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
+import { AboutProvider } from '../../providers/about/about';
+import { AppProvider } from '../../providers/app/app';
+import { UserProvider } from '../../providers/user/user';
+import { AppTranslationProvider } from '../../providers/app-translation/app-translation';
 
 /**
  * Generated class for the AboutPage page.
@@ -13,8 +14,8 @@ import { UserProvider } from "../../providers/user/user";
 
 @IonicPage()
 @Component({
-  selector: "page-about",
-  templateUrl: "about.html"
+  selector: 'page-about',
+  templateUrl: 'about.html'
 })
 export class AboutPage implements OnInit {
   logoUrl: string;
@@ -26,18 +27,36 @@ export class AboutPage implements OnInit {
   hasAllDataBeenLoaded: boolean = false;
   aboutContents: Array<any>;
   isAboutContentOpen: any = {};
+  translationMapper: any;
 
   constructor(
     private appProvider: AppProvider,
     private aboutProvider: AboutProvider,
-    private userProvider: UserProvider
+    private userProvider: UserProvider,
+    private appTranslation: AppTranslationProvider
   ) {}
 
   ngOnInit() {
-    this.loadingMessage = "loading app information";
     this.isLoading = true;
-    this.logoUrl = "assets/img/logo.png";
+    this.logoUrl = 'assets/img/logo.png';
     this.aboutContents = this.aboutProvider.getAboutContentDetails();
+    this.translationMapper = {};
+    this.appTranslation.getTransalations(this.getValuesToTranslate()).subscribe(
+      (data: any) => {
+        this.translationMapper = data;
+        this.loadingCurrentUserInformation();
+      },
+      error => {
+        this.loadingCurrentUserInformation();
+      }
+    );
+  }
+
+  loadingCurrentUserInformation() {
+    let key = 'Discovering current user information';
+    this.loadingMessage = this.translationMapper[key]
+      ? this.translationMapper[key]
+      : key;
     this.userProvider.getCurrentUser().subscribe(
       (currentUser: any) => {
         this.currentUser = currentUser;
@@ -45,17 +64,26 @@ export class AboutPage implements OnInit {
       },
       error => {
         this.isLoading = false;
-        this.appProvider.setNormalNotification("fail to load user information");
+        this.appProvider.setNormalNotification(
+          'Fail to discover current user information'
+        );
       }
     );
   }
 
   loadAllData() {
     this.hasAllDataBeenLoaded = false;
+    let key = 'Discovering app information';
+    this.loadingMessage = this.translationMapper[key]
+      ? this.translationMapper[key]
+      : key;
     this.aboutProvider.getAppInformation().subscribe(
       appInformation => {
         this.appInformation = appInformation;
-        this.loadingMessage = "loading system information";
+        key = 'Discovering system information';
+        this.loadingMessage = this.translationMapper[key]
+          ? this.translationMapper[key]
+          : key;
         this.aboutProvider.getSystemInformation().subscribe(
           systemInfo => {
             this.systemInfo = systemInfo;
@@ -73,7 +101,7 @@ export class AboutPage implements OnInit {
             this.isLoading = false;
             console.log(JSON.stringify(error));
             this.appProvider.setNormalNotification(
-              "fail to load system information"
+              'Fail to discover system information'
             );
           }
         );
@@ -81,7 +109,9 @@ export class AboutPage implements OnInit {
       error => {
         this.isLoading = false;
         console.log(JSON.stringify(error));
-        this.appProvider.setNormalNotification("fail to load app information");
+        this.appProvider.setNormalNotification(
+          'Fail to discover app information'
+        );
       }
     );
   }
@@ -103,5 +133,13 @@ export class AboutPage implements OnInit {
         this.isAboutContentOpen[content.id] = true;
       }
     }
+  }
+
+  getValuesToTranslate() {
+    return [
+      'Discovering current user information',
+      'Discovering system information',
+      'Discovering app information'
+    ];
   }
 }

@@ -1,10 +1,10 @@
-import { Component, OnInit } from "@angular/core";
-import { IonicPage } from "ionic-angular";
-import { SettingsProvider } from "../../providers/settings/settings";
-import { UserProvider } from "../../providers/user/user";
-import { AppProvider } from "../../providers/app/app";
-import { LocalInstanceProvider } from "../../providers/local-instance/local-instance";
-import { AppTranslationProvider } from "../../providers/app-translation/app-translation";
+import { Component, OnInit } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
+import { SettingsProvider } from '../../providers/settings/settings';
+import { UserProvider } from '../../providers/user/user';
+import { AppProvider } from '../../providers/app/app';
+import { LocalInstanceProvider } from '../../providers/local-instance/local-instance';
+import { AppTranslationProvider } from '../../providers/app-translation/app-translation';
 
 /**
  * Generated class for the SettingPage page.
@@ -15,21 +15,20 @@ import { AppTranslationProvider } from "../../providers/app-translation/app-tran
 
 @IonicPage()
 @Component({
-  selector: "page-setting",
-  templateUrl: "setting.html"
+  selector: 'page-setting',
+  templateUrl: 'setting.html'
 })
 export class SettingPage implements OnInit {
   isSettingContentOpen: any;
   settingContents: Array<any>;
-
   isLoading: boolean = false;
   settingObject: any;
   loadingMessage: string;
-
   currentUser: any;
   translationCodes: Array<any> = [];
   currentLanguage: string;
   localInstances: any;
+  translationMapper: any;
 
   constructor(
     private settingsProvider: SettingsProvider,
@@ -42,18 +41,39 @@ export class SettingPage implements OnInit {
   ngOnInit() {
     this.settingObject = {};
     this.translationCodes = this.appTranslationProvider.getSupportedTranslationObjects();
-    this.loadingMessage = "loading current user information";
     this.isLoading = true;
     this.isSettingContentOpen = {};
     this.settingContents = this.settingsProvider.getSettingContentDetails();
     if (this.settingContents.length > 0) {
       this.toggleSettingContents(this.settingContents[0]);
     }
+    this.translationMapper = {};
+    this.appTranslationProvider
+      .getTransalations(this.getValuesToTranslate())
+      .subscribe(
+        (data: any) => {
+          this.translationMapper = data;
+          this.loadingCurrentUserInformation();
+        },
+        error => {
+          this.loadingCurrentUserInformation();
+        }
+      );
+  }
+
+  loadingCurrentUserInformation() {
+    let key = 'Discovering current user information';
+    this.loadingMessage = this.translationMapper[key]
+      ? this.translationMapper[key]
+      : key;
     this.userProvider.getCurrentUser().subscribe(
       (currentUser: any) => {
         this.currentUser = currentUser;
         this.currentLanguage = currentUser.currentLanguage;
-        this.loadingMessage = "loading settings";
+        key = 'Discovering available local instances';
+        this.loadingMessage = this.translationMapper[key]
+          ? this.translationMapper[key]
+          : key;
         this.localInstanceProvider.getLocalInstances().subscribe(
           (instances: any) => {
             this.localInstances = instances;
@@ -62,7 +82,7 @@ export class SettingPage implements OnInit {
           error => {
             this.isLoading = false;
             this.appProvider.setNormalNotification(
-              "fail to load available local instances"
+              'Fail to load available local instances'
             );
           }
         );
@@ -71,7 +91,7 @@ export class SettingPage implements OnInit {
         console.log(error);
         this.isLoading = false;
         this.appProvider.setNormalNotification(
-          "fail to load current user information"
+          'Fail to load current user information'
         );
       }
     );
@@ -80,8 +100,8 @@ export class SettingPage implements OnInit {
   updateCurrentLanguage() {
     try {
       let loggedInInInstance = this.currentUser.serverUrl;
-      if (this.currentUser.serverUrl.split("://").length > 1) {
-        loggedInInInstance = this.currentUser.serverUrl.split("://")[1];
+      if (this.currentUser.serverUrl.split('://').length > 1) {
+        loggedInInInstance = this.currentUser.serverUrl.split('://')[1];
       }
       this.appTranslationProvider.setAppTranslation(this.currentLanguage);
       this.currentUser.currentLanguage = this.currentLanguage;
@@ -94,7 +114,7 @@ export class SettingPage implements OnInit {
         )
         .subscribe(() => {});
     } catch (e) {
-      this.appProvider.setNormalNotification("fail to set translation");
+      this.appProvider.setNormalNotification('Fail to set translation');
       console.log(JSON.stringify(e));
     }
   }
@@ -110,5 +130,12 @@ export class SettingPage implements OnInit {
         this.isSettingContentOpen[content.id] = true;
       }
     }
+  }
+
+  getValuesToTranslate() {
+    return [
+      'Discovering current user information',
+      'Discovering available local instances'
+    ];
   }
 }
