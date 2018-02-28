@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { LauncherPage } from '../pages/launcher/launcher';
-import { SharedModule } from '../components/share.module';
+import { SharedModule } from '../components/shared.module';
 import { NetworkAvailabilityProvider } from '../providers/network-availability/network-availability';
 import { UserProvider } from '../providers/user/user';
 import { SqlLiteProvider } from '../providers/sql-lite/sql-lite';
