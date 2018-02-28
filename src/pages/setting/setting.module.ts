@@ -1,8 +1,8 @@
-import { NgModule } from "@angular/core";
-import { IonicPageModule } from "ionic-angular";
-import { SettingPage } from "./setting";
-import { TranslateModule } from "@ngx-translate/core";
-import { SharedModule } from "../../components/share.module";
+import { NgModule } from '@angular/core';
+import { IonicPageModule } from 'ionic-angular';
+import { SettingPage } from './setting';
+import { TranslateModule } from '@ngx-translate/core';
+import { SharedModule } from '../../components/shared.module';
 
 @NgModule({
   declarations: [SettingPage],
