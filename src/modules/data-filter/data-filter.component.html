@@ -26,7 +26,7 @@
                 <input type="search" class="data-filter-input" placeholder="{{ translationMapper['Search'] }}" [(ngModel)]="querystring">
                 <ul class="data-filter-group-list">
                     <li *ngFor="let item of dataGroups | filterByName: querystring">
-                        <a (click)="setSelectedGroup(item, scrollse, $event)">{{ item.name }}</a>
+                        <a (click)="setSelectedGroup(item, scrollse, $event)">{{ (translationMapper[item.name]) ? translationMapper[item.name] : item.name }}</a>
                     </li>
                 </ul>
             </div>
