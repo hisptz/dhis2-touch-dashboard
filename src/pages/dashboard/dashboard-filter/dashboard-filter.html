@@ -2,7 +2,7 @@
 
   <ion-toolbar color="primary">
     <ion-title>
-      <span [translate]="'dashboard list'"></span>
+      <span [translate]="'Dashboard list'"></span>
     </ion-title>
     <ion-buttons end>
       <button class="normalButton" ion-button text-capitalize full large (tap)="dismiss()">
@@ -13,7 +13,7 @@
 </ion-header>
 <ion-content>
   <ion-grid>
-    <ion-searchbar animated="true" autocomplete="on" placeholder="{{'search dashboard by name'|translate}}" (ionInput)="getFilteredList($event)"></ion-searchbar>
+    <ion-searchbar animated="true" autocomplete="on" placeholder="{{'Search dashboard by name'|translate}}" (ionInput)="getFilteredList($event)"></ion-searchbar>
     <ion-row>
       <ion-col>
         <ion-list>
@@ -26,7 +26,7 @@
     </ion-row>
 
     <div *ngIf="(dashboards$ | async).length == 0">
-      <empty-list-notification [emptyListMessage]="'there no dashboard found'"></empty-list-notification>
+      <empty-list-notification [emptyListMessage]="translationMapper['There no dashboard item found']"></empty-list-notification>
     </div>
   </ion-grid>
 

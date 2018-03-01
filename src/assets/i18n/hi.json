@@ -1,1 +1,9 @@
-{}
+{
+  "Select period type": "dd",
+  "Previous year": "pe",
+  "Next year": "rr",
+  "Available": "dss",
+  "Selected": "sds",
+  "Update": "dsd",
+  "Close": "dsoo"
+}
