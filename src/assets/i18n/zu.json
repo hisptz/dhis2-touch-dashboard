@@ -1,1 +1,110 @@
-{}
+{
+  "Innovation in every dimension": "Ukuqamba kuzo zonke ubukhulu",
+  "Establishing connection to server": "Isungula ukuxhumeka kwiseva",
+  "Enter server address": "Faka ikheli leseva",
+  "Enter username": "Faka igama lomsebenzisi",
+  "Enter password": "Faka iphasiwedi",
+  "Login": "Ngena ngemvume",
+  "or": "noma",
+  "Offline instances": "izimo ungaxhumekile ku-intanethi",
+  "Powered by": "Inikezwe amandla yi",
+  "Discovering system information": "Ukuthola ulwazi uhlelo",
+  "Discovering current user authorities":
+    "Ukuthola iziphathimandla umsebenzisi wamanje",
+  "Preparing local storage": "Ilungiselela isitoreji wendawo",
+  "Fail to prepare local storage":
+    "Ukuhluleka ukulungiselela isitoreji sendawo",
+  "Fail to discover user authorities":
+    "Ukuhluleka ukuthola iziphathimandla umsebenzisi",
+  "Fail to discover system information": "Ukuhluleka ukuthola ulwazi uhlelo",
+  "Fail to save current user information":
+    "Ukuhluleka ukulondoloza ulwazi lomsebenzisi zamanje",
+  "Please check your network connectivity":
+    "Sicela uhlole ukuxhumana kwenethiwekhi yakho",
+  "You have enter wrong username or password or server address":
+    "Une ufake igama okungalungile noma iphasiwedi noma ikheli leseva",
+  "Please check server address, or contact your help desk":
+    "Sicela uhlole ikheli leseva, noma uxhumane usizo lwakho edeskini",
+  "Please enter server address, username and password":
+    "Sicela ufake ikheli leseva, igama lomsebenzisi nephasiwedi",
+  "Discovering assigned organisation units":
+    "Ukuthola babelwe amayunithi enhlangano",
+  "Assigned organisation units have been loaded":
+    "Inikezwe amayunithi enhlangano ezilayishiwe",
+  "Saving assigned organisation units": "Igcina babelwe amayunithi enhlangano",
+  "Assigned organisation units have been saved":
+    "Inikezwe amayunithi enhlangano nisindisiwe",
+  "Fail to save organisation data": "Ukuhluleka ukulondoloza inhlangano idatha",
+  "Fail to discover organisation data": "Ukuhluleka ukuthola inhlangano idatha",
+  "Search": "Ukucinga",
+  "There is no local instance to select":
+    "Akukho Ngokwesibonelo bendawo ukuze ukhethe",
+  "Discovering available local instances":
+    "Ukuthola izimo zendawo etholakalayo",
+  "Fail to load available local instances":
+    "Ukuhluleka ukulayisha izimo zendawo etholakalayo",
+  "Log out": "Phuma",
+  "About": "mayelana",
+  "System info": "info System",
+  "Discovering current user information": "Ukuthola ulwazi umsebenzisi wamanje",
+  "Discovering app information": "Ukuthola ulwazi lokusebenza",
+  "Fail to discover current user information":
+    "Ukuhluleka ukuthola ulwazi umsebenzisi wamanje",
+  "Fail to discover app information": "Ukuhluleka ukuthola ulwazi lokusebenza",
+  "Settings": "Amasethingi",
+  "App settings": "izilungiselelo zohlelo lokusebenza",
+  "Current language": "ulimi yamanje",
+  "Fail to load current user information":
+    "Ukuhluleka ukulayisha ulwazi umsebenzisi wamanje",
+  "Fail to set translation": "Ukuhluleka setha translation",
+  "Dashboard": "Dashboard",
+  "Discovering dashboards": "ukuthola amadesibhodi",
+  "There no dashboard item found": "Ayikho into kudeshibhodi ezitholakele",
+  "Dashboard list": "uhlu Dashboard",
+  "Search dashboard by name": "Ukucinga kudeshibhodi ngegama",
+  "Layout": "Isakhiwo",
+  "Table  Chart Layout": "Ithebula / Ishadi Isakhiwo",
+  "Filters": "Izihlungi",
+  "Column": "Ikholomu",
+  "Row": "Umugqa",
+  "Categories": "Izigaba",
+  "Series": "Series",
+  "Update": "Buyekeza",
+  "Close": "Vala",
+  "Data": "idatha",
+  "Select": "Khetha",
+  "All": "Zonke",
+  "Data elements": "izakhi idatha",
+  "Indicators": "izinkomba",
+  "Data sets": "amasethi wedatha",
+  "Program indicators": "izinkomba Uhlelo",
+  "Functions": "imisebenzi",
+  "Available": "Iyatholakala",
+  "Selected": "Kukhethwe",
+  "Discovering...": "Ukuthola ...",
+  "No items": "Azikho izinto",
+  "Period": "inkathi",
+  "Select period type": "Khetha isikhathi uhlobo",
+  "Previous year": "unyaka odlule",
+  "Next year": "Ngonyaka ozayo",
+  "Org-unit": "Org-iyunithi",
+  "Interpretation": "Ukuhunyushwa",
+  "Not found": "Akutholakalanga",
+  "This interpretation will be deleted, are you sure?":
+    "Lokhu incazelo izosuswa, ingabe uqinisekile?",
+  "Deleting interpretation": "incazelo Ukususa",
+  "Comment": "Phawula",
+  "Edit": "Hlela",
+  "Delete": "Susa",
+  "Updating likes status": "Iyabuyekeza othanda isimo",
+  "Unlike": "Ngokungafani",
+  "Like": "Thanda",
+  "Write new interpretation": "Bhala incazelo entsha",
+  "Cancel": "Khansela",
+  "Posting": "Iyathumela",
+  "Post": "Thumela",
+  "This comment will be deleted, are you sure?":
+    "Lokhu amazwana kuzosuswa, ingabe uqinisekile?",
+  "Deleting comment": "Ukususa amazwana",
+  "Write your comment": "Bhala amazwana akho"
+}

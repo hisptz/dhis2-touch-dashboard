@@ -1,16 +1,11 @@
 <div class="layout-container">
-    <h6>Table / Chart Layout</h6>
+    <h6>{{ translationMapper['Table / Chart Layout'] }}</h6>
     <table class="layout-table">
         <tr>
-            <!--<td rowspan="2" dnd-droppable (onDropSuccess)="onDrop($event,'excluded')">-->
-            <!--<div>-->
-            <!--<label>Excluded dimension</label>-->
-            <!--</div>-->
-            <!--<div class="draggable" dnd-draggable [dragEnabled]="true" *ngFor="let dimension of layout.excluded" [dragData]="{data: dimension, dimension: 'excluded'}"><span [ngClass]="icons[dimension]"></span> {{names[dimension]}}</div>-->
-            <!--</td>-->
             <td class="dimension-drops">
                 <div class="dimension-label">
-                    Filters
+
+                    {{ translationMapper['Filters'] }}
                 </div>
                 <div class="drag-container" [dragula]="'bag-one'" [dragulaModel]="filters">
                     <div class="draggable" *ngFor="let filter of filters">
@@ -21,7 +16,7 @@
             </td>
             <td class="dimension-drops">
                 <div class="dimension-label">
-                    {{columnName}}
+                    {{ translationMapper[columnName] }}
                 </div>
                 <div class="drag-container" [dragula]="'bag-one'" [dragulaModel]="columns">
                     <div class="draggable" *ngFor="let column of columns">
@@ -34,7 +29,7 @@
         <tr>
             <td class="dimension-drops">
                 <div class="dimension-label">
-                    {{rowName}}
+                    {{ translationMapper[rowName] }}
                 </div>
                 <div class="drag-container" [dragula]="'bag-one'" [dragulaModel]="rows">
                     <div class="draggable" *ngFor="let row of rows">
@@ -49,8 +44,10 @@
     </table>
     <div class="layout-footer">
         <div>
-            <button class="layout-action-btn" (click)="updateLayout()"><i class="fa fa-refresh"></i>Update</button>
-            <button class="layout-action-btn" (click)="close()"><i class="fa fa-times"></i>Close</button>
+            <button class="layout-action-btn" (click)="updateLayout()">
+                <i class="fa fa-refresh"></i>{{ translationMapper['Update'] }}</button>
+            <button class="layout-action-btn" (click)="close()">
+                <i class="fa fa-times"></i>{{ translationMapper['Close'] }}</button>
         </div>
     </div>
 </div>

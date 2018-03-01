@@ -16,6 +16,7 @@ import * as fromDashboardSelectors from '../../store/selectors/dashboard.selecto
 import * as fromVisualizationSelectors from '../../store/selectors/visualization.selectors';
 import * as fromCurrentUserSelectors from '../../store/selectors/currentUser.selectors';
 import * as fromVisualizationActions from '../../store/actions/visualization.actions';
+import { AppTranslationProvider } from '../../providers/app-translation/app-translation';
 
 /**
  * Generated class for the DashboardPage page.
@@ -36,12 +37,14 @@ export class DashboardPage implements OnInit {
   currentUser$: Observable<CurrentUser>;
   icons: any = {};
   opendeInterpreationsMapper: any = {};
+  translationMapper: any;
 
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController,
     private store: Store<ApplicationState>,
-    private menu: MenuController
+    private menu: MenuController,
+    private appTranslation: AppTranslationProvider
   ) {
     this.currentDashboard$ = store.select(
       fromDashboardSelectors.getCurrentDashboard
@@ -69,6 +72,12 @@ export class DashboardPage implements OnInit {
       MESSAGES: 'assets/icon/filled-chat.png',
       INFO: 'assets/icon/info.png'
     };
+    this.appTranslation.getTransalations(this.getValuesToTranslate()).subscribe(
+      (data: any) => {
+        this.translationMapper = data;
+      },
+      error => {}
+    );
   }
 
   openDashboardListFilter() {
@@ -92,5 +101,8 @@ export class DashboardPage implements OnInit {
         visualizationObject
       )
     );
+  }
+  getValuesToTranslate() {
+    return ['Discovering dashboards', 'There no dashboard item found'];
   }
 }

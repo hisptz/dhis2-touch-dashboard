@@ -1,0 +1,114 @@
+{
+  "Innovation in every dimension": "Inovação em todas as dimensões",
+  "Establishing connection to server": "Estabelecer conexão com o servidor",
+  "Enter server address": "Digite o endereço do servidor",
+  "Enter username": "Insira nome de usuário",
+  "Enter password": "Digite a senha",
+  "Login": "Entrar",
+  "or": "ou",
+  "Offline instances": "casos offline",
+  "Powered by": "Distribuído por",
+  "Discovering system information": "Descobrir informações do sistema",
+  "Discovering current user authorities":
+    "Descobrir autoridades do usuário atual",
+  "Preparing local storage": "Preparando armazenamento local",
+  "Fail to prepare local storage": "Não se prepararem armazenamento local",
+  "Fail to discover user authorities":
+    "Não conseguem descobrir autoridades de usuários",
+  "Fail to discover system information":
+    "Não conseguem descobrir informações do sistema",
+  "Fail to save current user information":
+    "Falha ao salvar as informações do usuário atual",
+  "Please check your network connectivity":
+    "Verifique sua conectividade de rede",
+  "You have enter wrong username or password or server address":
+    "Você tem inserir nome de usuário ou senha incorreta ou endereço do servidor",
+  "Please check server address, or contact your help desk":
+    "Por favor, verifique o endereço do servidor, ou contacte o seu help desk",
+  "Please enter server address, username and password":
+    "Por favor, indique servidor endereço, nome de usuário e senha",
+  "Discovering assigned organisation units":
+    "Descobrir unidades organizacionais atribuídos",
+  "Assigned organisation units have been loaded":
+    "unidades organizacionais atribuídos foram carregados",
+  "Saving assigned organisation units":
+    "Salvando unidades organizacionais atribuídos",
+  "Assigned organisation units have been saved":
+    "unidades organizacionais atribuídos foram salvos",
+  "Fail to save organisation data": "Falha ao salvar dados da organização",
+  "Fail to discover organisation data":
+    "Não conseguem descobrir os dados da organização",
+  "Search": "Pesquisa",
+  "There is no local instance to select":
+    "Não há nenhuma instância local para selecionar",
+  "Discovering available local instances":
+    "Descobrir instâncias locais disponíveis",
+  "Fail to load available local instances":
+    "Falhar ao carregar instâncias locais disponíveis",
+  "Log out": "Sair",
+  "About": "Sobre",
+  "System info": "Informação do sistema",
+  "Discovering current user information":
+    "Descobrir informações do usuário atual",
+  "Discovering app information": "Descobrir informações aplicativo",
+  "Fail to discover current user information":
+    "Não conseguem descobrir informações do usuário atual",
+  "Fail to discover app information":
+    "Não conseguem descobrir informações aplicativo",
+  "Settings": "Configurações",
+  "App settings": "Configurações do aplicativo",
+  "Current language": "idioma atual",
+  "Fail to load current user information":
+    "Falhar ao carregar informações do usuário atual",
+  "Fail to set translation": "Falha ao definir tradução",
+  "Dashboard": "painel de controle",
+  "Discovering dashboards": "descobrir dashboards",
+  "There no dashboard item found": "Não há nenhum item do painel encontrado",
+  "Dashboard list": "lista de painel",
+  "Search dashboard by name": "Pesquisa dashboard pelo nome",
+  "Layout": "traçado",
+  "Table / Chart Layout": "Tabela / Esquema Gráfico",
+  "Filters": "filtros",
+  "Column": "Coluna",
+  "Row": "Linha",
+  "Categories": "categorias",
+  "Series": "Series",
+  "Update": "Atualizar",
+  "Close": "Fechar",
+  "Data": "Dados",
+  "Select": "selecionar",
+  "All": "Todos",
+  "Data elements": "Os elementos de dados",
+  "Indicators": "indicadores",
+  "Data sets": "conjuntos de dados",
+  "Program indicators": "indicadores do programa",
+  "Functions": "Funções",
+  "Available": "acessível",
+  "Selected": "Selecionado",
+  "Discovering...": "Descobrir ...",
+  "No items": "nenhum item",
+  "Period": "Período",
+  "Select period type": "Selecione o tipo de período",
+  "Previous year": "Ano anterior",
+  "Next year": "Próximo ano",
+  "Org-unit": "Org-unidade",
+  "Interpretation": "Interpretação",
+  "Not found": "Não encontrado",
+  "This interpretation will be deleted, are you sure?":
+    "Esta interpretação será excluído, você tem certeza?",
+  "Deleting interpretation": "interpretação Excluindo",
+  "Comment": "Comente",
+  "Edit": "Editar",
+  "Delete": "Excluir",
+  "Updating likes status": "Atualização gosta de status",
+  "Unlike": "Ao contrário",
+  "Like": "Gostar",
+  "Write new interpretation": "Escrever nova interpretação",
+  "Cancel": "Cancelar",
+  "Posting": "postagem",
+  "Post": "Postar",
+  "This comment will be deleted, are you sure?":
+    "Este comentário será excluído, você tem certeza?",
+  "Deleting comment": "comentário exclusão",
+  "Write your comment": "Escreva o seu comentário"
+}

@@ -1,1 +1,111 @@
-{}
+{
+  "Innovation in every dimension": "Innovasie in elke dimensie",
+  "Establishing connection to server": "Stigting verbinding met bediener",
+  "Enter server address": "Tik bediener adres",
+  "Enter username": "Tik gebruikersnaam",
+  "Enter password": "Sleutel wagwoord in",
+  "Login": "Teken aan",
+  "or": "of",
+  "Offline instances": "op die regte pad gevalle",
+  "Powered by": "Aangedryf deur",
+  "Discovering system information": "Ontdekking stelsel inligting",
+  "Discovering current user authorities":
+    "Die ontdekking van die huidige gebruiker owerhede",
+  "Preparing local storage": "Voorbereiding plaaslike stoor",
+  "Fail to prepare local storage": "Versuim om plaaslike stoor voor te berei",
+  "Fail to discover user authorities": "Versuim om gebruikers owerhede ontdek",
+  "Fail to discover system information":
+    "Versuim om stelsel inligting te ontdek",
+  "Fail to save current user information":
+    "Versuim om huidige gebruiker inligting te red",
+  "Please check your network connectivity":
+    "Gaan asseblief jou netwerkverbinding",
+  "You have enter wrong username or password or server address":
+    "Jy het te gaan verkeerd gebruikersnaam of wagwoord of bediener adres",
+  "Please check server address, or contact your help desk":
+    "Gaan asseblief die bediener adres, of kontak jou hulptoonbank",
+  "Please enter server address, username and password":
+    "Voer die bediener adres, gebruikersnaam en wagwoord",
+  "Discovering assigned organisation units":
+    "Ontdek opgedra organisasie-eenhede",
+  "Assigned organisation units have been loaded":
+    "Opgedra organisasie-eenhede is gelaai",
+  "Saving assigned organisation units": "Spaar opgedra organisasie-eenhede",
+  "Assigned organisation units have been saved":
+    "Opgedra organisasie-eenhede is gered",
+  "Fail to save organisation data": "Versuim om organisasie data red",
+  "Fail to discover organisation data": "Versuim om organisasie data te ontdek",
+  "Search": "Soek",
+  "There is no local instance to select":
+    "Daar is geen plaaslike instansie te kies",
+  "Discovering available local instances":
+    "Ontdek beskikbaar plaaslike gevalle",
+  "Fail to load available local instances":
+    "Versuim om beskikbare plaaslike gevalle laai",
+  "Log out": "Teken uit",
+  "About": "oor",
+  "System info": "stelsel info",
+  "Discovering current user information":
+    "Die ontdekking van die huidige gebruiker inligting",
+  "Discovering app information": "Ontdekking app inligting",
+  "Fail to discover current user information":
+    "Versuim om huidige gebruiker inligting te ontdek",
+  "Fail to discover app information":
+    "Versuim om inligting inligting te ontdek",
+  "Settings": "instellings",
+  "App settings": "app instellings",
+  "Current language": "Huidige taal",
+  "Fail to load current user information":
+    "Versuim om huidige gebruiker inligting te laai",
+  "Fail to set translation": "Versuim om vertaling te stel",
+  "Dashboard": "Dashboard",
+  "Discovering dashboards": "ontdek dashboards",
+  "There no dashboard item found": "Daar is geen paneelbord item gevind",
+  "Dashboard list": "paneelbord lys",
+  "Search dashboard by name": "Soek paneelbord met die naam",
+  "Layout": "uitleg",
+  "Table / Chart Layout": "Table / Chart uitleg",
+  "Filters": "filters",
+  "Column": "kolom",
+  "Row": "ry",
+  "Categories": "kategorieë",
+  "Series": "reeks",
+  "Update": "Opdateer",
+  "Close": "Naby",
+  "Data": "data",
+  "Select": "Kies",
+  "All": "Almal",
+  "Data elements": "data-elemente",
+  "Indicators": "aanwysers",
+  "Data sets": "datastelle",
+  "Program indicators": "program aanwysers",
+  "Functions": "funksies",
+  "Available": "beskikbaar",
+  "Selected": "gekies",
+  "Discovering...": "Die ontdekking van ...",
+  "No items": "geen items",
+  "Period": "tydperk",
+  "Select period type": "Kies soort tydperk",
+  "Previous year": "Vorige jaar",
+  "Next year": "Volgende jaar",
+  "Org-unit": "Org-eenheid",
+  "Interpretation": "interpretasie",
+  "Not found": "Nie gevind nie",
+  "This interpretation will be deleted, are you sure?":
+    "Hierdie interpretasie sal uit gewis word, is jy seker?",
+  "Deleting interpretation": "interpretasie verwydering",
+  "Comment": "kommentaar",
+  "Edit": "wysig",
+  "Delete": "verwyder",
+  "Updating likes status": "Opdatering hou status",
+  "Unlike": "In teenstelling met",
+  "Like": "soos",
+  "Write new interpretation": "Skryf nuwe interpretasie",
+  "Cancel": "kanselleer",
+  "Posting": "plasing",
+  "Post": "Post",
+  "This comment will be deleted, are you sure?":
+    "Hierdie kommentaar sal verwyder word, is jy seker?",
+  "Deleting comment": "kommentaar verwydering",
+  "Write your comment": "Skryf jou kommentaar"
+}

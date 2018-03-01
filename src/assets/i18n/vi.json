@@ -1,1 +1,114 @@
-{}
+{
+  "Innovation in every dimension": "Đổi mới trong mọi chiều kích",
+  "Establishing connection to server": "Thiết lập kết nối đến máy chủ",
+  "Enter server address": "Nhập địa chỉ máy chủ",
+  "Enter username": "Điền tên đăng nhập",
+  "Enter password": "Nhập mật khẩu",
+  "Login": "Đăng nhập",
+  "or": "hoặc là",
+  "Offline instances": "trường hợp ẩn",
+  "Powered by": "Powered by",
+  "Discovering system information": "Khám phá hệ thống thông tin",
+  "Discovering current user authorities":
+    "Khám phá chính quyền người dùng hiện hành",
+  "Preparing local storage": "Chuẩn bị lưu trữ địa phương",
+  "Fail to prepare local storage":
+    "Thất bại trong việc chuẩn bị lưu trữ địa phương",
+  "Fail to discover user authorities":
+    "Thất bại trong việc phát hiện ra các cơ quan người dùng",
+  "Fail to discover system information":
+    "Thất bại trong việc khám phá thông tin hệ thống",
+  "Fail to save current user information":
+    "Thất bại trong việc lưu thông tin người dùng hiện tại",
+  "Please check your network connectivity":
+    "Vui lòng kiểm tra kết nối mạng của bạn",
+  "You have enter wrong username or password or server address":
+    "Bạn phải nhập tên tài khoản sai hoặc mật khẩu hoặc địa chỉ máy chủ",
+  "Please check server address, or contact your help desk":
+    "Vui lòng kiểm tra địa chỉ máy chủ, hoặc liên hệ với bộ phận hỗ trợ của bạn",
+  "Please enter server address, username and password":
+    "Vui lòng nhập địa chỉ máy chủ, tên người dùng và mật khẩu",
+  "Discovering assigned organisation units":
+    "Khám phá các đơn vị tổ chức được giao",
+  "Assigned organisation units have been loaded":
+    "đơn vị tổ chức được giao đã được nạp",
+  "Saving assigned organisation units": "Tiết kiệm đơn vị tổ chức giao",
+  "Assigned organisation units have been saved":
+    "đơn vị tổ chức được giao đã được lưu",
+  "Fail to save organisation data": "Thất bại trong việc lưu dữ liệu tổ chức",
+  "Fail to discover organisation data":
+    "Thất bại trong việc khám phá dữ liệu tổ chức",
+  "Search": "Tìm kiếm",
+  "There is no local instance to select":
+    "Không có trường hợp địa phương để lựa chọn",
+  "Discovering available local instances":
+    "Khám phá các trường hợp địa phương có sẵn",
+  "Fail to load available local instances":
+    "Không thể tải trường hợp địa phương có sẵn",
+  "Log out": "Đăng xuất",
+  "About": "Trong khoảng",
+  "System info": "Thông tin hệ thống",
+  "Discovering current user information":
+    "Khám phá thông tin người dùng hiện tại",
+  "Discovering app information": "Khám phá thông tin ứng dụng",
+  "Fail to discover current user information":
+    "Thất bại trong việc phát hiện ra thông tin người dùng hiện tại",
+  "Fail to discover app information":
+    "Thất bại trong việc khám phá thông tin ứng dụng",
+  "Settings": "Cài đặt",
+  "App settings": "cài đặt ứng dụng",
+  "Current language": "ngôn ngữ hiện tại",
+  "Fail to load current user information":
+    "Không thể tải thông tin người dùng hiện tại",
+  "Fail to set translation": "Thất bại trong việc thiết lập dịch",
+  "Dashboard": "bảng điều khiển",
+  "Discovering dashboards": "Khám phá biểu đồ",
+  "There no dashboard item found": "Không có mục bảng điều khiển tìm thấy",
+  "Dashboard list": "danh mục Bảng điều khiển",
+  "Search dashboard by name": "Tìm kiếm bảng điều khiển theo tên",
+  "Layout": "Bố trí",
+  "Table / Chart Layout": "Bảng / Chart Layout",
+  "Filters": "bộ lọc",
+  "Column": "Cột",
+  "Row": "Hàng",
+  "Categories": "Thể loại",
+  "Series": "Loạt",
+  "Update": "cập nhật",
+  "Close": "Gần",
+  "Data": "Dữ liệu",
+  "Select": "Lựa chọn",
+  "All": "Tất cả các",
+  "Data elements": "yếu tố dữ liệu",
+  "Indicators": "Các chỉ số",
+  "Data sets": "tập hợp dữ liệu",
+  "Program indicators": "chỉ số chương trình",
+  "Functions": "Chức năng",
+  "Available": "có sẵn",
+  "Selected": "Đã chọn",
+  "Discovering...": "Khám phá ...",
+  "No items": "Không có sản phẩm",
+  "Period": "Giai đoạn",
+  "Select period type": "Chọn loại thời gian",
+  "Previous year": "Năm trước",
+  "Next year": "Năm sau",
+  "Org-unit": "Org-đơn vị",
+  "Interpretation": "Diễn dịch",
+  "Not found": "Không tìm thấy",
+  "This interpretation will be deleted, are you sure?":
+    "Giải thích này sẽ bị xóa, bạn có chắc?",
+  "Deleting interpretation": "xóa giải thích",
+  "Comment": "Bình luận",
+  "Edit": "Chỉnh sửa",
+  "Delete": "Xóa bỏ",
+  "Updating likes status": "Cập nhật tình trạng thích",
+  "Unlike": "không giống",
+  "Like": "Như",
+  "Write new interpretation": "Viết giải thích mới",
+  "Cancel": "hủy bỏ",
+  "Posting": "gửi bài",
+  "Post": "Bài đăng",
+  "This comment will be deleted, are you sure?":
+    "Nhận xét này sẽ bị xóa, bạn có chắc?",
+  "Deleting comment": "xóa bình luận",
+  "Write your comment": "Viết bình luận của bạn"
+}

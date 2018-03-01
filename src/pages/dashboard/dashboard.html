@@ -5,7 +5,7 @@
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>
-            <span [translate]="'dashboard'"></span>
+            <span [translate]="'Dashboard'"></span>
         </ion-title>
     </ion-navbar>
 
@@ -17,7 +17,7 @@
     <ion-grid>
         <!-- loading area -->
         <div *ngIf="loading$ | async">
-            <loading [loadingMessage]="'loading dashboard'" [loadingSize]="'large'"></loading>
+            <loading [loadingMessage]="translationMapper['Discovering dashboards']" [loadingSize]="'large'"></loading>
         </div>
         <!-- end of loading area -->
 
@@ -37,7 +37,7 @@
 
             <!-- no dashboard section -->
             <div *ngIf="(visualizationObjects$ | async).length == 0">
-                <empty-list-notification [emptyListMessage]="'there no dashboard item found'"></empty-list-notification>
+                <empty-list-notification [emptyListMessage]="translationMapper['There no dashboard item found']"></empty-list-notification>
             </div>
             <!-- end of no dashboard section -->
 
@@ -56,8 +56,10 @@
                     </ion-col>
                     <ion-col col-1 item>
                         <div style="text-align: center;">
-                            <ion-icon *ngIf="!visualizationObject.details.expanded" name="ios-arrow-down" [color]="(visualizationObject.details.expanded) ?'current' : 'font-color'" item-right></ion-icon>
-                            <ion-icon *ngIf="visualizationObject.details.expanded" name="ios-arrow-up" [color]="(visualizationObject.details.expanded) ?'current' : 'font-color'" item-right></ion-icon>
+                            <ion-icon *ngIf="!visualizationObject.details.expanded" name="ios-arrow-down" [color]="(visualizationObject.details.expanded) ?'current' : 'font-color'"
+                                item-right></ion-icon>
+                            <ion-icon *ngIf="visualizationObject.details.expanded" name="ios-arrow-up" [color]="(visualizationObject.details.expanded) ?'current' : 'font-color'"
+                                item-right></ion-icon>
                         </div>
                     </ion-col>
                 </ion-row>
@@ -66,7 +68,8 @@
                 <!-- visualization card body section -->
                 <div *ngIf="visualizationObject.details.expanded">
 
-                    <dashboard-visualization-card [visualizationObject]="visualizationObject" (onOpeningFullScreen)="openDashboardInFullScreen($event)" [currentUser]="currentUser$ | async "></dashboard-visualization-card>
+                    <dashboard-visualization-card [visualizationObject]="visualizationObject" (onOpeningFullScreen)="openDashboardInFullScreen($event)"
+                        [currentUser]="currentUser$ | async "></dashboard-visualization-card>
 
                     <!-- end of visualization card body section -->
                 </div>

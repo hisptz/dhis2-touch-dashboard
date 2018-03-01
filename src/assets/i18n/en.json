@@ -1,1 +1,109 @@
-{}
+{
+  "Innovation in every dimension": "Innovation in every dimension",
+  "Establishing connection to server": "Establishing connection to server",
+  "Enter server address": "Enter server address",
+  "Enter username": "Enter username",
+  "Enter password": "Enter password",
+  "Login": "Login",
+  "or": "or",
+  "Offline instances": "Offline instances",
+  "Powered by": "Powered by",
+  "Discovering system information": "Discovering system information",
+  "Discovering current user authorities":
+    "Discovering current user authorities",
+  "Preparing local storage": "Preparing local storage",
+  "Fail to prepare local storage": "Fail to prepare local storage",
+  "Fail to discover user authorities": "Fail to discover user authorities",
+  "Fail to discover system information": "Fail to discover system information",
+  "Fail to save current user information":
+    "Fail to save current user information",
+  "Please check your network connectivity":
+    "Please check your network connectivity",
+  "You have enter wrong username or password or server address":
+    "You have enter wrong username or password or server address",
+  "Please check server address, or contact your help desk":
+    "Please check server address, or contact your help desk",
+  "Please enter server address, username and password":
+    "Please enter server address, username and password",
+  "Discovering assigned organisation units":
+    "Discovering assigned organisation units",
+  "Assigned organisation units have been loaded":
+    "Assigned organisation units have been loaded",
+  "Saving assigned organisation units": "Saving assigned organisation units",
+  "Assigned organisation units have been saved":
+    "Assigned organisation units have been saved",
+  "Fail to save organisation data": "Fail to save organisation data",
+  "Fail to discover organisation data": "Fail to discover organisation data",
+  "Search": "Search",
+  "There is no local instance to select":
+    "There is no local instance to select",
+  "Discovering available local instances":
+    "Discovering available local instances",
+  "Fail to load available local instances":
+    "Fail to load available local instances",
+  "Log out": "Log out",
+  "About": "About",
+  "System info": "System info",
+  "Discovering current user information":
+    "Discovering current user information",
+  "Discovering app information": "Discovering app information",
+  "Fail to discover current user information":
+    "Fail to discover current user information",
+  "Fail to discover app information": "Fail to discover app information",
+  "Settings": "Settings",
+  "App settings": "App settings",
+  "Current language": "Current language",
+  "Fail to load current user information":
+    "Fail to load current user information",
+  "Fail to set translation": "Fail to set translation",
+  "Dashboard": "Dashboard",
+  "Discovering dashboards": "Discovering dashboards",
+  "There no dashboard item found": "There no dashboard item found",
+  "Dashboard list": "Dashboard list",
+  "Search dashboard by name": "Search dashboard by name",
+  "Layout": "Layout",
+  "Table / Chart Layout": "Table / Chart Layout",
+  "Filters": "Filters",
+  "Column": "Column",
+  "Row": "Row",
+  "Categories": "Categories",
+  "Series": "Series",
+  "Update": "Update",
+  "Close": "Close",
+  "Data": "Data",
+  "Select": "Select",
+  "All": "All",
+  "Data elements": "Data elements",
+  "Indicators": "Indicators",
+  "Data sets": "Data sets",
+  "Program indicators": "Program indicators",
+  "Functions": "Functions",
+  "Available": "Available",
+  "Selected": "Selected",
+  "Discovering...": "Discovering...",
+  "No items": "No items",
+  "Period": "Period",
+  "Select period type": "Select period type",
+  "Previous year": "Previous year",
+  "Next year": "Next year",
+  "Org-unit": "Org-unit",
+  "Interpretation": "Interpretation",
+  "Not found": "Not found",
+  "This interpretation will be deleted, are you sure?":
+    "This interpretation will be deleted, are you sure?",
+  "Deleting interpretation": "Deleting interpretation",
+  "Comment": "Comment",
+  "Edit": "Edit",
+  "Delete": "Delete",
+  "Updating likes status": "Updating likes status",
+  "Unlike": "Unlike",
+  "Like": "Like",
+  "Write new interpretation": "Write new interpretation",
+  "Cancel": "Cancel",
+  "Posting": "Posting",
+  "Post": "Post",
+  "This comment will be deleted, are you sure?":
+    "This comment will be deleted, are you sure?",
+  "Deleting comment": "Deleting comment",
+  "Write your comment": "Write your comment"
+}

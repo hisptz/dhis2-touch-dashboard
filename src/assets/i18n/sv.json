@@ -1,1 +1,115 @@
-{}
+{
+  "Innovation in every dimension": "Innovation i varje dimension",
+  "Establishing connection to server": "Etablera anslutning till servern",
+  "Enter server address": "Ange serveradress",
+  "Enter username": "Skriv in ditt användarnamn",
+  "Enter password": "Skriv in lösenord",
+  "Login": "Logga in",
+  "or": "eller",
+  "Offline instances": "offline instanser",
+  "Powered by": "Powered by",
+  "Discovering system information": "Upptäcka systeminformation",
+  "Discovering current user authorities":
+    "Upptäcka nuvarande användar myndigheter",
+  "Preparing local storage": "Förbereda lokal lagring",
+  "Fail to prepare local storage": "Misslyckas med att förbereda lokal lagring",
+  "Fail to discover user authorities":
+    "Misslyckas med att upptäcka användar myndigheter",
+  "Fail to discover system information":
+    "Misslyckas att upptäcka systeminformation",
+  "Fail to save current user information":
+    "Misslyckas med att spara aktuell användarinformation",
+  "Please check your network connectivity":
+    "Kontrollera din nätverksanslutning",
+  "You have enter wrong username or password or server address":
+    "Du har anger fel användarnamn eller lösenord eller serveradress",
+  "Please check server address, or contact your help desk":
+    "Kontrollera serveradress eller kontakta helpdesk",
+  "Please enter server address, username and password":
+    "Ange serveradress, användarnamn och lösenord",
+  "Discovering assigned organisation units":
+    "Upptäcka tilldelade organisationsenheter",
+  "Assigned organisation units have been loaded":
+    "Tilldelade organisationsenheter har laddats",
+  "Saving assigned organisation units": "Spara tilldelade organisationsenheter",
+  "Assigned organisation units have been saved":
+    "Tilldelade organisationsenheter har sparats",
+  "Fail to save organisation data":
+    "Misslyckas med att spara organisation data",
+  "Fail to discover organisation data":
+    "Misslyckas med att upptäcka organisation data",
+  "Search": "Sök",
+  "There is no local instance to select":
+    "Det finns ingen lokal instans för att välja",
+  "Discovering available local instances":
+    "Upptäcka tillgängliga lokala instanser",
+  "Fail to load available local instances":
+    "Misslyckas att läsa tillgängliga lokala instanser",
+  "Log out": "Logga ut",
+  "About": "Handla om",
+  "System info": "System information",
+  "Discovering current user information":
+    "Upptäcka nuvarande användarinformation",
+  "Discovering app information": "Upptäcka appinformation",
+  "Fail to discover current user information":
+    "Misslyckas med att upptäcka aktuell användarinformation",
+  "Fail to discover app information":
+    "Misslyckas med att upptäcka appinformation",
+  "Settings": "inställningar",
+  "App settings": "App inställningar",
+  "Current language": "Aktuellt språk",
+  "Fail to load current user information":
+    "Misslyckas att läsa aktuell användarinformation",
+  "Fail to set translation": "Misslyckas att ställa översättning",
+  "Dashboard": "instrumentbräda",
+  "Discovering dashboards": "upptäcka instrumentpaneler",
+  "There no dashboard item found":
+    "Det ingen instrumentbrädan artiklar hittade",
+  "Dashboard list": "Dashboard listan",
+  "Search dashboard by name": "Sök instrumentpanel med namn",
+  "Layout": "Layout",
+  "Table / Chart Layout": "Bord / Diagram Layout",
+  "Filters": "filter",
+  "Column": "Kolumn",
+  "Row": "Rad",
+  "Categories": "kategorier",
+  "Series": "Serier",
+  "Update": "Uppdatering",
+  "Close": "Stänga",
+  "Data": "Data",
+  "Select": "Välj",
+  "All": "Allt",
+  "Data elements": "dataelement",
+  "Indicators": "indikatorer",
+  "Data sets": "dataset",
+  "Program indicators": "program~~POS=TRUNC indikatorer~~POS=HEADCOMP",
+  "Functions": "funktioner",
+  "Available": "Tillgängliga",
+  "Selected": "Vald",
+  "Discovering...": "Upptäcka ...",
+  "No items": "Inga föremål",
+  "Period": "Period",
+  "Select period type": "Välj period typ",
+  "Previous year": "Förra året",
+  "Next year": "Nästa år",
+  "Org-unit": "Org-enhet",
+  "Interpretation": "tolkning",
+  "Not found": "Hittades inte",
+  "This interpretation will be deleted, are you sure?":
+    "Denna tolkning kommer att tas bort, är du säker?",
+  "Deleting interpretation": "Radera tolkning",
+  "Comment": "Kommentar",
+  "Edit": "Redigera",
+  "Delete": "Radera",
+  "Updating likes status": "Uppdatering gillar status",
+  "Unlike": "Till skillnad från",
+  "Like": "Tycka om",
+  "Write new interpretation": "Skriv ny tolkning",
+  "Cancel": "Annullera",
+  "Posting": "inlägg",
+  "Post": "Posta",
+  "This comment will be deleted, are you sure?":
+    "Denna kommentar kommer att tas bort, är du säker?",
+  "Deleting comment": "Radera kommentar",
+  "Write your comment": "Skriv din kommentar"
+}

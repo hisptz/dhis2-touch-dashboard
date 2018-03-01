@@ -3,18 +3,14 @@
     <div class="period-top-section">
         <div class="period-type-section">
             <select [(ngModel)]="selectedPeriodType" (change)="updatePeriodType(selectedPeriodType, $event)" class="period-filter-select">
-        <option [value]="''" disabled>Select period type</option>
-        <option
-          *ngFor="let periodType of periodTypes"
-          [value]="periodType.value"
-          [hidden]="!periodType.shown"
-        >{{periodType.name}}</option>
-      </select>
+                <option [value]="''" disabled>{{ translationMapper['Select period type'] }}</option>
+                <option *ngFor="let periodType of periodTypes" [value]="periodType.value" [hidden]="!periodType.shown">{{periodType.name}}</option>
+            </select>
         </div>
         <div class="period-year-section">
             <div>
-                <button type="button" class="period-filter-year-btn" (click)="pushPeriodBackward($event)">Prev Year</button>
-                <button type="button" class="period-filter-year-btn" (click)="pushPeriodForward($event)" [disabled]="selectedYear === currentYear">Next Year</button>
+                <button type="button" class="period-filter-year-btn" (click)="pushPeriodBackward($event)">{{ translationMapper['Previous year'] }}</button>
+                <button type="button" class="period-filter-year-btn" (click)="pushPeriodForward($event)" [disabled]="selectedYear === currentYear">{{ translationMapper['Next year'] }}</button>
             </div>
         </div>
     </div>
@@ -23,12 +19,12 @@
     <!--period available and selected section-->
     <div class="period-header">
         <div class="period-available-header">
-            <span>Available ({{availablePeriods.length}})</span>
+            <span>{{ translationMapper['Available'] }} ({{availablePeriods.length}})</span>
             <a (click)="selectAllPeriods($event)">&raquo;</a>
         </div>
         <div class="period-selected-header">
             <a (click)="deselectAllPeriods($event)">&laquo;</a>
-            <span>Selected ({{selectedPeriods.length}})</span>
+            <span>{{ translationMapper['Selected'] }} ({{selectedPeriods.length}})</span>
         </div>
     </div>
     <!--end of period available and selected section-->
@@ -39,8 +35,8 @@
             <ul class="period-list">
                 <li *ngFor="let availablePeriod of availablePeriods">
                     <a (click)="togglePeriod(availablePeriod, $event)">
-            {{availablePeriod.name}}
-          </a>
+                        {{availablePeriod.name}}
+                    </a>
                 </li>
             </ul>
         </div>
@@ -48,8 +44,8 @@
             <ul class="period-list">
                 <li *ngFor="let selectedPeriod of selectedPeriods$ | async">
                     <a (click)="togglePeriod(selectedPeriod, $event)">
-            {{selectedPeriod.name}}
-          </a>
+                        {{selectedPeriod.name}}
+                    </a>
                 </li>
             </ul>
         </div>
@@ -59,8 +55,8 @@
     <!--period footer-->
     <div class="period-filter-actions-btns">
         <div>
-            <button class="period-filter-action-btn" (click)="updatePeriod($event)">Update</button>
-            <button class="period-filter-action-btn" (click)="closePeriodFilter($event)">Close</button>
+            <button class="period-filter-action-btn" (click)="updatePeriod($event)"> {{ translationMapper['Update'] }}</button>
+            <button class="period-filter-action-btn" (click)="closePeriodFilter($event)">{{ translationMapper['Close'] }}</button>
         </div>
     </div>
     <!--end of period footer-->

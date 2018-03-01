@@ -1,1 +1,117 @@
-{}
+{
+  "Innovation in every dimension": "La innovación en todas las dimensiones",
+  "Establishing connection to server":
+    "El establecimiento de la conexión al servidor",
+  "Enter server address": "Introduzca la dirección del servidor",
+  "Enter username": "Introduzca su nombre de usuario",
+  "Enter password": "Introducir la contraseña",
+  "Login": "Iniciar sesión",
+  "or": "o",
+  "Offline instances": "casos fuera de línea",
+  "Powered by": "Energizado por",
+  "Discovering system information":
+    "El descubrimiento de la información del sistema",
+  "Discovering current user authorities":
+    "El descubrimiento de las autoridades actuales de los usuarios",
+  "Preparing local storage": "Preparación de almacenamiento local",
+  "Fail to prepare local storage": "Fallar para preparar almacenamiento local",
+  "Fail to discover user authorities":
+    "Dejar de descubrir autorizaciones de los usuarios",
+  "Fail to discover system information":
+    "Dejar de descubrir la información del sistema",
+  "Fail to save current user information":
+    "Dejar de guardar la información de usuario actual",
+  "Please check your network connectivity":
+    "Por favor, compruebe la conectividad de red",
+  "You have enter wrong username or password or server address":
+    "Hay que introducir nombre de usuario o contraseña incorrecta o dirección del servidor",
+  "Please check server address, or contact your help desk":
+    "Por favor, compruebe la dirección del servidor, o ponerse en contacto con el servicio de asistencia",
+  "Please enter server address, username and password":
+    "Por favor, introduzca la dirección del servidor, nombre de usuario y contraseña",
+  "Discovering assigned organisation units":
+    "El descubrimiento de las unidades de organización asociados",
+  "Assigned organisation units have been loaded":
+    "unidades de organización de Asignación se han cargado",
+  "Saving assigned organisation units":
+    "Ahorro de las unidades de organización asociados",
+  "Assigned organisation units have been saved":
+    "unidades de organización asociados se han guardado",
+  "Fail to save organisation data": "Dejar de guardar datos de la organización",
+  "Fail to discover organisation data":
+    "Dejar de descubrir datos de la organización",
+  "Search": "Buscar",
+  "There is no local instance to select":
+    "No existe una instancia local para seleccionar",
+  "Discovering available local instances":
+    "El descubrimiento de las instancias locales disponibles",
+  "Fail to load available local instances":
+    "No se pueden cargar instancias locales disponibles",
+  "Log out": "Cerrar sesión",
+  "About": "Acerca de",
+  "System info": "Información del sistema",
+  "Discovering current user information":
+    "El descubrimiento de la información del usuario actual",
+  "Discovering app information":
+    "El descubrimiento de información de la aplicación",
+  "Fail to discover current user information":
+    "Dejar de descubrir la información del usuario actual",
+  "Fail to discover app information":
+    "Dejar de descubrir información de la aplicación",
+  "Settings": "ajustes",
+  "App settings": "Ajustes de Aplicacion",
+  "Current language": "Idioma actual",
+  "Fail to load current user information":
+    "No podrá cargar la información del usuario actual",
+  "Fail to set translation": "Faltar la práctica de la traducción",
+  "Dashboard": "Tablero",
+  "Discovering dashboards": "El descubrimiento de cuadros de mando",
+  "There no dashboard item found": "No hay elemento del panel encontró",
+  "Dashboard list": "lista del tablero",
+  "Search dashboard by name": "Buscar salpicadero por su nombre",
+  "Layout": "Diseño",
+  "Table / Chart Layout": "Tabla / Diseño del gráfico",
+  "Filters": "filtros",
+  "Column": "Columna",
+  "Row": "Fila",
+  "Categories": "categorías",
+  "Series": "Serie",
+  "Update": "Actualizar",
+  "Close": "Cerca",
+  "Data": "Datos",
+  "Select": "Seleccionar",
+  "All": "Todas",
+  "Data elements": "Los elementos de datos",
+  "Indicators": "indicadores",
+  "Data sets": "Los conjuntos de datos",
+  "Program indicators": "los indicadores del programa",
+  "Functions": "funciones",
+  "Available": "Disponible",
+  "Selected": "Seleccionado",
+  "Discovering...": "El descubrimiento de ...",
+  "No items": "No hay artículos",
+  "Period": "Período",
+  "Select period type": "Seleccione el tipo de periodo",
+  "Previous year": "año anterior",
+  "Next year": "El próximo año",
+  "Org-unit": "Org-unidad",
+  "Interpretation": "Interpretación",
+  "Not found": "Extraviado",
+  "This interpretation will be deleted, are you sure?":
+    "Se eliminará esta interpretación, ¿está seguro?",
+  "Deleting interpretation": "Eliminación de interpretación",
+  "Comment": "Comentario",
+  "Edit": "Editar",
+  "Delete": "Borrar",
+  "Updating likes status": "La actualización de estado le gusta",
+  "Unlike": "diferente a",
+  "Like": "Me gusta",
+  "Write new interpretation": "Escribir nueva interpretación",
+  "Cancel": "Cancelar",
+  "Posting": "Destino",
+  "Post": "Enviar",
+  "This comment will be deleted, are you sure?":
+    "¿Quieres borrar este comentario, ¿está seguro?",
+  "Deleting comment": "al eliminar el comentario",
+  "Write your comment": "Deja tu comentario"
+}

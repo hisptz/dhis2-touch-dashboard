@@ -12,6 +12,7 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { DATA_FILTER_OPTIONS } from './data-filter.model';
+import { AppTranslationProvider } from '../../providers/app-translation/app-translation';
 
 @Component({
   selector: 'app-data-filter',
@@ -61,8 +62,12 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
   hideMonth = false;
   hideQuarter = false;
+  translationMapper: any;
 
-  constructor(private dataFilterService: DataFilterService) {
+  constructor(
+    private dataFilterService: DataFilterService,
+    private appTranslation: AppTranslationProvider
+  ) {
     this.dataFilterOptions = DATA_FILTER_OPTIONS;
     this.showGroups = false;
     this.need_groups = true;
@@ -74,6 +79,33 @@ export class DataFilterComponent implements OnInit, OnDestroy {
     this.initiateData();
     this._selectedItems = [...this.selectedItems];
     this.selectedItems$ = Observable.of(this._selectedItems);
+    this.translationMapper = {};
+    this.translationMapper = {};
+    this.appTranslation.getTransalations(this.getValuesToTranslate()).subscribe(
+      (data: any) => {
+        this.translationMapper = data;
+      },
+      error => {}
+    );
+  }
+
+  getValuesToTranslate() {
+    return [
+      'Select',
+      'All',
+      'Data elements',
+      'Indicators',
+      'Program indicators',
+      'Functions',
+      'Data sets',
+      'Search',
+      'Available',
+      'Selected',
+      'Discovering...',
+      'No items',
+      'Update',
+      'Close'
+    ];
   }
 
   // trigger this to reset pagination pointer when search change
