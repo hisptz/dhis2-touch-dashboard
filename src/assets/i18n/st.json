@@ -1,1 +1,110 @@
-{}
+{
+  "Innovation in every dimension": "Le popontshwa le leng le le teba",
+  "Establishing connection to server": "Theha mabapi ho seva",
+  "Enter server address": "Kena seva aterese",
+  "Enter username": "Kenya lebitso la mosebedisi",
+  "Enter password": "Kenya phasewete",
+  "Login": "Kena",
+  "or": "kapa",
+  "Offline instances": "Maemong Offline",
+  "Powered by": "E tsamaisoa ke",
+  "Discovering system information": "Ho Fumana tsamaiso ya tshedimosetso",
+  "Discovering current user authorities":
+    "Ho Fumana ba boholong jwale mosebedisi",
+  "Preparing local storage": "Lokisetsa poloko ea moo",
+  "Fail to prepare local storage": "Ba hlōleha ho lokisa polokelo ea moo",
+  "Fail to discover user authorities":
+    "Ba hlōleha ho fumana hore ba boholong mosebedisi",
+  "Fail to discover system information":
+    "Ba hlōleha ho fumana lesedi oona tsamaisong",
+  "Fail to save current user information":
+    "Ba hlōleha ho boloka jwale mosebedisi lesedi",
+  "Please check your network connectivity":
+    "Ka kopo, hlahloba marangrang kgokelo ya hao",
+  "You have enter wrong username or password or server address":
+    "O na le kenye mosebedisi e fosahetseng kapa password ya kapa seva aterese",
+  "Please check server address, or contact your help desk":
+    "Ka kopo, hlahloba seva aterese, kapa ikopanya thuso ea hao deskeng",
+  "Please enter server address, username and password":
+    "Ka kopo, kenya seva aterese, mosebedisi le phasewete",
+  "Discovering assigned organisation units":
+    "Ho Fumana abeloa mokgatlo diyuniti",
+  "Assigned organisation units have been loaded":
+    "Abeloa mokgatlo diyuniti di laela",
+  "Saving assigned organisation units": "Pholosang abeloa mokgatlo diyuniti",
+  "Assigned organisation units have been saved":
+    "Abeloa mokgatlo diyuniti le pholositsoe",
+  "Fail to save organisation data": "Ba hlōleha ho boloka ya data mokgatlo",
+  "Fail to discover organisation data": "Ba hlōleha ho fumana ya data mokgatlo",
+  "Search": "Search",
+  "There is no local instance to select": "Ha ho na mohlala ea moo ho khetha",
+  "Discovering available local instances":
+    "Ho Fumana fumanehang maemong a ea moo",
+  "Fail to load available local instances":
+    "Hlōleha ho laela fumanehang maemong a ea moo",
+  "Log out": "Loka tsoa",
+  "About": "About",
+  "System info": "System Info",
+  "Discovering current user information":
+    "Ho Fumana morao-rao mosebedisi lesedi",
+  "Discovering app information": "Ho Fumana lesedi app e",
+  "Fail to discover current user information":
+    "Ba hlōleha ho fumana tsa morao-rao mosebedisi lesedi",
+  "Fail to discover app information": "Ba hlōleha ho fumana lesedi app e",
+  "Settings": "Litlhophiso",
+  "App settings": "Litlhophiso tsa App",
+  "Current language": "puo jwale",
+  "Fail to load current user information":
+    "Hlōleha ho laela jwale mosebedisi lesedi",
+  "Fail to set translation": "Ba hlōleha ho beha phetolelo",
+  "Dashboard": "Dashboard",
+  "Discovering dashboards": "Ho Fumana dashboards",
+  "There no dashboard item found": "Ho na le ha ho na ntho Dashboard fumanwa",
+  "Dashboard list": "lethathamo Dashboard",
+  "Search dashboard by name": "Search Dashboard ka lebitso",
+  "Layout": "Halli",
+  "Table/ Chart Layout": "Tafole / Chate Halli",
+  "Filters": "filter",
+  "Column": "lenaneng la",
+  "Row": "Row",
+  "Categories": "Categories",
+  "Series": "Series",
+  "Update": "Update",
+  "Close": "haufi",
+  "Data": "Data",
+  "Select": "khetha",
+  "All": "All",
+  "Data elements": "likarolo Data",
+  "Indicators": "litsupa",
+  "Data sets": "disete Data",
+  "Program indicators": "litsupa lenaneo",
+  "Functions": "mesebetsi",
+  "Available": "fumaneha",
+  "Selected": "kgethile",
+  "Discovering...": "Fumana ...",
+  "No items": "Ha ho dintho",
+  "Period": "nako",
+  "Select period type": "Select mofuta nako",
+  "Previous year": "selemo se fetileng",
+  "Next year": "selemong se tlang",
+  "Org-unit": "Ru-unit trust",
+  "Interpretation": "Phetolelo",
+  "Not found": "Ha ea fumanoa",
+  "This interpretation will be deleted, are you sure?":
+    "tlhaloso ena e tla hlakolwa, na u etsa bonnete ba?",
+  "Deleting interpretation": "hlakola tlhaloso",
+  "Comment": "Comment",
+  "Edit": "Edit",
+  "Delete": "Tlosa",
+  "Updating likes status": "Tlhabololwa like boemo",
+  "Unlike": "Ho fapana",
+  "Like": "joaloka",
+  "Write new interpretation": "Ngola tlhaloso e ncha",
+  "Cancel": "Hlakola",
+  "Posting": "Posting",
+  "Post": "Post",
+  "This comment will be deleted, are you sure?":
+    "tlhaloso ena e tla hlakolwa, na u etsa bonnete ba?",
+  "Deleting comment": "phumula ho hlahisa maikutlo",
+  "Write your comment": "Ngola ho hlahisa maikutlo hao"
+}

@@ -30,7 +30,7 @@ export class EditInterpretationComponent implements OnInit {
   }
 
   getValuesToTranslate() {
-    return ['Write new interpretation', 'Cancel', 'Posting', 'Posting'];
+    return ['Write new interpretation', 'Cancel', 'Posting', 'Post'];
   }
 
   editInterpretation(e) {

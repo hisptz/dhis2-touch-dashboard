@@ -1,1 +1,111 @@
-{}
+{
+  "Innovation in every dimension": "хэмжээс бүрт шинэтгэлийн",
+  "Establishing connection to server": "сервертэй холболт тогтоох",
+  "Enter server address": "сервер хаягаа оруулна уу",
+  "Enter username": "Хэрэглэгчийн нэрээ оруулна уу",
+  "Enter password": "Нууц үгээ оруулна",
+  "Login": "Нэвтрэх",
+  "or": "эсвэл",
+  "Offline instances": "Offline тохиолдол",
+  "Powered by": "Powered хамт",
+  "Discovering system information": "Олж мэдэх системийн мэдээлэл",
+  "Discovering current user authorities":
+    "Одоогийн хэрэглэгчийн эрх баригчдад олж мэдэх",
+  "Preparing local storage": "Орон нутгийн хадгалах бэлдэх нь",
+  "Fail to prepare local storage": "Орон нутгийн хадгалах бэлтгэж чадахгүй",
+  "Fail to discover user authorities":
+    "хэрэглэгчийн эрх баригчдад олж чадахгүй",
+  "Fail to discover system information": "системийн мэдээллийг олж чадаагүй",
+  "Fail to save current user information":
+    "Одоогийн хэрэглэгчийн мэдээллийг аварч чадахгүй",
+  "Please check your network connectivity":
+    "Өөрийн сүлжээний холболтыг шалгана уу",
+  "You have enter wrong username or password or server address":
+    "Та буруу хэрэглэгчийн нэр юмуу нууц үг эсвэл сервер хаягаа оруулна байна",
+  "Please check server address, or contact your help desk":
+    "сервер хаягаа шалгана уу, эсвэл таны тусламж ширээ холбоо барина уу",
+  "Please enter server address, username and password":
+    "серверийн хаяг, хэрэглэгчийн нэр болон нууц үгээ оруулна уу",
+  "Discovering assigned organisation units":
+    "томилсон байгууллага нэгж олж мэдэх",
+  "Assigned organisation units have been loaded":
+    "Хариуцах байгууллага нэгж ачаалал ихтэй байна",
+  "Saving assigned organisation units": "томилсон байгууллага нэгж хадгалах",
+  "Assigned organisation units have been saved":
+    "Хариуцах байгууллага нэгж аварсан байна",
+  "Fail to save organisation data": "байгууллага нь мэдээллийг аварч чадахгүй",
+  "Fail to discover organisation data":
+    "байгууллага нь мэдээллийг олж чадаагүй",
+  "Search": "хайх",
+  "There is no local instance to select":
+    "сонгохын тулд ямар ч орон нутгийн жишээ байдаг",
+  "Discovering available local instances":
+    "боломжтой, орон нутгийн тохиолдлыг олж мэдэх",
+  "Fail to load available local instances":
+    "байгаа нь орон нутгийн тохиолдлыг дуудаж чадахгүй",
+  "Log out": "Гарах",
+  "About": "тухай",
+  "System info": "Системийн мэдээлэл",
+  "Discovering current user information":
+    "Одоогийн хэрэглэгчийн мэдээллийг олж мэдэх",
+  "Discovering app information": "апп мэдээллийг олж мэдэх",
+  "Fail to discover current user information":
+    "Одоогийн хэрэглэгчийн мэдээллийг олж чадаагүй",
+  "Fail to discover app information": "апп мэдээллийг олж чадаагүй",
+  "Settings": "Тохиргоо",
+  "App settings": "App тохиргоо",
+  "Current language": "Одоогийн хэл",
+  "Fail to load current user information":
+    "Одоогийн хэрэглэгчийн мэдээллийг ачаалж чадахгүй",
+  "Fail to set translation": "орчуулгыг тогтоосон чадахгүй",
+  "Dashboard": "Хянах самбар",
+  "Discovering dashboards": "Хянах самбар олж мэдэх",
+  "There no dashboard item found": "ямар ч самбар зүйл байхгүй олдлоо",
+  "Dashboard list": "Хянах самбар жагсаалт",
+  "Search dashboard by name": "нэрээр нь хянах самбар хайх",
+  "Layout": "Layout",
+  "Table / Chart Layout": "Хүснэгт / График Layout",
+  "Filters": "Шүүлтүүрүүд",
+  "Column": "багана",
+  "Row": "мөр",
+  "Categories": "Бүлгүүд",
+  "Series": "цуврал",
+  "Update": "шинэчлэх",
+  "Close": "Хаах",
+  "Data": "өгөгдлийн",
+  "Select": "сонгоно уу",
+  "All": "мэдээлэл",
+  "Data elements": "өгөгдлийн элемент",
+  "Indicators": "Шалгуур үзүүлэлт",
+  "Data sets": "өгөгдлийн багц",
+  "Program indicators": "Хөтөлбөрийн шалгуур үзүүлэлт",
+  "Functions": "чиг үүрэг",
+  "Available": "Боломжит",
+  "Selected": "сонгогдсон",
+  "Discovering...": "Олж мэдэх нь ...",
+  "No items": "Ямар ч зүйл",
+  "Period": "хугацаа",
+  "Select period type": "Сонгох хугацаа төрөл",
+  "Previous year": "Өмнөх жил",
+  "Next year": "Дараа жил",
+  "Org-unit": "ORG нэгж",
+  "Interpretation": "тайлбар",
+  "Not found": "Олдсонгүй",
+  "This interpretation will be deleted, are you sure?":
+    "Энэ тайлбар нь устгагдах болно, та итгэлтэй байна уу?",
+  "Deleting interpretation": "устгах тайлбар",
+  "Comment": "сэтгэгдэл",
+  "Edit": "Засварлах",
+  "Delete": "устгах",
+  "Updating likes status": "Шинэчилж статусыг дуртай",
+  "Unlike": "ялгаатай нь",
+  "Like": "нэгэн адил",
+  "Write new interpretation": "Шинэ тайлбарыг бичих",
+  "Cancel": "Болих",
+  "Posting": "Бичлэг оруулах тухайд",
+  "Post": "Бичлэгийн",
+  "This comment will be deleted, are you sure?":
+    "Энэ сэтгэгдэл устгагдах болно, та итгэлтэй байна уу?",
+  "Deleting comment": "устгах сэтгэгдэл",
+  "Write your comment": "Сэтгэгдэл бичих"
+}
