@@ -84,12 +84,14 @@
         </div>
         <div *ngIf="orgUnitTreeConfig.loading">{{ orgUnitTreeConfig.loading_message }}</div>
         <div class="tree-area" [ngClass]="{'someclass': orgUnitModel.selectedUserOrgUnits.length != 0}">
-            <tree-root #orgtree [nodes]="organisationunits" [focused]="true" [options]="customTemplateStringOrgunitOptions" (activate)="activateOrg($event)"
+            <!-- <tree-root #orgtree [nodes]="organisationunits" [focused]="true" [options]="customTemplateStringOrgunitOptions" (activate)="activateOrg($event)"
                 (deactivate)="deactivateOrg($event)">
                 <ng-template #treeNodeTemplate let-node>
                     <span (click)="updateModelOnSelect(node.data)">{{ node.data.name }}</span>
                 </ng-template>
-            </tree-root>
+            </tree-root> -->
+            <multi-organisation-unit [selectedOrgUnits]="orgUnitModel.selectedUserOrgUnits" (activateOrganisationUnit)="activateOrg($event)"
+                (deactivateOrganisationUnit)="deactivateOrg($event)"></multi-organisation-unit>
         </div>
 
     </div>

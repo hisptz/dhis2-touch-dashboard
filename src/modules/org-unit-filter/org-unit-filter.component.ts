@@ -382,6 +382,7 @@ export class OrgUnitFilterComponent implements OnInit, OnDestroy {
 
   // action to be called when a tree item is deselected(Remove item in array of selected items
   deactivateOrg($event) {
+    console.log('on deselect' + JSON.stringify($event));
     if (this.orgUnitModel.selectionMode === 'Usr_orgUnit') {
       this.orgUnitModel.selectionMode = 'orgUnit';
     }
@@ -395,6 +396,7 @@ export class OrgUnitFilterComponent implements OnInit, OnDestroy {
 
   // add item to array of selected items when item is selected
   activateOrg($event) {
+    console.log('on select' + JSON.stringify($event));
     if (this.orgUnitModel.selectionMode === 'Usr_orgUnit') {
       this.orgUnitModel.selectionMode = 'orgUnit';
     }
