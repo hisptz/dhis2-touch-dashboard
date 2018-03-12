@@ -3,6 +3,8 @@ import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/map';
 import { HTTP } from '@ionic-native/http';
 import { Observable } from 'rxjs/Observable';
+import { HttpClientProvider } from '../http-client/http-client';
+import { CurrentUser } from '../../models/currentUser';
 
 /*
  Generated class for the UserProvider provider.
@@ -14,22 +16,30 @@ import { Observable } from 'rxjs/Observable';
 export class UserProvider {
   public userData: any;
 
-  constructor(public storage: Storage, public http: HTTP) {}
+  constructor(
+    public storage: Storage,
+    public http: HTTP,
+    private httpProvider: HttpClientProvider
+  ) {}
 
   /**
    *
    * @param user
    * @returns {Observable<any>}
    */
-  getUserDataFromServer(user): Observable<any> {
+  getUserDataFromServer(user, withBaseUrl: boolean = false): Observable<any> {
     this.http.useBasicAuth(user.username, user.password);
     let fields =
       'fields=[:all],organisationUnits[id,name],dataViewOrganisationUnits[id,name],userCredentials[userRoles[name,dataSets[id,name],programs[id,name]]';
     let url = user.serverUrl.split('/dhis-web-commons')[0];
-    url = url.split('/dhis-web-dashboard-integration')[0];
+    url = url.split('/dhis-web-dashboard')[0];
     url = url.split('/api/apps')[0];
     user.serverUrl = url;
     url += '/api/me.json?' + fields;
+    let apiurl = url;
+    if (withBaseUrl) {
+      apiurl = this.httpProvider.getUrlBasedOnDhisVersion(url, user);
+    }
     return new Observable(observer => {
       this.http
         .get(url, {}, {})
@@ -40,7 +50,7 @@ export class UserProvider {
               this.getUserDataFromServer(user).subscribe(
                 (data: any) => {
                   let url = user.serverUrl.split('/dhis-web-commons')[0];
-                  url = url.split('/dhis-web-dashboard-integration')[0];
+                  url = url.split('/dhis-web-dashboard')[0];
                   user.serverUrl = url;
                   observer.next({ data: data.data, user: user });
                   observer.complete();
