@@ -44,6 +44,10 @@ export class HttpClientProvider {
     if (user.dhisVersion && parseInt(user.dhisVersion) < 25) {
       let pattern = '/api/' + user.dhisVersion;
       url = url.replace(pattern, '/api/');
+    } else if (user.dhisVersion && parseInt(user.dhisVersion) >= 25) {
+      //removing hardcorded /api/25 on all apps urls
+      let pattern = '/api/' + user.dhisVersion;
+      url = url.replace('/api/25', pattern);
     }
     return url;
   }
@@ -111,7 +115,7 @@ export class HttpClientProvider {
             let promises = [];
             let testUrl =
               user.serverUrl +
-              '/api/25/' +
+              '/api/' +
               resourceName +
               '.json?fields=none&pageSize=' +
               pageSize;
