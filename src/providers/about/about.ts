@@ -23,10 +23,26 @@ export class AboutProvider {
   getAboutContentDetails() {
     let syncContents = [
       //{id : 'appInformation',name : 'App information',icon: 'assets/icon/app-information.png'},
-      //{id: 'dataValues', name: 'aggregate_status', icon: 'assets/icon/data-values.png'},
-      //{id: 'eventStatus', name: 'event_status', icon: 'assets/icon/event-status.png'},
-      //{id: 'eventForTrackerStatus', name: 'event_for_tracker_status', icon: 'assets/icon/event-status.png'},
-      //{id: 'enrollment', name: 'enrollments', icon: 'assets/icon/profile-tracker.png'},
+      // {
+      //   id: "dataValues",
+      //   name: "Aggregate status",
+      //   icon: "assets/icon/data-values.png"
+      // },
+      // {
+      //   id: "eventStatus",
+      //   name: "Event status",
+      //   icon: "assets/icon/event-status.png"
+      // },
+      // {
+      //   id: "eventForTrackerStatus",
+      //   name: "Event for tracker status",
+      //   icon: "assets/icon/event-status.png"
+      // },
+      // {
+      //   id: "enrollment",
+      //   name: "Enrollments",
+      //   icon: "assets/icon/profile-tracker.png"
+      // },
       {
         id: 'systemInfo',
         name: 'System info',

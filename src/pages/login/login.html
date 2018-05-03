@@ -17,32 +17,41 @@
     </ion-row>
     <ion-row *ngIf="isLoginProcessActive" [ngClass]="animationEffect.progressBar">
       <ion-col>
-        <ion-list>
-          <ion-item>
-            <div style="text-align: center" item-left>
-              <div *ngIf="progressTracker.communication.passStepCount == progressTracker.communication.count">
-                <ion-icon name="done-all" color="favorite"></ion-icon>
+        <div *ngIf="!isNetworkAvailable">
+          <ion-list>
+            <ion-item>
+              <div style="text-align: center" item-left>
+                <div>
+                  <loading loadingSize="small"></loading>
+                </div>
               </div>
-              <div *ngIf="progressTracker.communication.passStepCount != progressTracker.communication.count">
-                <loading loadingSize="small"></loading>
+              <span text-wrap [translate]="'Authenticating current user offline'"></span>
+            </ion-item>
+          </ion-list>
+        </div>
+        <div *ngIf="isNetworkAvailable">
+          <ion-list>
+            <ion-item>
+              <div style="text-align: center" item-left>
+                <div *ngIf="progressTracker.communication.totalPassedProcesses == progressTracker.communication.expectedProcesses">
+                  <ion-icon name="done-all" color="favorite"></ion-icon>
+                </div>
+                <div *ngIf="progressTracker.communication.totalPassedProcesses != progressTracker.communication.expectedProcesses">
+                  <loading loadingSize="small"></loading>
+                </div>
               </div>
-            </div>
-            <span text-wrap *ngIf="progressTracker.communication.message !=''">
-              {{ progressTracker.communication.message|translate}}
-            </span>
-            <span text-wrap *ngIf="progressTracker.communication.message ==''">
-              <span [translate]="'Establishing connection to server'"></span>
-            </span>
-            <div style="text-align: center" item-right>
-              {{ progressTracker.communication.passStepCount}}/{{ progressTracker.communication.count}}
-            </div>
-          </ion-item>
-        </ion-list>
+              <span text-wrap *ngIf="progressTracker.communication.message !=''" [translate]="progressTracker.communication.message"></span>
+              <span text-wrap *ngIf="progressTracker.communication.message ==''" [translate]="'Establishing connection to server'"></span>
+              <div style="text-align: center" item-right>
+                {{ progressTracker.communication.totalPassedProcesses}}/{{ progressTracker.communication.expectedProcesses}}
+              </div>
+            </ion-item>
+          </ion-list>
+        </div>
       </ion-col>
     </ion-row>
 
-
-    <div *ngIf="!isLoginProcessActive">
+    <div *ngIf="!isLoginProcessActive ">
 
       <div *ngIf="isLocalInstancesListOpen && !isTranslationListOpen">
         <ion-row>
@@ -102,12 +111,6 @@
         </div>
       </div>
     </div>
-
-    <ion-row>
-      <ion-col class="bottomSLogan">
-
-      </ion-col>
-    </ion-row>
     <ion-row>
       <ion-col class="bottomSLogan">
         <p>
@@ -128,10 +131,13 @@
         </p>
         <p>
           <span class="bottom-sLogan-title">
-            <span [translate]="'Powered by'"></span> HISPTZ </span>
+            <span [translate]="'powered by'"></span> HISPTZ
+          </span>
         </p>
       </ion-col>
     </ion-row>
   </ion-grid>
+
+
 
 </ion-content>

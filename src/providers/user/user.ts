@@ -5,6 +5,7 @@ import { HTTP } from '@ionic-native/http';
 import { Observable } from 'rxjs/Observable';
 import { HttpClientProvider } from '../http-client/http-client';
 import { CurrentUser } from '../../models/currentUser';
+import { EncryptionProvider } from '../encryption/encryption';
 
 /*
  Generated class for the UserProvider provider.
@@ -17,7 +18,8 @@ export class UserProvider {
   constructor(
     public storage: Storage,
     public http: HTTP,
-    private httpProvider: HttpClientProvider
+    private httpProvider: HttpClientProvider,
+    private encryptionProvider: EncryptionProvider
   ) {}
 
   /**
@@ -139,13 +141,32 @@ export class UserProvider {
             this.getUserDataFromServer(user).subscribe(
               (data: any) => {
                 let url = user.serverUrl.split('/dhis-web-commons')[0];
-                url = url.split('/dhis-web-dashboard-integration')[0];
+                url = url.split('/dhis-web-dashboard')[0];
                 user.serverUrl = url;
                 observer.next({ data: data.data, user: data.user });
                 observer.complete();
               },
               error => {
-                observer.error(error);
+                const serverUrl = user.serverUrl;
+                const dhisInstanceName = serverUrl.split('/').pop();
+                //for other possible instances such as dev, demo
+                if (dhisInstanceName != 'dhis') {
+                  user.serverUrl = serverUrl + '/dhis';
+                  this.authenticateUser(user).subscribe(
+                    (data: any) => {
+                      let url = user.serverUrl.split('/dhis-web-commons')[0];
+                      url = url.split('/dhis-web-dashboard')[0];
+                      user.serverUrl = url;
+                      observer.next({ data: data, user: user });
+                      observer.complete();
+                    },
+                    error => {
+                      observer.error(error);
+                    }
+                  );
+                } else {
+                  observer.error(error);
+                }
               }
             );
           } else {
@@ -159,7 +180,7 @@ export class UserProvider {
               this.authenticateUser(user).subscribe(
                 (data: any) => {
                   let url = user.serverUrl.split('/dhis-web-commons')[0];
-                  url = url.split('/dhis-web-dashboard-integration')[0];
+                  url = url.split('/dhis-web-dashboard')[0];
                   user.serverUrl = url;
                   observer.next({ data: data, user: user });
                   observer.complete();
@@ -173,7 +194,7 @@ export class UserProvider {
               this.authenticateUser(user).subscribe(
                 (data: any) => {
                   let url = user.serverUrl.split('/dhis-web-commons')[0];
-                  url = url.split('/dhis-web-dashboard-integration')[0];
+                  url = url.split('/dhis-web-dashboard')[0];
                   user.serverUrl = url;
                   observer.next({ data: data, user: user });
                   observer.complete();
@@ -189,6 +210,32 @@ export class UserProvider {
             observer.error(error);
           }
         });
+    });
+  }
+
+  offlineUserAuthentication(user: CurrentUser): Observable<any> {
+    return new Observable(observer => {
+      if (user && user.hashedKeyForOfflineAuthentication) {
+        const hashedKeyForOfflineAuthentication = this.encryptionProvider.getHashedKeyForOfflineAuthentication(
+          user
+        );
+        if (
+          hashedKeyForOfflineAuthentication ==
+          user.hashedKeyForOfflineAuthentication
+        ) {
+          observer.next(user);
+          observer.complete();
+        } else {
+          observer.error({
+            error: 'You have enter wrong username or password or server address'
+          });
+        }
+      } else {
+        observer.error({
+          error:
+            'You can not login offline, please make sure you have network and try in again'
+        });
+      }
     });
   }
 

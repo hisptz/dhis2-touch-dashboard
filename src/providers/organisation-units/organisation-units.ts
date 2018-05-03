@@ -3,6 +3,8 @@ import 'rxjs/add/operator/map';
 import { SqlLiteProvider } from '../sql-lite/sql-lite';
 import { HttpClientProvider } from '../http-client/http-client';
 import { Observable } from 'rxjs/Observable';
+import { CurrentUser } from '../../models/currentUser';
+import * as _ from 'lodash';
 
 /*
   Generated class for the OrganisationUnitsProvider provider.
@@ -15,6 +17,7 @@ export interface OrganisationUnitModel {
   name: string;
   level: string;
   path: string;
+  displayName?: string;
   openingDate: string;
   closedDate: string;
   children: Array<any>;
@@ -52,44 +55,49 @@ export class OrganisationUnitsProvider {
    * @returns {Promise<T>}
    */
   downloadingOrganisationUnitsFromServer(
-    orgUnitIds,
-    currentUser
+    currentUser: CurrentUser
   ): Observable<any> {
     let orgUnits = [];
+    let counts = 0;
+    const { userOrgUnitIds } = currentUser;
     return new Observable(observer => {
-      let counts = 0;
-      for (let orgUnitId of orgUnitIds) {
-        let fields =
-          'fields=id,name,path,ancestors[id,name,children[id]],openingDate,closedDate,level,children[id,name,children[id],parent';
-        let filter = 'filter=path:ilike:';
-        let url = '/api/25/' + this.resource + '.json?';
-        url += fields + '&' + filter + orgUnitId;
-        this.HttpClient.get(
-          url,
-          false,
-          currentUser,
-          this.resource,
-          800
-        ).subscribe(
-          (response: any) => {
-            try {
-              counts = counts + 1;
-              orgUnits = this.appendOrgUnitsFromServerToOrgUnitArray(
-                orgUnits,
-                response
-              );
-              if (counts == orgUnitIds.length) {
-                observer.next(orgUnits);
-                observer.complete();
+      if (userOrgUnitIds && userOrgUnitIds.length == 0) {
+        observer.next(orgUnits);
+        observer.complete();
+      } else {
+        for (let orgUnitId of userOrgUnitIds) {
+          let fields =
+            'fields=id,name,path,ancestors[id,name,children[id]],openingDate,closedDate,level,children[id,name,children[id],parent';
+          let filter = 'filter=path:ilike:';
+          let url = '/api/25/' + this.resource + '.json?';
+          url += fields + '&' + filter + orgUnitId;
+          this.HttpClient.get(
+            url,
+            false,
+            currentUser,
+            this.resource,
+            800
+          ).subscribe(
+            (response: any) => {
+              try {
+                counts = counts + 1;
+                orgUnits = this.appendOrgUnitsFromServerToOrgUnitArray(
+                  orgUnits,
+                  response
+                );
+                if (counts == userOrgUnitIds.length) {
+                  observer.next(orgUnits);
+                  observer.complete();
+                }
+              } catch (e) {
+                observer.error(e);
               }
-            } catch (e) {
-              observer.error(e);
+            },
+            error => {
+              observer.error(error);
             }
-          },
-          error => {
-            observer.error(error);
-          }
-        );
+          );
+        }
       }
     });
   }
@@ -169,6 +177,58 @@ export class OrganisationUnitsProvider {
           }
         );
       }
+    });
+  }
+
+  getAllOrganisationUnits(currentUser: CurrentUser): Observable<any> {
+    return new Observable(observer => {
+      this.sqlLite
+        .getAllDataFromTable(this.resource, currentUser.currentDatabase)
+        .subscribe(
+          (organisationUnits: any) => {
+            this.getSortedOrganisationUnits(organisationUnits).subscribe(
+              (organisationUnits: any) => {
+                observer.next(organisationUnits);
+                observer.complete();
+              }
+            );
+          },
+          error => {
+            observer.error(error);
+          }
+        );
+    });
+  }
+
+  getAllOrganisationUnitsForSearching(
+    currentUser: CurrentUser
+  ): Observable<any> {
+    let searchedOrganisationUnits = [];
+    return new Observable(observer => {
+      this.getAllOrganisationUnits(currentUser).subscribe(
+        (organisationUnits: Array<OrganisationUnitModel>) => {
+          searchedOrganisationUnits = _.map(
+            organisationUnits,
+            (organisationUnit: OrganisationUnitModel) => {
+              const ancestors = _.reverse(organisationUnit.ancestors);
+              let label = organisationUnit.name;
+              if (ancestors && ancestors.length > 0) {
+                label = ancestors[0].name + '/' + label;
+              }
+              organisationUnit['displayName'] = label;
+              return organisationUnit;
+            }
+          );
+          searchedOrganisationUnits = _.sortBy(searchedOrganisationUnits, [
+            'displayName'
+          ]);
+          observer.next(searchedOrganisationUnits);
+          observer.complete();
+        },
+        error => {
+          observer.error(error);
+        }
+      );
     });
   }
 
@@ -327,15 +387,7 @@ export class OrganisationUnitsProvider {
    */
   getSortedOrganisationUnits(organisationUnits): Observable<any> {
     return new Observable(observer => {
-      organisationUnits.sort((a, b) => {
-        if (a.name > b.name) {
-          return 1;
-        }
-        if (a.name < b.name) {
-          return -1;
-        }
-        return 0;
-      });
+      organisationUnits = _.sortBy(organisationUnits, ['name']);
       organisationUnits.forEach((organisationUnit: any) => {
         this.sortOrganisationUnits(organisationUnit);
       });
@@ -350,15 +402,7 @@ export class OrganisationUnitsProvider {
    */
   sortOrganisationUnits(organisationUnit) {
     if (organisationUnit.children) {
-      organisationUnit.children.sort((a, b) => {
-        if (a.name > b.name) {
-          return 1;
-        }
-        if (a.name < b.name) {
-          return -1;
-        }
-        return 0;
-      });
+      organisationUnit.children = _.sortBy(organisationUnit.children, ['name']);
       organisationUnit.children.forEach(child => {
         this.sortOrganisationUnits(child);
       });

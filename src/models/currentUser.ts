@@ -1,4 +1,3 @@
-
 export interface CurrentUser {
   username: string;
   name?: string;
@@ -9,8 +8,10 @@ export interface CurrentUser {
   currentLanguage: string;
   isLogin?: boolean;
   authorizationKey?: string;
+  hashedKeyForOfflineAuthentication?: string;
   currentDatabase?: string;
   dhisVersion?: string;
   authorities?: Array<string>;
   progressTracker?: any;
+  userOrgUnitIds?: Array<string>;
 }
