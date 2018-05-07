@@ -1,3 +1,16 @@
 page-dashboard {
+  .selected-dashboard-block {
+    border: 1px solid #ddd;
+    padding: 5px 10px 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    img {
+      height: 25px;
+    }
+  }
 
+  .visualization-card-container {
+    width: 100%;
+  }
 }

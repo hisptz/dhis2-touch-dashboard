@@ -1,0 +1,48 @@
+<div class="visualization-card">
+  <!--visualization title block-->
+  <div class="visualization-title-block">
+    <visualization-title-section
+      [id]="id"
+      [uiConfigId]="(visualizationUiConfig$ | async)?.id"
+      [showBody]="(visualizationUiConfig$ | async)?.showBody"
+      [type]="(visualizationConfig$ | async)?.currentType"
+      [name]="(visualizationObject$ | async)?.name"
+      (toggleVisualization)="onToggleVisualizationBody($event)"
+    ></visualization-title-section>
+  </div>
+  <!--end of visualization title block-->
+
+  <!--visualization body block-->
+  <div class="visualization-body-block"
+       [style.height]="(visualizationUiConfig$ | async)?.height"
+       *ngIf="(visualizationUiConfig$ | async)?.showBody">
+    <!--visualization body header-->
+    <div class="visualization-body-header-block">
+      <visualization-header-section></visualization-header-section>
+    </div>
+    <!--end of visualization body header-->
+
+    <!--visualization body content block-->
+    <div class="visualization-body-content-block" [style.height]="(visualizationUiConfig$ | async)?.height">
+      <visualization-body-section
+        [id]="id"
+        [currentType]="(visualizationConfig$ | async)?.currentType"
+        [visualizationUiConfig]="visualizationUiConfig$ | async"
+        [visualizationLayers]="visualizationLayers$ | async"
+        [visualizationConfig]="visualizationConfig$ | async"
+      ></visualization-body-section>
+    </div>
+    <!--end of visualization body content block-->
+
+    <!--visualization body footer block-->
+    <div class="visualization-body-footer-block">
+      <visualization-footer-section
+        [type]="(visualizationConfig$ | async)?.currentType"
+        [configId]="(visualizationConfig$ | async)?.id"
+        (visualizationTypeChange)="onVisualizationTypeChange($event)"
+      ></visualization-footer-section>
+    </div>
+    <!-- end of visualization body footer block-->
+  </div>
+  <!--end of visualization body block-->
+</div>

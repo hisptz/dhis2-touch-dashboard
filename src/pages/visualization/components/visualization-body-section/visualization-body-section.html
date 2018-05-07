@@ -1,0 +1,50 @@
+<div class="visualization-body-section-container">
+  <!--chart visualization-->
+  <div class="chart-visualization-block" *ngIf="currentType === 'CHART'">
+    <chart-list [visualizationId]="id" [visualizationLayers]="visualizationLayers" [chartHeight]="visualizationUiConfig.height"></chart-list>
+  </div>
+  <!--end of chart visualization-->
+
+  <!--table visualization-->
+  <div class="chart-visualization-block" *ngIf="currentType === 'TABLE'">
+    <table-list [visualizationLayers]="visualizationLayers" [visualizationType]="currentType"></table-list>
+  </div>
+  <!--end of table visualization-->
+
+  <!--map visualization-->
+  <div class="chart-visualization-block" *ngIf="currentType === 'MAP'">
+    Map
+  </div>
+  <!--end of map visualization-->
+
+  <!--info/dictionary visualization-->
+  <div class="chart-visualization-block" *ngIf="currentType === 'INFO'">
+    <dictionary-list [visualizationLayers]="visualizationLayers"></dictionary-list>
+  </div>
+  <!--end of info/dictionary visualization-->
+
+  <!--users visualization-->
+  <div class="chart-visualization-block" *ngIf="currentType === 'USERS'">
+    Users
+  </div>
+  <!--end of users visualization-->
+
+  <!--resources visualization-->
+  <div class="chart-visualization-block" *ngIf="currentType === 'RESOURCES'">
+    Resources
+  </div>
+  <!--end of resources visualization-->
+
+  <!--reports visualization-->
+  <div class="chart-visualization-block" *ngIf="currentType === 'REPORTS'">
+    Reports
+  </div>
+  <!--end of reports visualization-->
+
+  <!--reports visualization-->
+  <div class="chart-visualization-block" *ngIf="currentType === 'APP'">
+    App
+  </div>
+  <!--end of reports visualization-->
+
+</div>
