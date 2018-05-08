@@ -13,7 +13,7 @@ export class AnalyticsService {
     const analyticsUrl = (layerType === 'thematic' || layerType === 'event') ?
                          getAnalyticsUrl(dataSelections, layerType, config) :
                          '';
-    return analyticsUrl !== '' ? this.http.get(analyticsUrl) : of(null);
+    return analyticsUrl !== '' ? this.http.get(`/api/${analyticsUrl}`, true) : of(null);
 
   }
 }

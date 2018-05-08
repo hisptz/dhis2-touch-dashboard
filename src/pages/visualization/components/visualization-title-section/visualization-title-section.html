@@ -1,4 +1,8 @@
 <div class="visualization-title-section" (click)="onToggleVisualization($event)">
-  <div>{{type}} {{name}}</div>
-  <div >actions</div>
+  <div class="title-block">
+    <img [src]="visualizationIcons[type]" alt="">
+    &nbsp;
+    <div>{{name}}</div>
+  </div>
+  <img [src]="showBody ? 'assets/icon/arrow-up.png' : 'assets/icon/arrow-down.png'" alt="">
 </div>

@@ -45,7 +45,7 @@ export class DictionaryEffects {
           .pipe(
             mergeMap(identifier =>
               this.httpClient.get(
-                `identifiableObjects/${identifier}.json`,
+                `/api/identifiableObjects/${identifier}.json`,
                 true
               )
             )
@@ -98,7 +98,7 @@ export class DictionaryEffects {
     );
 
   getDataSetInfo(dataSetUrl: string, dataSetId: string) {
-    this.httpClient.get(dataSetUrl, true).subscribe((dataSet: any) => {
+    this.httpClient.get(`/api/${dataSetUrl}`, true).subscribe((dataSet: any) => {
       let dataSetDescription =
         '<p>' +
         dataSet.name +
@@ -178,7 +178,7 @@ export class DictionaryEffects {
   }
 
   getDataElementInfo(dataElementUrl: string, dataElementId: string) {
-    this.httpClient.get(dataElementUrl, true).subscribe((dataElement: any) => {
+    this.httpClient.get(`/api/${dataElementUrl}`, true).subscribe((dataElement: any) => {
       let dataElementDescription =
         '<p>This ' +
         dataElement.name +
@@ -322,7 +322,7 @@ export class DictionaryEffects {
   }
 
   getIndicatorInfo(indicatorUrl: string, indicatorId: string) {
-    this.httpClient.get(indicatorUrl, true).subscribe((indicator: any) => {
+    this.httpClient.get(`/api/${indicatorUrl}`, true).subscribe((indicator: any) => {
       let indicatorDescription =
         '<p><strong>' +
         indicator.name +
@@ -369,12 +369,12 @@ export class DictionaryEffects {
        */
       Observable.forkJoin(
         this.httpClient.get(
-          'expressions/description?expression=' +
+          '/api/expressions/description?expression=' +
             encodeURIComponent(indicator.numerator),
           true
         ),
         this.httpClient.get(
-          'dataSets.json?fields=periodType,id,name,timelyDays,formType,created,expiryDays&' +
+          '/api/dataSets.json?fields=periodType,id,name,timelyDays,formType,created,expiryDays&' +
             'filter=dataSetElements.dataElement.id:in:[' +
             this.getAvailableDataElements(indicator.numerator) +
             ']&paging=false',
@@ -434,11 +434,11 @@ export class DictionaryEffects {
          */
         Observable.forkJoin(
           this.httpClient.get(
-            'expressions/description?expression=' +
+            '/api/expressions/description?expression=' +
               encodeURIComponent(indicator.denominator), true
           ),
           this.httpClient.get(
-            'dataSets.json?fields=periodType,id,name,timelyDays,formType,created,expiryDays&' +
+            '/api/dataSets.json?fields=periodType,id,name,timelyDays,formType,created,expiryDays&' +
               'filter=dataSetElements.dataElement.id:in:[' +
               this.getAvailableDataElements(indicator.denominator) +
               ']&paging=false', true

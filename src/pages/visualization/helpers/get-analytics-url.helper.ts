@@ -9,10 +9,20 @@ export function getAnalyticsUrl(dataSelections: VisualizationDataSelection[], la
 }
 
 function flattenDimensions(dataSelections: VisualizationDataSelection[]): string {
-  return _.map(dataSelections, (dataSelection: VisualizationDataSelection) => {
-    const selectionValues = _.map(dataSelection.items, item => item.id).join(';');
+  const isEligibleForAnalytics = _.filter(
+    _.map(dataSelections, dataSelection => ['ou', 'pe'].indexOf(dataSelection.dimension) !== -1),
+    isEligible => isEligible).length === 2;
+
+  if (!isEligibleForAnalytics) {
+    return '';
+  }
+  const dimensions = _.filter(_.map(dataSelections, (dataSelection: VisualizationDataSelection) => {
+    const selectionValues = dataSelection.filter ? dataSelection.filter :
+      _.map(dataSelection.items, item => item.id).join(';');
     return selectionValues !== '' ? 'dimension=' + dataSelection.dimension + ':' + selectionValues : '';
-  }).join('&');
+  }), dimension => dimension !== '');
+
+  return dimensions.join('&');
 }
 
 function getAggregateAnalyticsUrl(dataSelections: VisualizationDataSelection[], layerType: string,
@@ -43,9 +53,10 @@ function getAnalyticsUrlOptions(config: any, layerType: string) {
 }
 
 function getEventAnalyticsUrl(dataSelections: VisualizationDataSelection[], layerType: string, config: any) {
-  const analyticsUrlFields = getProgramParameters(config) + getEventAnalyticsUrlSection(
-    config) + getEventAnalyticsStartAndEndDateSection(config) + flattenDimensions(
-    dataSelections) + getAnalyticsUrlOptions(config, layerType);
+  const flattenedDimensionString = flattenDimensions(dataSelections);
+  const analyticsUrlFields = flattenedDimensionString !== '' ? getEventAnalyticsUrlSection(
+    config) + getProgramParameters(config) + getEventAnalyticsStartAndEndDateSection(config) + flattenDimensions(
+    dataSelections) + getAnalyticsUrlOptions(config, layerType) : '';
   return analyticsUrlFields !== '' ? 'analytics/events/' + analyticsUrlFields : '';
 }
 
@@ -55,7 +66,7 @@ function getProgramParameters(config: any): string {
 }
 
 function getEventAnalyticsUrlSection(config) {
-  return config && (config.dataType || config.aggregate || config.eventClustering) ?
+  return config ?
     (config.dataType !== 'AGGREGATED_VALUES' || !config.aggregate) ? config.eventClustering ? 'count/' : 'query/' :
       'aggregate/' : '';
 }

@@ -2,5 +2,15 @@ visualization-title-section {
   .visualization-title-section {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+
+    img {
+      height: 20px;
+    }
+
+    .title-block {
+      display: flex;
+      align-items: center;
+    }
   }
 }

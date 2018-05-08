@@ -9,8 +9,8 @@ export function getSelectionDimensionsFromFavorite(favoriteLayer) {
 }
 
 function getStandardizedDimensions(dimensions, dimensionLayout: string) {
-
   return _.map(dimensions, dimensionObject => {
+
     return {
       dimension: dimensionObject.dimension,
       layout: dimensionLayout,

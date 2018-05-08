@@ -7,11 +7,13 @@ import { CommonModule } from '@angular/common';
 import { services } from './services';
 import { components } from './components';
 import { modules } from './modules';
+import { pipes } from './pipes';
 
 @NgModule({
   declarations: [
     ...containers,
-    ...components
+    ...components,
+    ...pipes
   ],
   imports: [
     CommonModule,

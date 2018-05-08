@@ -28,4 +28,12 @@ app-visualization-card {
   .visualization-body-content-block {
     overflow: auto;
   }
+
+  .visualization-error-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 10px;
+  }
 }

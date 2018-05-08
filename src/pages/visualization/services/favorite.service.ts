@@ -10,6 +10,6 @@ export class FavoriteService {
 
   getFavorite(favorite: {id: string, type: string}) {
     const favoriteUrl = getFavoriteUrl(favorite);
-    return favoriteUrl ? this.http.get(favoriteUrl) : of(null);
+    return favoriteUrl !== '' ? this.http.get(`/api/${favoriteUrl}`, true) : of(null);
   }
 }

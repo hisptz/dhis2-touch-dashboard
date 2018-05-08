@@ -40,6 +40,15 @@ export class VisualizationLayerEffects {
             message: 'Analytics loaded'
           }
         }));
+      }, error => {
+        this.store.dispatch(new UpdateVisualizationObjectAction(action.visualizationId, {
+          progress: {
+            statusCode: error.status,
+            statusText: 'Error',
+            percent: 100,
+            message: error.error
+          }
+        }));
       });
     }));
 }

@@ -4,7 +4,7 @@ import { VisualizationLayout } from './visualization-layout.model';
 
 export interface VisualizationLayer {
   id: string;
-  analytics: Analytics;
+  analytics?: Analytics;
   dataSelections?: VisualizationDataSelection[];
   layout?: VisualizationLayout;
   metadataIdentifiers?: Array<string>;

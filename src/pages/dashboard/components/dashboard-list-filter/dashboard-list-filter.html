@@ -16,7 +16,7 @@
 
 <ion-content>
   <ion-searchbar animated="true" autocomplete="on" placeholder="{{'Search dashboard by name'}}" (ionInput)="onDashboardSearch($event)"></ion-searchbar>
-  <ion-list [virtualScroll]="dashboards$ | async | filterByName: searchTerm">
+  <ion-list [virtualScroll]="dashboards$ | async | filterByName: searchTerm" [approxItemHeight]="'40px'">
     <ion-item *virtualItem="let dashboard" (tap)="onSetCurrentDashboard(dashboard)">
       <span ion-text [color]="((currentDashboard$ | async).id === dashboard.id) ? 'current' : 'font-color'">{{ dashboard.name }}</span>
     </ion-item>

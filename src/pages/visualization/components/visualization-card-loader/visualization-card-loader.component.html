@@ -1,0 +1,26 @@
+<div class="visualization-card-loader-container">
+    <div class="loader-block">
+        <div class="chart-loader" *ngIf="visualizationType === 'CHART'">
+            <div class="animated-background" style="margin-top: 30%;">
+            </div>
+            <div class="animated-background" style="margin-top: 20%;">
+            </div>
+            <div class="animated-background" style="height: 100%;">
+            </div>
+            <div class="animated-background" style="margin-top: 10%;">
+            </div>
+            <div class="animated-background" style="margin-top: 25%;">
+            </div>
+            <div class="animated-background" style="margin-top: 20%;">
+            </div>
+        </div>
+        <div class="table-loader" *ngIf="visualizationType === 'TABLE'">
+            <div *ngFor="let tableCell of tableCellCounts" class="animated-background">
+            </div>
+        </div>
+    </div>
+    <div class="map-loader" *ngIf="visualizationType === 'MAP'">
+        <div class="map-image animated-background">
+        </div>
+    </div>
+</div>

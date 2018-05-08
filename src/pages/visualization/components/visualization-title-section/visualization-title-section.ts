@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { VisualizationIcons } from '../../models/visualization-icons.model';
+import { VISUALIZATION_ICONS } from '../../constants/visualization-icons.constant';
 
 /**
  * Generated class for the VisualizationTitleSectionComponent component.
@@ -18,9 +20,10 @@ export class VisualizationTitleSectionComponent {
   @Input() name: string;
   @Input() type: string;
   @Output() toggleVisualization: EventEmitter<{id: string, showBody: boolean}> = new EventEmitter<{id: string, showBody: boolean}>();
+  visualizationIcons: VisualizationIcons;
 
   constructor() {
-
+    this.visualizationIcons = VISUALIZATION_ICONS;
   }
 
   onToggleVisualization(e) {

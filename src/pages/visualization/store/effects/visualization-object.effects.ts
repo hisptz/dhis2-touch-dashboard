@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import * as _ from 'lodash';
 import {
-  InitializeVisualizationObjectAction, LoadVisualizationFavoriteAction, LoadVisualizationFavoriteFailAction,
+  InitializeVisualizationObjectAction, LoadVisualizationFavoriteAction,
   LoadVisualizationFavoriteSuccessAction,
   UpdateVisualizationObjectAction,
   VisualizationObjectActionTypes
@@ -56,12 +56,19 @@ export class VisualizationObjectEffects {
     mergeMap(
       (action: LoadVisualizationFavoriteAction) => this.favoriteService.getFavorite(action.visualization.favorite).
         pipe(map((favorite: any) => new LoadVisualizationFavoriteSuccessAction(action.visualization, favorite)),
-          catchError((error) => of(new LoadVisualizationFavoriteFailAction(action.visualization.id, error))))));
+          catchError((error) => of(new UpdateVisualizationObjectAction(action.visualization.id, {
+              progress: {
+                statusCode: error.status,
+                statusText: 'Error',
+                percent: 100,
+                message: error.error
+              }
+            })
+          )))));
 
   @Effect({dispatch: false}) loadFavoriteSuccess$ = this.actions$.ofType(
     VisualizationObjectActionTypes.LOAD_VISUALIZATION_FAVORITE_SUCCESS).
     pipe(tap((action: LoadVisualizationFavoriteSuccessAction) => {
-
       if (action.favorite) {
         // prepare global visualization configurations
         this.store.dispatch(new AddVisualizationConfigurationAction(
@@ -77,7 +84,7 @@ export class VisualizationObjectEffects {
         // generate visualization layers
         const visualizationLayers: VisualizationLayer[] = _.map(action.favorite.mapViews || [action.favorite],
           (favoriteLayer: any) => {
-          const dataSelections = getSelectionDimensionsFromFavorite(favoriteLayer);
+            const dataSelections = getSelectionDimensionsFromFavorite(favoriteLayer);
             return {
               id: favoriteLayer.id,
               dataSelections,
