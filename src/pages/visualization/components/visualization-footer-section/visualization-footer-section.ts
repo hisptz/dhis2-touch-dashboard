@@ -14,6 +14,7 @@ export class VisualizationFooterSectionComponent {
 
   @Input() type: string;
   @Input() configId: string;
+  @Input() hideTypeButtons: boolean;
   @Output() visualizationTypeChange: EventEmitter<{id: string, type: string}> = new EventEmitter<{id: string, type: string}>();
 
   constructor() {

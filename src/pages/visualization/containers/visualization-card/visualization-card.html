@@ -70,10 +70,18 @@
       <visualization-footer-section
         [type]="(visualizationConfig$ | async)?.currentType"
         [configId]="(visualizationConfig$ | async)?.id"
+        [hideTypeButtons]="(visualizationUiConfig$ | async)?.hideTypeButtons"
         (visualizationTypeChange)="onVisualizationTypeChange($event)"
       ></visualization-footer-section>
     </div>
     <!-- end of visualization body footer block-->
   </div>
   <!--end of visualization body block-->
+
+  <!--visualization chating block-->
+  <div class="visualization-chat-block" *ngIf="(visualizationUiConfig$ | async)?.showInterpretionBlock &&
+  (visualizationUiConfig$ | async)?.showBody">
+    Chating
+  </div>
+  <!--end of visualization chating block-->
 </div>

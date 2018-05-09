@@ -10,4 +10,5 @@ export interface VisualizationUiConfig {
   height: string;
   width: string;
   fullScreen: boolean;
+  showInterpretionBlock: boolean;
 }

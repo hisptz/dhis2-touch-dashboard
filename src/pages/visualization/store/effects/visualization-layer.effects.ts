@@ -7,7 +7,7 @@ import {
   LoadVisualizationAnalyticsAction, LoadVisualizationAnalyticsSuccessAction,
   VisualizationLayerActionTypes
 } from '../actions/visualization-layer.actions';
-import { map, tap } from 'rxjs/operators';
+import {tap } from 'rxjs/operators';
 import { AnalyticsService } from '../../services/analytics.service';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { UpdateVisualizationObjectAction } from '../actions/visualization-object.actions';

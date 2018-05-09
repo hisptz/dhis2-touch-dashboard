@@ -10,9 +10,8 @@ export class DashboardService {
 
   constructor(private http: HttpClientProvider) {
     this.dashboardUrlFields = '?fields=id,name,publicAccess,access,externalAccess,created,lastUpdated,' +
-      'user[id,name],dashboardItems[id,type,created,lastUpdated,shape,appKey,reports[id,displayName],chart[id,displayName],' +
-      'map[id,displayName],reportTable[id,displayName],eventReport[id,displayName],eventChart[id,displayName],' +
-      'resources[id,displayName],users[id,displayName]]&paging=false';
+      'user[id,name],dashboardItems[id,type,created,lastUpdated,shape,appKey,chart[id,displayName],' +
+      'map[id,displayName],reportTable[id,displayName],eventReport[id,displayName],eventChart[id,displayName]]&paging=false';
   }
 
   loadAll(): Observable<Dashboard[]> {

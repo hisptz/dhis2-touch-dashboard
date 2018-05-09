@@ -1,14 +1,16 @@
 import * as _ from 'lodash';
 
 export function getSelectionDimensionsFromFavorite(favoriteLayer) {
+  const favoriteDataElements = _.map(favoriteLayer.dataElementDimensions,
+    dataElementDimension => dataElementDimension.dataElement);
   return [
-    ...getStandardizedDimensions(favoriteLayer.rows, 'rows'),
-    ...getStandardizedDimensions(favoriteLayer.columns, 'columns'),
-    ...getStandardizedDimensions(favoriteLayer.filters, 'filters')
+    ...getStandardizedDimensions(favoriteLayer.rows, favoriteDataElements, 'rows'),
+    ...getStandardizedDimensions(favoriteLayer.columns, favoriteDataElements, 'columns'),
+    ...getStandardizedDimensions(favoriteLayer.filters, favoriteDataElements, 'filters')
   ];
 }
 
-function getStandardizedDimensions(dimensions, dimensionLayout: string) {
+function getStandardizedDimensions(dimensions: any[], dataElements: any[], dimensionLayout: string) {
   return _.map(dimensions, dimensionObject => {
 
     return {
@@ -16,7 +18,8 @@ function getStandardizedDimensions(dimensions, dimensionLayout: string) {
       layout: dimensionLayout,
       filter: dimensionObject.filter,
       items: _.map(dimensionObject.items, item => {
-        return {id: item.dimensionItem || item.id, name: item.displayName, type: item.dimensionItemType};
+        const itemInfo = _.find(dataElements, 'id', item.id);
+        return {id: item.dimensionItem || item.id, name: item.displayName, type: item.dimensionItemType, optionSet: itemInfo ? itemInfo.optionSet : null};
       })
     };
   });

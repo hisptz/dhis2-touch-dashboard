@@ -489,24 +489,29 @@ ion-select {
   animation-duration: 600ms;
 }
 
+// Table styles
+
+.list-table {
+  -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+  -moz-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+  width: 100%;
+  text-align: left;
+  tr:hover {
+    background-color: #eeeeee;
+  }
+  th, td {
+    padding: 10px;
+    border-bottom: solid 1px rgba(0, 0, 0, 0.03);
+    font-size: 1.2rem;
+  }
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
 /* Zebra striping */
-
-.table .table-bordered > thead {
-  background: #fbfbfb;
-  overflow: auto;
-}
-
-th {
-  font-weight: bold;
-}
-
-td,
-th {
-  padding: 6px;
-  border: 1px solid #e6e6e7;
-  text-align: center;
-  min-height: 2.1rem;
-}
 
 .chart-icon {
   width: 30px;

@@ -24,27 +24,33 @@
   <!--end of info/dictionary visualization-->
 
   <!--users visualization-->
-  <div class="chart-visualization-block" *ngIf="currentType === 'USERS'">
-    Users
+  <div class="users-visualization-block" *ngIf="currentType === 'USERS'">
+    <users [visualizationLayers]="visualizationLayers"></users>
   </div>
   <!--end of users visualization-->
 
   <!--resources visualization-->
-  <div class="chart-visualization-block" *ngIf="currentType === 'RESOURCES'">
-    Resources
+  <div class="resources-visualization-block" *ngIf="currentType === 'RESOURCES'">
+    <resources [visualizationLayers]="visualizationLayers"></resources>
   </div>
   <!--end of resources visualization-->
 
   <!--reports visualization-->
-  <div class="chart-visualization-block" *ngIf="currentType === 'REPORTS'">
-    Reports
+  <div class="reports-visualization-block" *ngIf="currentType === 'REPORTS'">
+    <reports [visualizationLayers]="visualizationLayers"></reports>
   </div>
   <!--end of reports visualization-->
 
-  <!--reports visualization-->
+  <!--app visualization-->
   <div class="chart-visualization-block" *ngIf="currentType === 'APP'">
     App
   </div>
-  <!--end of reports visualization-->
+  <!--end of app visualization-->
+
+  <!--messages visualization-->
+  <div class="message-visualization-block" *ngIf="currentType === 'MESSAGES'">
+    <app-message-conversation-list [height]="visualizationUiConfig.height"></app-message-conversation-list>
+  </div>
+  <!--end of messages visualization-->
 
 </div>

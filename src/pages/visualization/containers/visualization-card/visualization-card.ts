@@ -18,7 +18,9 @@ import { VisualizationProgress } from '../../models/visualization-progress.model
 import { VisualizationConfig } from '../../models/visualization-config.model';
 import { getCurrentVisualizationConfig } from '../../store/selectors/visualization-configuration.selectors';
 import { ShowOrHideVisualizationBodyAction } from '../../store/actions/visualization-ui-configuration.actions';
-import { UpdateVisualizationTypeAction } from '../../store/actions/visualization-configuration.actions';
+import {
+  UpdateVisualizationConfigurationAction
+} from '../../store/actions/visualization-configuration.actions';
 
 @Component({
   selector: 'app-visualization-card',
@@ -72,7 +74,7 @@ export class VisualizationCard implements OnInit, OnChanges, AfterViewInit {
 
   onVisualizationTypeChange(visualizationTypeObject) {
     this.store.dispatch(
-      new UpdateVisualizationTypeAction(visualizationTypeObject.id, {currentType: visualizationTypeObject.type}));
+      new UpdateVisualizationConfigurationAction(visualizationTypeObject.id, {currentType: visualizationTypeObject.type}));
   }
 
 }

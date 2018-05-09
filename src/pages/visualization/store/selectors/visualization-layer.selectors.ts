@@ -7,6 +7,7 @@ import {
 } from '../reducers';
 import { Visualization } from '../../models/visualization.model';
 import { VisualizationUiConfig } from '../../models/visualization-ui-config.model';
+import { VisualizationLayer } from '../../models/visualization-layer.model';
 
 export const getCurrentVisualizationObjectLayers = (visualizationId: string) => createSelector(
   getVisualizationObjectEntities, getVisualizationLayerEntities, getVisualizationUiConfigurationEntities,
@@ -17,6 +18,6 @@ export const getCurrentVisualizationObjectLayers = (visualizationId: string) => 
     }
 
     const currentVisualizationUiConfiguration: VisualizationUiConfig = visualizationUiConfigurationEntities[currentVisualizationObject.uiConfigId];
-    return currentVisualizationUiConfiguration.showBody ? _.filter(_.map(currentVisualizationObject.layers, layer => visualizationLayerEntities[layer]),
-      layer => layer): [];
+    return currentVisualizationUiConfiguration.showBody ? _.filter(_.map(currentVisualizationObject.layers, (layerId: string) => visualizationLayerEntities[layerId]),
+      (layer: VisualizationLayer) => layer): [];
   });

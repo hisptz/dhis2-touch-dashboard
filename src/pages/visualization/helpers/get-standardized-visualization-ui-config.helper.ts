@@ -12,6 +12,7 @@ export function getStandardizedVisualizationUiConfig(visualizationItem: any): Vi
     showBody: visualizationItem.isOpen,
     fullScreen: false,
     hideFilters: isNonVisualizable,
-    hideTypeButtons: isNonVisualizable
+    hideTypeButtons: isNonVisualizable,
+    showInterpretionBlock: !isNonVisualizable
   }
 }

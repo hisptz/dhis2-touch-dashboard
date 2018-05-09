@@ -17,7 +17,7 @@ export function visualizationConfigurationReducer(state: VisualizationConfigurat
   switch (action.type) {
     case VisualizationConfigurationActionTypes.ADD_VISUALIZATION_CONFIGURATION:
       return visualizationConfigurationAdapter.addOne(action.visualizationConfiguration, state);
-    case VisualizationConfigurationActionTypes.UPDATE_VISUALIZATION_TYPE:
+    case VisualizationConfigurationActionTypes.UPDATE_VISUALIZATION_CONFIGURATION:
       return visualizationConfigurationAdapter.updateOne({id: action.id, changes: action.changes}, state);
   }
   return state;

@@ -16,7 +16,10 @@ import { of } from 'rxjs/observable/of';
 import { getSelectionDimensionsFromFavorite } from '../../helpers/get-selection-dimensions-from-favorite.helper';
 import { AddVisualizationLayerAction, LoadVisualizationAnalyticsAction } from '../actions/visualization-layer.actions';
 import { VisualizationLayer } from '../../models/visualization-layer.model';
-import { AddVisualizationConfigurationAction } from '../actions/visualization-configuration.actions';
+import {
+  AddVisualizationConfigurationAction,
+  UpdateVisualizationConfigurationAction
+} from '../actions/visualization-configuration.actions';
 import { getVisualizationLayerType } from '../../helpers/get-visualization-layer-type.helper';
 import { getVisualizationLayout } from '../../helpers/get-visualization-layout.helper';
 import { getVisualizationMetadataIdentifiers } from '../../helpers/get-visualization-metadata-identifier.helper';
@@ -33,18 +36,15 @@ export class VisualizationObjectEffects {
       ([action, visualizationObjectEntities]: [InitializeVisualizationObjectAction, {[id: string]: Visualization}]) => {
         const visualizationObject: Visualization = visualizationObjectEntities[action.id];
 
-        if (visualizationObject && !visualizationObject.progress) {
-          // Set initial Progress
-          this.store.dispatch(new UpdateVisualizationObjectAction(visualizationObject.id, {
-            progress: {
-              statusCode: 200,
-              statusText: 'OK',
-              percent: 0,
-              message: 'Loading favorite information'
-            }
-          }));
+        if (visualizationObject) {
+          // set initial global visualization configurations
+          this.store.dispatch(new AddVisualizationConfigurationAction(
+            {
+              id: visualizationObject.visualizationConfigId,
+              currentType: visualizationObject.type,
+            }));
 
-          //Load favorite information
+          // Load favorite information
           if (visualizationObject.favorite) {
             this.store.dispatch(
               new LoadVisualizationFavoriteAction(visualizationObject));
@@ -69,51 +69,90 @@ export class VisualizationObjectEffects {
   @Effect({dispatch: false}) loadFavoriteSuccess$ = this.actions$.ofType(
     VisualizationObjectActionTypes.LOAD_VISUALIZATION_FAVORITE_SUCCESS).
     pipe(tap((action: LoadVisualizationFavoriteSuccessAction) => {
-      if (action.favorite) {
-        // prepare global visualization configurations
-        this.store.dispatch(new AddVisualizationConfigurationAction(
-          {
-            id: action.visualization.visualizationConfigId,
-            currentType: action.visualization.type,
-            basemap: action.favorite.basemap,
-            zoom: action.favorite.zoom,
-            latitude: action.favorite.latitude,
-            longitude: action.favorite.longitude,
-          }));
+      const visualizationFavoriteOptions = action.visualization && action.visualization.favorite ?
+        action.visualization.favorite : null;
 
-        // generate visualization layers
-        const visualizationLayers: VisualizationLayer[] = _.map(action.favorite.mapViews || [action.favorite],
-          (favoriteLayer: any) => {
-            const dataSelections = getSelectionDimensionsFromFavorite(favoriteLayer);
-            return {
-              id: favoriteLayer.id,
-              dataSelections,
-              layout: getVisualizationLayout(dataSelections),
-              metadataIdentifiers: getVisualizationMetadataIdentifiers(dataSelections),
-              layerType: getVisualizationLayerType(action.visualization.favorite.type, favoriteLayer),
-              analytics: null,
-              config: _.omit(favoriteLayer, ['id', 'rows', 'columns', 'filters'])
-            };
+      if (visualizationFavoriteOptions && action.favorite) {
+        if (visualizationFavoriteOptions.requireAnalytics) {
+          // update global visualization configurations
+          this.store.dispatch(new UpdateVisualizationConfigurationAction(
+            action.visualization.visualizationConfigId, {
+              basemap: action.favorite.basemap,
+              zoom: action.favorite.zoom,
+              latitude: action.favorite.latitude,
+              longitude: action.favorite.longitude,
+            }));
+
+          // generate visualization layers
+          const visualizationLayers: VisualizationLayer[] = _.map(action.favorite.mapViews || [action.favorite],
+            (favoriteLayer: any) => {
+              const dataSelections = getSelectionDimensionsFromFavorite(favoriteLayer);
+              return {
+                id: favoriteLayer.id,
+                dataSelections,
+                layout: getVisualizationLayout(dataSelections),
+                metadataIdentifiers: getVisualizationMetadataIdentifiers(dataSelections),
+                layerType: getVisualizationLayerType(action.visualization.favorite.type, favoriteLayer),
+                analytics: null,
+                config: _.omit(favoriteLayer, ['id', 'rows', 'columns', 'filters'])
+              };
+            });
+
+          // Add visualization Layers
+          _.each(visualizationLayers, visualizationLayer => {
+            this.store.dispatch(new AddVisualizationLayerAction(visualizationLayer));
           });
 
-        // Add visualization Layers
-        _.each(visualizationLayers, visualizationLayer => {
-          this.store.dispatch(new AddVisualizationLayerAction(visualizationLayer));
-        });
+          // Update visualization object
+          this.store.dispatch(new UpdateVisualizationObjectAction(action.visualization.id, {
+            layers: _.map(visualizationLayers, visualizationLayer => visualizationLayer.id),
+            progress: {
+              statusCode: 200,
+              statusText: 'OK',
+              percent: 50,
+              message: 'Favorite information has been loaded'
+            }
+          }));
 
+          //Load analytics for visualization layers
+          this.store.dispatch(new LoadVisualizationAnalyticsAction(action.visualization.id, visualizationLayers));
+        } else {
+          const visualizationLayers: VisualizationLayer[] = _.map([action.favorite], favoriteLayer => {
+            return {
+              id: favoriteLayer.id,
+              analytics: {
+                rows: favoriteLayer[visualizationFavoriteOptions.type]
+              }
+            }
+          });
+
+          // Update visualization object
+          this.store.dispatch(new UpdateVisualizationObjectAction(action.visualization.id, {
+            layers: _.map(visualizationLayers, visualizationLayer => visualizationLayer.id),
+            progress: {
+              statusCode: 200,
+              statusText: 'OK',
+              percent: 100,
+              message: 'Information has been loaded'
+            }
+          }));
+
+          // Add visualization Layers
+          _.each(visualizationLayers, visualizationLayer => {
+            this.store.dispatch(new AddVisualizationLayerAction(visualizationLayer));
+          });
+        }
+      } else {
         // Update visualization object
         this.store.dispatch(new UpdateVisualizationObjectAction(action.visualization.id, {
-          layers: _.map(visualizationLayers, visualizationLayer => visualizationLayer.id),
+          layers: [visualizationFavoriteOptions.id],
           progress: {
             statusCode: 200,
             statusText: 'OK',
-            percent: 50,
-            message: 'Favorite information has been loaded'
+            percent: 100,
+            message: 'Information has been loaded'
           }
         }));
-
-        //Load analytics for visualization layers
-        this.store.dispatch(new LoadVisualizationAnalyticsAction(action.visualization.id, visualizationLayers));
       }
     }));
 }

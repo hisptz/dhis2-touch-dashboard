@@ -10,6 +10,7 @@ import { reducers, effects } from './store';
 import { services } from './services';
 import { VisualizationPageModule } from '../visualization/visualization.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedModule } from '../../components/shared.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [
     IonicPageModule.forChild(DashboardPage),
     VisualizationPageModule,
+    SharedModule,
     StoreModule.forFeature('dashboard', reducers),
     EffectsModule.forFeature(effects),
     TranslateModule.forChild()
