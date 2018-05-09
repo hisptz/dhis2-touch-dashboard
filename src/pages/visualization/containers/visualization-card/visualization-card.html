@@ -5,6 +5,7 @@
       [id]="id"
       [uiConfigId]="(visualizationUiConfig$ | async)?.id"
       [showBody]="(visualizationUiConfig$ | async)?.showBody"
+      [fullScreen]="fullScreen"
       [type]="(visualizationConfig$ | async)?.currentType"
       [name]="(visualizationObject$ | async)?.name"
       (toggleVisualization)="onToggleVisualizationBody($event)"
@@ -18,7 +19,13 @@
        *ngIf="(visualizationUiConfig$ | async)?.showBody">
     <!--visualization body header-->
     <div class="visualization-body-header-block">
-      <visualization-header-section></visualization-header-section>
+      <visualization-header-section
+        [id]="id"
+        [uiConfigId]="(visualizationUiConfig$ | async)?.id"
+        [showFilters]="(visualizationUiConfig$ | async)?.showFilters"
+        [fullScreen]="fullScreen"
+        (fullScreenAction)="onFullScreenAction($event)"
+      ></visualization-header-section>
     </div>
     <!--end of visualization body header-->
 
@@ -54,7 +61,7 @@
            (visualizationProgress$ | async).percent === 100 &&
            (visualizationProgress$ | async).statusCode === 200">
         <visualization-body-section
-          [id]="id"
+          [id]="fullScreen ? id + '_full_screen' : id"
           [currentType]="(visualizationConfig$ | async)?.currentType"
           [visualizationUiConfig]="visualizationUiConfig$ | async"
           [visualizationLayers]="visualizationLayers$ | async"

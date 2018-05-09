@@ -35,8 +35,7 @@ export class VisualizationObjectEffects {
     pipe(withLatestFrom(this.store.select(getVisualizationObjectEntities)), tap(
       ([action, visualizationObjectEntities]: [InitializeVisualizationObjectAction, {[id: string]: Visualization}]) => {
         const visualizationObject: Visualization = visualizationObjectEntities[action.id];
-
-        if (visualizationObject) {
+        if (visualizationObject && visualizationObject.progress && visualizationObject.progress.percent === 0) {
           // set initial global visualization configurations
           this.store.dispatch(new AddVisualizationConfigurationAction(
             {
@@ -123,7 +122,7 @@ export class VisualizationObjectEffects {
               analytics: {
                 rows: favoriteLayer[visualizationFavoriteOptions.type]
               }
-            }
+            };
           });
 
           // Update visualization object

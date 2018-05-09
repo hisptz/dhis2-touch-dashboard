@@ -4,7 +4,7 @@ export interface VisualizationUiConfig {
   hideBorder?: boolean;
   hideHeader?: boolean;
   hideFooter?: boolean;
-  hideFilters?: boolean;
+  showFilters?: boolean;
   hideTypeButtons?: boolean;
   showBody: boolean;
   height: string;

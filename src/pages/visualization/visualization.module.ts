@@ -8,6 +8,7 @@ import { services } from './services';
 import { components } from './components';
 import { modules } from './modules';
 import { pipes } from './pipes';
+import { SelectionFiltersModule } from '../selection-filters/selection-filters.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { pipes } from './pipes';
   imports: [
     CommonModule,
     ...modules,
+    SelectionFiltersModule,
     StoreModule.forFeature('visualization', reducers),
     EffectsModule.forFeature(effects)
   ],

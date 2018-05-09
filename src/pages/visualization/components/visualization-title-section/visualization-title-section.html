@@ -3,5 +3,5 @@
     <div class="title-icon"><img [src]="visualizationIcons[type]" alt=""></div>
     <div>{{name}}</div>
   </div>
-  <img [src]="showBody ? 'assets/icon/arrow-up.png' : 'assets/icon/arrow-down.png'" alt="">
+  <img *ngIf="!fullScreen" [src]="showBody ? 'assets/icon/arrow-up.png' : 'assets/icon/arrow-down.png'" alt="">
 </div>

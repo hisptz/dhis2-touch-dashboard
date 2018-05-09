@@ -11,7 +11,7 @@ export function getStandardizedVisualizationUiConfig(visualizationItem: any): Vi
     width: getVisualizationWidthFromShape(visualizationItem.shape || 'NORMAL'),
     showBody: visualizationItem.isOpen,
     fullScreen: false,
-    hideFilters: isNonVisualizable,
+    showFilters: !isNonVisualizable,
     hideTypeButtons: isNonVisualizable,
     showInterpretionBlock: !isNonVisualizable
   }

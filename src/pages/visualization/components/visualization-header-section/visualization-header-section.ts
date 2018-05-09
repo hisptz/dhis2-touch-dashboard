@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { VisualizationUiConfig } from '../../models/visualization-ui-config.model';
 
 /**
  * Generated class for the VisualizationHeaderSectionComponent component.
@@ -11,9 +12,20 @@ import { Component } from '@angular/core';
   templateUrl: 'visualization-header-section.html'
 })
 export class VisualizationHeaderSectionComponent {
-  
+
+  @Input() id: string;
+  @Input() uiConfigId: string;
+  @Input() showFilters: boolean;
+  @Input() fullScreen: boolean;
+
+  @Output() fullScreenAction: EventEmitter<any> = new EventEmitter<any>();
+
   constructor() {
 
+  }
+
+  onFullScreenAction(id) {
+    this.fullScreenAction.emit({id, uiConfigId: this.uiConfigId});
   }
 
 }

@@ -1,3 +1,6 @@
 visualization-header-section {
-
+  .visualization-header-section-container {
+    display: flex;
+    justify-content: space-between;
+  }
 }

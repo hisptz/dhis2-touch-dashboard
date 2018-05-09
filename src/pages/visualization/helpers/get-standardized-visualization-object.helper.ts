@@ -13,7 +13,7 @@ export function getStandardizedVisualizationObject(visualizationItem: any): Visu
     progress: {
       statusCode: 200,
       statusText: 'OK',
-      percent: 50,
+      percent: 0,
       message: 'Loading..'
     },
     uiConfigId: `${visualizationItem.id}_ui_config`,

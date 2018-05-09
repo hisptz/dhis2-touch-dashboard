@@ -18,7 +18,15 @@ export function visualizationUiConfigurationReducer(state: VisualizationUiConfig
     case VisualizationUiConfigurationActionTypes.ADD_ALL_VISUALIZATION_UI_CONFIGURATIONS:
       return visualizationUiConfigurationAdapter.addAll(action.visualizationUiConfigurations, state);
     case VisualizationUiConfigurationActionTypes.SHOW_OR_HIDE_VISUALIZATION_BODY:
-      return visualizationUiConfigurationAdapter.updateOne({id: action.id, changes: action.changes}, state)
+      return visualizationUiConfigurationAdapter.updateOne({id: action.id, changes: action.changes}, state);
+    case VisualizationUiConfigurationActionTypes.TOGGLE_FULL_SCREEN:
+      const visualizationUiConfig = state.entities[action.id];
+      return visualizationUiConfig ? visualizationUiConfigurationAdapter.updateOne({
+          id: action.id, changes: {
+            fullScreen: !visualizationUiConfig.fullScreen
+          }
+        }, state) :
+        state;
   }
   return state;
 }

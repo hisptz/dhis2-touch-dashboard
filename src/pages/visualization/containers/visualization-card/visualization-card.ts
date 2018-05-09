@@ -17,10 +17,14 @@ import { VisualizationInputs } from '../../models/visualization-inputs.model';
 import { VisualizationProgress } from '../../models/visualization-progress.model';
 import { VisualizationConfig } from '../../models/visualization-config.model';
 import { getCurrentVisualizationConfig } from '../../store/selectors/visualization-configuration.selectors';
-import { ShowOrHideVisualizationBodyAction } from '../../store/actions/visualization-ui-configuration.actions';
+import {
+  ShowOrHideVisualizationBodyAction,
+  ToggleFullScreenAction
+} from '../../store/actions/visualization-ui-configuration.actions';
 import {
   UpdateVisualizationConfigurationAction
 } from '../../store/actions/visualization-configuration.actions';
+import { NavController } from 'ionic-angular';
 
 @Component({
   selector: 'app-visualization-card',
@@ -31,6 +35,8 @@ export class VisualizationCard implements OnInit, OnChanges, AfterViewInit {
 
   @Input() id: string;
   @Input() type: string;
+  // TODO find generic way for handling full screen
+  @Input() fullScreen: boolean;
   @Input() visualizationLayers: VisualizationLayer[];
   private _visualizationInputs$: Subject<VisualizationInputs> = new Subject();
   visualizationObject$: Observable<Visualization>;
@@ -39,7 +45,7 @@ export class VisualizationCard implements OnInit, OnChanges, AfterViewInit {
   visualizationProgress$: Observable<VisualizationProgress>;
   visualizationConfig$: Observable<VisualizationConfig>;
 
-  constructor(private store: Store<VisualizationState>) {
+  constructor(private store: Store<VisualizationState>, public navCtrl: NavController) {
     this._visualizationInputs$.asObservable().
       subscribe((visualizationInputs) => {
         if (visualizationInputs) {
@@ -74,7 +80,13 @@ export class VisualizationCard implements OnInit, OnChanges, AfterViewInit {
 
   onVisualizationTypeChange(visualizationTypeObject) {
     this.store.dispatch(
-      new UpdateVisualizationConfigurationAction(visualizationTypeObject.id, {currentType: visualizationTypeObject.type}));
+      new UpdateVisualizationConfigurationAction(visualizationTypeObject.id,
+        {currentType: visualizationTypeObject.type}));
+  }
+
+  onFullScreenAction(event: {id: string, uiConfigId: string}) {
+    // this.store.dispatch(new ToggleFullScreenAction(event.uiConfigId));
+    this.navCtrl.push('VisualizationItemPage', {id: event.id});
   }
 
 }

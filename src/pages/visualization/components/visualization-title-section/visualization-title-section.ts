@@ -17,6 +17,7 @@ export class VisualizationTitleSectionComponent {
   @Input() id: string;
   @Input() uiConfigId: string;
   @Input() showBody: boolean;
+  @Input() fullScreen: boolean;
   @Input() name: string;
   @Input() type: string;
   @Output() toggleVisualization: EventEmitter<{id: string, showBody: boolean}> = new EventEmitter<{id: string, showBody: boolean}>();

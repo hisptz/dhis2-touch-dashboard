@@ -5,9 +5,10 @@ import { VisualizationHeaderSectionComponent } from './visualization-header-sect
 import { VisualizationBodySectionComponent } from './visualization-body-section/visualization-body-section';
 import { VisualizationCardLoaderComponent } from './visualization-card-loader/visualization-card-loader.component';
 import { VisualizationErrorNotifierComponent } from './visualization-error-notifier/visualization-error-notifier.component';
+import { VisualizationResizeSectionComponent } from './visualization-resize-section/visualization-resize-section.component';
 
 export const components: any[] = [
   VisualizationTitleSectionComponent, VisualizationFooterSectionComponent, VisualizationHeaderSectionComponent,
   VisualizationBodySectionComponent, VisualizationTypesSectionComponent, VisualizationCardLoaderComponent,
-  VisualizationErrorNotifierComponent
+  VisualizationErrorNotifierComponent, VisualizationResizeSectionComponent
 ];
