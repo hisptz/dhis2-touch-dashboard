@@ -51,6 +51,8 @@ export class SelectionFiltersComponent implements OnInit {
     this.showFilters = !this.showFilters;
     if (this.showFilters) {
       this.showFilterBody = true;
+    } else {
+      this.showFilterBody = false;
     }
   }
 
