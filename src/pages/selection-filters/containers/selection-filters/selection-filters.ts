@@ -17,16 +17,22 @@ export class SelectionFiltersComponent implements OnInit {
   @Input() dataSelections: VisualizationDataSelection[];
   @Output() filterUpdate: EventEmitter<VisualizationDataSelection[]> = new EventEmitter<VisualizationDataSelection[]>();
   showFilters: boolean;
+  showFilterBody: boolean;
   selectedFilter: string;
 
   constructor() {
-    this.showFilters = false;
+    this.showFilters = this.showFilterBody = false;
     this.selectedFilter = 'DATA';
   }
 
-
   get selectedData(): any[] {
     const dataObject = _.find(this.dataSelections, ['dimension', 'dx']);
+    return dataObject ? dataObject.items : [];
+  }
+
+
+  get selectedPeriods(): any[] {
+    const dataObject = _.find(this.dataSelections, ['dimension', 'pe']);
     return dataObject ? dataObject.items : [];
   }
 
@@ -37,26 +43,33 @@ export class SelectionFiltersComponent implements OnInit {
   toggleFilters(e) {
     e.stopPropagation();
     this.showFilters = !this.showFilters;
+    if (this.showFilters) {
+      this.showFilterBody = true;
+    }
   }
 
   setCurrentFilter(e, selectedFilter) {
     e.stopPropagation();
     this.selectedFilter = selectedFilter;
+    this.showFilterBody = true;
   }
 
-  onFilterClose(selectedItems) {
+  onFilterClose(selectedItems, selectedFilter) {
     if (selectedItems && selectedItems.items.length > 0) {
-      this.dataSelections =  [...this.updateDataSelectionWithNewSelections(this.dataSelections, selectedItems)];
+      this.dataSelections = [...this.updateDataSelectionWithNewSelections(this.dataSelections, selectedItems)];
     }
-    this.selectedFilter = '';
-    this.showFilters = false;
+
+    if (this.selectedFilter === selectedFilter) {
+      this.selectedFilter = '';
+      this.showFilterBody = false;
+    }
   }
 
   onFilterUpdate(selectedItems) {
     this.dataSelections = [...this.updateDataSelectionWithNewSelections(this.dataSelections, selectedItems)];
     this.filterUpdate.emit(this.dataSelections);
     this.selectedFilter = '';
-    this.showFilters = false;
+    this.showFilterBody = false;
   }
 
   updateDataSelectionWithNewSelections(dataSelections: VisualizationDataSelection[],

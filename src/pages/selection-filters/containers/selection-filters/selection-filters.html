@@ -65,14 +65,22 @@
   <!--end of selection filter header-->
 
   <!--selection filter body-->
-  <div class="selection-filter-body" *ngIf="selectedFilter !== '' && showFilters">
+  <div class="selection-filter-body" *ngIf="selectedFilter !== '' && showFilterBody">
     <!--data filter-->
     <app-data-filter
       *ngIf="selectedFilter === 'DATA'"
       [selectedItems]="selectedData"
-      (onDataFilterClose)="onFilterClose($event)"
+      (onDataFilterClose)="onFilterClose($event, 'DATA')"
       (onDataUpdate)="onFilterUpdate($event, 'DATA')"></app-data-filter>
     <!--end of data filter-->
+
+    <!--period filter-->
+    <app-period-filter
+      *ngIf="selectedFilter === 'PERIOD'"
+      [selectedPeriods]="selectedPeriods"
+      (onPeriodFilterClose)="onFilterClose($event, 'PERIOD')"
+      (onPeriodUpdate)="onFilterUpdate($event, 'PERIOD')"></app-period-filter>
+    <!--end of period filter-->
   </div>
   <!--end of selection filter body-->
 </div>
