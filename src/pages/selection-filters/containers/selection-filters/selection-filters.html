@@ -20,7 +20,7 @@
         'active-filter': selectedFilter === 'DATA'
         }"
         [title]="'Filter by data' | translate"
-        (click)="setCurrentFilter($event, 'DATA')"
+        (click)="toggleCurrentFilter($event, 'DATA')"
       >
         <img src="assets/icon/data.png" alt="">
       </button>
@@ -33,7 +33,7 @@
         'active-filter': selectedFilter === 'PERIOD'
         }"
         [title]="'Filter by period' | translate"
-        (click)="setCurrentFilter($event, 'PERIOD')"
+        (click)="toggleCurrentFilter($event, 'PERIOD')"
       >
         <img src="assets/icon/period.png" alt="">
       </button>
@@ -46,7 +46,7 @@
         'active-filter': selectedFilter === 'ORG_UNIT'
         }"
         [title]="'Filter by organisation unit' | translate"
-        (click)="setCurrentFilter($event, 'ORG_UNIT')"
+        (click)="toggleCurrentFilter($event, 'ORG_UNIT')"
       >
         <img src="assets/icon/tree.png" alt="">
       </button>
@@ -81,6 +81,14 @@
       (onPeriodFilterClose)="onFilterClose($event, 'PERIOD')"
       (onPeriodUpdate)="onFilterUpdate($event, 'PERIOD')"></app-period-filter>
     <!--end of period filter-->
+
+    <!--org unit filter-->
+    <app-org-unit-filter
+      [selectedOrgUnits]="selectedOrgUnits"
+      (orgUnitClose)="onFilterClose($event, 'ORG_UNIT')"
+      (orgUnitUpdate)="onFilterUpdate($event, 'ORG_UNIT')"
+    ></app-org-unit-filter>
+    <!--end of org unit filter-->
   </div>
   <!--end of selection filter body-->
 </div>

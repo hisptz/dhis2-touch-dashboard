@@ -36,6 +36,12 @@ export class SelectionFiltersComponent implements OnInit {
     return dataObject ? dataObject.items : [];
   }
 
+
+  get selectedOrgUnits(): any[] {
+    const dataObject = _.find(this.dataSelections, ['dimension', 'ou']);
+    return dataObject ? dataObject.items : [];
+  }
+
   ngOnInit() {
 
   }
@@ -48,10 +54,15 @@ export class SelectionFiltersComponent implements OnInit {
     }
   }
 
-  setCurrentFilter(e, selectedFilter) {
+  toggleCurrentFilter(e, selectedFilter) {
     e.stopPropagation();
-    this.selectedFilter = selectedFilter;
-    this.showFilterBody = true;
+    if (this.selectedFilter === selectedFilter) {
+      this.selectedFilter = '';
+      this.showFilterBody = false;
+    } else {
+      this.selectedFilter = selectedFilter;
+      this.showFilterBody = true;
+    }
   }
 
   onFilterClose(selectedItems, selectedFilter) {
