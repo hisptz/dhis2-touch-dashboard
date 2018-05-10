@@ -38,15 +38,11 @@
            *ngIf="(visualizationProgress$ | async) &&
            (visualizationProgress$ | async).statusCode === 200 &&
            (visualizationProgress$ | async).percent < 100">
-        <div class="spinner">
-          <div class="dot1"></div>
-          <div class="dot2"></div>
-        </div>
-        <div class="progress">
-          <div class="bar" [style.width]="(visualizationProgress$ | async).percent + '%'">
-            {{(visualizationProgress$ | async).percent}}%
-          </div>
-        </div>
+        <app-visualization-card-loader
+          [visualizationType]="(visualizationConfig$ | async)?.currentType"
+          [height]="(visualizationUiConfig$ | async)?.height"
+          [name]="(visualizationObject$ | async)?.name"
+        ></app-visualization-card-loader>
       </div>
       <!--end of visualization loader-->
 
@@ -75,7 +71,12 @@
     <!--end of visualization body content block-->
 
     <!--visualization body footer block-->
-    <div class="visualization-body-footer-block">
+    <div
+      class="visualization-body-footer-block"
+      *ngIf="(visualizationProgress$ | async) &&
+           (visualizationProgress$ | async).percent === 100 &&
+           (visualizationProgress$ | async).statusCode === 200"
+    >
       <visualization-footer-section
         [type]="(visualizationConfig$ | async)?.currentType"
         [configId]="(visualizationConfig$ | async)?.id"
@@ -88,7 +89,7 @@
   <!--end of visualization body block-->
 
   <!--visualization chating block-->
-  <div class="visualization-chat-block" *ngIf="(visualizationUiConfig$ | async)?.showInterpretionBlock &&
+  <div class="visualization-chat-block" *ngIf="!(visualizationUiConfig$ | async)?.showInterpretionBlock &&
   (visualizationUiConfig$ | async)?.showBody">
     Chating
   </div>
