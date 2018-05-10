@@ -45,7 +45,9 @@ export class SelectionFiltersComponent implements OnInit {
   }
 
   onFilterClose(selectedItems) {
-    this.dataSelections = [...this.updateDataSelectionWithNewSelections(this.dataSelections, selectedItems)];
+    if (selectedItems && selectedItems.items.length > 0) {
+      this.dataSelections =  [...this.updateDataSelectionWithNewSelections(this.dataSelections, selectedItems)];
+    }
     this.selectedFilter = '';
     this.showFilters = false;
   }

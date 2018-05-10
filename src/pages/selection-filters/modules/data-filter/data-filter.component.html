@@ -85,7 +85,11 @@
 
 <div class="data-filter-actions-btns">
     <div>
-        <button class="data-filter-actions-btn" (click)="emit($event)">{{ 'Update' | translate }}</button>
+        <button
+          class="data-filter-actions-btn"
+          (click)="emit($event)"
+          [disabled]="(selectedItems$ | async).length === 0"
+        >{{ 'Update' | translate }}</button>
         <button class="data-filter-actions-btn" (click)="close($event)">{{ 'Close' | translate }}</button>
     </div>
 </div>=
