@@ -7,7 +7,10 @@ import {
   getCurrentVisualizationProgress,
   getVisualizationObjectById
 } from '../../store/selectors/visualization-object.selectors';
-import { InitializeVisualizationObjectAction } from '../../store/actions/visualization-object.actions';
+import {
+  InitializeVisualizationObjectAction,
+  UpdateVisualizationObjectAction
+} from '../../store/actions/visualization-object.actions';
 import { VisualizationLayer } from '../../models/visualization-layer.model';
 import { VisualizationUiConfig } from '../../models/visualization-ui-config.model';
 import { getCurrentVisualizationObjectLayers } from '../../store/selectors/visualization-layer.selectors';
@@ -25,6 +28,7 @@ import {
   UpdateVisualizationConfigurationAction
 } from '../../store/actions/visualization-configuration.actions';
 import { NavController } from 'ionic-angular';
+import { LoadVisualizationAnalyticsAction } from '../../store/actions/visualization-layer.actions';
 
 @Component({
   selector: 'app-visualization-card',
@@ -87,6 +91,21 @@ export class VisualizationCard implements OnInit, OnChanges, AfterViewInit {
   onFullScreenAction(event: {id: string, uiConfigId: string}) {
     // this.store.dispatch(new ToggleFullScreenAction(event.uiConfigId));
     this.navCtrl.push('VisualizationItemPage', {id: event.id});
+  }
+
+  onVisualizationLayerUpdate(visualizationLayer: VisualizationLayer) {
+    this.store.dispatch(
+      new UpdateVisualizationObjectAction(this.id, {
+        progress: {
+          statusCode: 200,
+          statusText: 'OK',
+          percent: 50,
+          message: 'Favorite information has been loaded'
+        }
+      })
+    );
+
+    this.store.dispatch(new LoadVisualizationAnalyticsAction(this.id, [visualizationLayer]));
   }
 
 }

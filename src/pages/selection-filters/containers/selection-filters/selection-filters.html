@@ -66,7 +66,13 @@
 
   <!--selection filter body-->
   <div class="selection-filter-body" *ngIf="selectedFilter !== '' && showFilters">
-    {{selectedFilter}}
+    <!--data filter-->
+    <app-data-filter
+      *ngIf="selectedFilter === 'DATA'"
+      [selectedItems]="selectedData"
+      (onDataFilterClose)="onFilterClose($event)"
+      (onDataUpdate)="onFilterUpdate($event, 'DATA')"></app-data-filter>
+    <!--end of data filter-->
   </div>
   <!--end of selection filter body-->
 </div>

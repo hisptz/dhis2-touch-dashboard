@@ -24,7 +24,9 @@
         [uiConfigId]="(visualizationUiConfig$ | async)?.id"
         [showFilters]="(visualizationUiConfig$ | async)?.showFilters"
         [fullScreen]="fullScreen"
+        [visualizationLayer]="(visualizationLayers$ | async) ? (visualizationLayers$ | async)[0] : null"
         (fullScreenAction)="onFullScreenAction($event)"
+        (visualizationLayerUpdate)="onVisualizationLayerUpdate($event)"
       ></visualization-header-section>
     </div>
     <!--end of visualization body header-->

@@ -3,6 +3,7 @@ import { VisualizationLayer } from '../../models/visualization-layer.model';
 
 export enum VisualizationLayerActionTypes {
   ADD_VISUALIZATION_LAYER = '[VisualizationLayer] Add visualization layer',
+  UPDATE_VISUALIZATION_LAYER = '[VisualizationLayer] Update visualization layer',
   LOAD_VISUALIZATION_ANALYTICS = '[VisualizationLayer] Load visualization analytics',
   LOAD_VISUALIZATION_ANALYTICS_SUCCESS = '[VisualizationLayer] Load visualization analytics success',
   LOAD_VISUALIZATION_ANALYTICS_FAIL = '[VisualizationLayer] Load visualization analytics fail',
@@ -13,6 +14,11 @@ export class AddVisualizationLayerAction implements Action {
 
   constructor(public visualizationLayer: VisualizationLayer) {
   }
+}
+
+export class UpdateVisualizationLayerAction implements Action {
+  readonly type = VisualizationLayerActionTypes.UPDATE_VISUALIZATION_LAYER;
+  constructor(public visualizationLayer: VisualizationLayer) {}
 }
 
 export class LoadVisualizationAnalyticsAction implements Action {

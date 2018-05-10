@@ -1,6 +1,9 @@
 <div class="visualization-header-section-container">
   <div class="visualization-filters" *ngIf="showFilters">
-    <selection-filters></selection-filters>
+    <selection-filters
+      [dataSelections]="visualizationLayer?.dataSelections"
+      (filterUpdate)="onFilterUpdateAction($event)"
+    ></selection-filters>
   </div>
   <div *ngIf="!showFilters"></div>
   <div class="visualization-resize">

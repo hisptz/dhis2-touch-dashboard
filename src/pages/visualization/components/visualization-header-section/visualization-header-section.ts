@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { VisualizationUiConfig } from '../../models/visualization-ui-config.model';
+import { VisualizationLayer } from '../../models/visualization-layer.model';
+import { VisualizationDataSelection } from '../../models/visualization-data-selection.model';
 
 /**
  * Generated class for the VisualizationHeaderSectionComponent component.
@@ -17,6 +19,8 @@ export class VisualizationHeaderSectionComponent {
   @Input() uiConfigId: string;
   @Input() showFilters: boolean;
   @Input() fullScreen: boolean;
+  @Input() visualizationLayer: VisualizationLayer;
+  @Output() visualizationLayerUpdate: EventEmitter<VisualizationLayer> = new EventEmitter<VisualizationLayer>()
 
   @Output() fullScreenAction: EventEmitter<any> = new EventEmitter<any>();
 
@@ -26,6 +30,13 @@ export class VisualizationHeaderSectionComponent {
 
   onFullScreenAction(id) {
     this.fullScreenAction.emit({id, uiConfigId: this.uiConfigId});
+  }
+
+  onFilterUpdateAction(dataSelections: VisualizationDataSelection[]) {
+    this.visualizationLayerUpdate.emit({
+      ...this.visualizationLayer,
+      dataSelections
+    })
   }
 
 }

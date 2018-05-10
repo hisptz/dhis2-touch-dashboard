@@ -21,11 +21,11 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   availableItems: any[] = [];
   dataGroups: any[] = [];
-  selectedGroup: any = { id: 'ALL', name: 'All' };
+  selectedGroup: any = {id: 'ALL', name: 'All'};
 
   @Output() onDataUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output()
-  onDataFilterClose: EventEmitter<boolean> = new EventEmitter<boolean>();
+  onDataFilterClose: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectedItems: any[] = [];
   @Input() functionMappings: any[] = [];
   @Input() hiddenDataElements: any[] = [];
@@ -44,11 +44,11 @@ export class DataFilterComponent implements OnInit, OnDestroy {
     programs: [],
     programIndicators: [],
     dataSetGroups: [
-      { id: '', name: 'Reporting Rate' },
-      { id: '.REPORTING_RATE_ON_TIME', name: 'Reporting Rate on time' },
-      { id: '.ACTUAL_REPORTS', name: 'Actual Reports Submitted' },
-      { id: '.ACTUAL_REPORTS_ON_TIME', name: 'Reports Submitted on time' },
-      { id: '.EXPECTED_REPORTS', name: 'Expected Reports' }
+      {id: '', name: 'Reporting Rate'},
+      {id: '.REPORTING_RATE_ON_TIME', name: 'Reporting Rate on time'},
+      {id: '.ACTUAL_REPORTS', name: 'Actual Reports Submitted'},
+      {id: '.ACTUAL_REPORTS_ON_TIME', name: 'Reports Submitted on time'},
+      {id: '.EXPECTED_REPORTS', name: 'Expected Reports'}
     ]
   };
   loading: boolean;
@@ -62,9 +62,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   hideMonth = false;
   hideQuarter = false;
 
-  constructor(
-    private dataFilterService: DataFilterService
-  ) {
+  constructor(private dataFilterService: DataFilterService) {
     this.dataFilterOptions = DATA_FILTER_OPTIONS;
     this.showGroups = false;
     this.need_groups = true;
@@ -103,50 +101,48 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   }
 
   initiateData() {
-    this.subscription = this.dataFilterService
-      .initiateData()
-      .subscribe(items => {
-        this.dataItems = Object.assign(
-          {},
-          {
-            dataElements: items[0],
-            indicators: items[1],
-            dataElementGroups: items[3],
-            indicatorGroups: items[2],
-            categoryOptions: items[5],
-            dataSets: items[4],
-            programs: items[6],
-            programIndicators: items[7],
-            dataSetGroups: [
-              { id: '', name: 'Reporting Rate' },
-              { id: '.REPORTING_RATE_ON_TIME', name: 'Reporting Rate on time' },
-              { id: '.ACTUAL_REPORTS', name: 'Actual Reports Submitted' },
-              {
-                id: '.ACTUAL_REPORTS_ON_TIME',
-                name: 'Reports Submitted on time'
-              },
-              { id: '.EXPECTED_REPORTS', name: 'Expected Reports' }
-            ]
-          }
-        );
-        this.loading = false;
-        this.dataGroups = this.groupList();
-        this.availableItems = this.dataItemList(
-          this._selectedItems,
-          this.selectedGroup
-        );
+    this.subscription = this.dataFilterService.initiateData().subscribe(items => {
+      this.dataItems = Object.assign(
+        {},
+        {
+          dataElements: items[0],
+          indicators: items[1],
+          dataElementGroups: items[3],
+          indicatorGroups: items[2],
+          categoryOptions: items[5],
+          dataSets: items[4],
+          programs: items[6],
+          programIndicators: items[7],
+          dataSetGroups: [
+            {id: '', name: 'Reporting Rate'},
+            {id: '.REPORTING_RATE_ON_TIME', name: 'Reporting Rate on time'},
+            {id: '.ACTUAL_REPORTS', name: 'Actual Reports Submitted'},
+            {
+              id: '.ACTUAL_REPORTS_ON_TIME',
+              name: 'Reports Submitted on time'
+            },
+            {id: '.EXPECTED_REPORTS', name: 'Expected Reports'}
+          ]
+        }
+      );
+      this.loading = false;
+      this.dataGroups = this.groupList();
+      this.availableItems = this.dataItemList(
+        this._selectedItems,
+        this.selectedGroup
+      );
 
-        // /**
-        //  * Detect changes manually
-        //  */
-        // this.changeDetector.detectChanges();
-      });
+      // /**
+      //  * Detect changes manually
+      //  */
+      // this.changeDetector.detectChanges();
+    });
   }
 
   setSelectedGroup(group, listArea, event) {
     event.stopPropagation();
     this.listchanges = '';
-    this.selectedGroup = { ...group };
+    this.selectedGroup = {...group};
     this.availableItems = this.dataItemList(this._selectedItems, group);
     this.showGroups = false;
     this.p = 1;
@@ -424,7 +420,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
       this.functionMappings.forEach(mappedItem => {
         const mappedId = mappedItem.split('_');
         if (dataElementId[0] === mappedId[0]) {
-          mappings.push({ id: value.id, func: mappedId[1] });
+          mappings.push({id: value.id, func: mappedId[1]});
         }
       });
     });
@@ -489,15 +485,8 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   emit(e) {
     e.stopPropagation();
     this.onDataUpdate.emit({
-      itemList: this._selectedItems,
-      need_functions: this.getFunctions(this._selectedItems),
-      auto_growing: this.getAutogrowingTables(this._selectedItems),
-      selectedData: {
-        name: 'dx',
-        value: this.getDataForAnalytics(this._selectedItems)
-      },
-      hideQuarter: this.hideQuarter,
-      hideMonth: this.hideMonth
+      items: this._selectedItems,
+      dimension: 'dx'
     });
   }
 
@@ -574,7 +563,10 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
   close(e) {
     e.stopPropagation();
-    this.onDataFilterClose.emit(true);
+    this.onDataFilterClose.emit({
+      items: this._selectedItems,
+      dimension: 'dx'
+    });
   }
 
   toggleDataFilterOption(toggledOption, event) {
@@ -583,7 +575,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
     this.dataFilterOptions = [
       ..._.map(this.dataFilterOptions, option => {
-        const newOption: any = { ...option };
+        const newOption: any = {...option};
 
         if (toggledOption.prefix === 'ALL') {
           if (newOption.prefix !== 'ALL') {
@@ -615,7 +607,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
       })
     ];
 
-    this.selectedGroup = { id: 'ALL', name: 'All' };
+    this.selectedGroup = {id: 'ALL', name: 'All'};
     this.dataGroups = this.groupList();
 
     this.availableItems = this.dataItemList(
@@ -632,6 +624,10 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.onDataFilterClose.emit({
+      items: this._selectedItems,
+      dimension: 'dx'
+    });
     this.subscription.unsubscribe();
   }
 }
