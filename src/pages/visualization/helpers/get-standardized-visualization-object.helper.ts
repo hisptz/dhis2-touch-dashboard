@@ -56,10 +56,12 @@ function getFavoriteDetails(visualizationItem: any) {
   return _.isPlainObject(favoriteItem) ? {
     id: favoriteItem.id,
     type: _.camelCase(visualizationItem.type),
+    name: getVisualizationName(visualizationItem),
     useTypeAsBase: true,
     requireAnalytics: true
   } : {
     id: visualizationItem.id,
+    name: getVisualizationName(visualizationItem),
     type: _.camelCase(visualizationItem.type)
   }
 }
