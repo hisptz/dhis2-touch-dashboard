@@ -5,7 +5,7 @@
       [id]="id"
       [uiConfigId]="(visualizationUiConfig$ | async)?.id"
       [showBody]="(visualizationUiConfig$ | async)?.showBody"
-      [fullScreen]="fullScreen"
+      [fullScreen]="(visualizationUiConfig$ | async)?.fullScreen"
       [type]="(visualizationConfig$ | async)?.currentType"
       [name]="(visualizationObject$ | async)?.name"
       (toggleVisualization)="onToggleVisualizationBody($event)"
@@ -23,7 +23,7 @@
         [id]="id"
         [uiConfigId]="(visualizationUiConfig$ | async)?.id"
         [showFilters]="(visualizationUiConfig$ | async)?.showFilters"
-        [fullScreen]="fullScreen"
+        [fullScreen]="(visualizationUiConfig$ | async)?.fullScreen"
         [visualizationLayer]="(visualizationLayers$ | async) ? (visualizationLayers$ | async)[0] : null"
         (fullScreenAction)="onFullScreenAction($event)"
         (visualizationLayerUpdate)="onVisualizationLayerUpdate($event)"
@@ -59,7 +59,7 @@
            (visualizationProgress$ | async).percent === 100 &&
            (visualizationProgress$ | async).statusCode === 200">
         <visualization-body-section
-          [id]="fullScreen ? id + '_full_screen' : id"
+          [id]="(visualizationUiConfig$ | async)?.fullScreen ? id + '_full_screen' : id"
           [currentType]="(visualizationConfig$ | async)?.currentType"
           [visualizationUiConfig]="visualizationUiConfig$ | async"
           [visualizationLayers]="visualizationLayers$ | async"
@@ -89,9 +89,9 @@
   <!--end of visualization body block-->
 
   <!--visualization chating block-->
-  <div class="visualization-chat-block" *ngIf="!(visualizationUiConfig$ | async)?.showInterpretionBlock &&
-  (visualizationUiConfig$ | async)?.showBody">
-    Chating
-  </div>
+  <!--<div class="visualization-chat-block" *ngIf="!(visualizationUiConfig$ | async)?.showInterpretionBlock &&-->
+  <!--(visualizationUiConfig$ | async)?.showBody">-->
+    <!--Chating-->
+  <!--</div>-->
   <!--end of visualization chating block-->
 </div>

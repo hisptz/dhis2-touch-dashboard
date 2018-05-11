@@ -62,7 +62,7 @@ export class MapComponent implements OnInit {
     this.visualizationLegendIsOpen$ = this.store.select(
       fromStore.isVisualizationLegendOpen(this.id)
     );
-    this.transformVisualizationObject(this.visualizationConfig, this.visualizationLayers);
+    this.transformVisualizationObject(this.visualizationConfig,this.visualizationUiConfig, this.visualizationLayers);
     this.visualizationObject$ = this.store.select(
       fromStore.getCurrentVisualizationObject(this.id)
     );
@@ -82,10 +82,11 @@ export class MapComponent implements OnInit {
     }
   }
 
-  transformVisualizationObject(visualizationConfig: VisualizationConfig, visualizationLayers: VisualizationLayer[]) {
+  transformVisualizationObject(visualizationConfig: VisualizationConfig, visualizationUiConfig: VisualizationUiConfig, visualizationLayers: VisualizationLayer[]) {
     // TODO FIND A WAY TO GET GEO FEATURES HERE
     const { visObject } = fromUtils.transformVisualizationObject(
       visualizationConfig,
+      visualizationUiConfig,
       getSplitedVisualizationLayers(visualizationConfig.type, visualizationLayers)
     );
     this.visObject = {

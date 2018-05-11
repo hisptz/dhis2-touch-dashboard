@@ -50,6 +50,11 @@ export function getSplitedVisualizationLayers(type: string, visualizationLayers:
 }
 
 export const splitPeriodISo = (settings, analytics) => {
+
+  if (!analytics || !analytics.metaData) {
+    return settings;
+  }
+
   const metaData = analytics.metaData;
   const { pe, names } = metaData;
 

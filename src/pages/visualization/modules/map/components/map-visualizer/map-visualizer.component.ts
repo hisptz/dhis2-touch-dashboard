@@ -48,6 +48,7 @@ export class MapVisualizerComponent implements OnInit, OnChanges, AfterViewInit 
 
   public mapHasGeofeatures: boolean = true;
   public mapHasDataAnalytics: boolean = true;
+  public fullScreen: boolean;
   public map: any;
 
   constructor(private store: Store<fromStore.MapState>) {}
@@ -155,12 +156,13 @@ export class MapVisualizerComponent implements OnInit, OnChanges, AfterViewInit 
     const { itemHeight, mapWidth } = this.displayConfigurations;
     const { mapConfiguration, componentId } = this.visualizationObject;
     const fullScreen = (mapConfiguration && mapConfiguration.fullScreen) || itemHeight === '100vh';
+    this.fullScreen = fullScreen;
     const container = fromUtils.prepareMapContainer(componentId, itemHeight, mapWidth, false);
     const otherOptions = {
       zoomControl: false,
       maxZoom: 12,
       fadeAnimation: false,
-      scrollWheelZoom: fullScreen ? true : false,
+      scrollWheelZoom: fullScreen,
       worldCopyJump: true
     };
     this.map = L.map(container, otherOptions);
@@ -316,7 +318,7 @@ export class MapVisualizerComponent implements OnInit, OnChanges, AfterViewInit 
           });
         }
         if (tileLayer) {
-          leafletlayer.setOpacity(opacity);
+          // leafletlayer.setOpacity(opacity);
         }
         const visible = !hidden;
         if (leafletlayer) {

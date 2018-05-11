@@ -39,5 +39,8 @@
     <img src="assets/icon/map.png" alt="">
     <h4>Sorry, this map has no data to visualize</h4>
   </div>
+  <div class="no-scroll-block" *ngIf="!fullScreen">
+    &nbsp;
+  </div>
 </div>
 <app-data-table class="map-data-table" *ngIf="isDataTableOpen" [mapVisualizationObject]="visualizationObject"></app-data-table>

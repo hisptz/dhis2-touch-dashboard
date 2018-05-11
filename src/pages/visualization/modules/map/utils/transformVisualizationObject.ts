@@ -5,7 +5,7 @@ import { Layer } from '../models/layer.model';
 import { getBboxBounds } from './layers';
 import { colorBrewer, getColorScale } from './colorBrewer';
 
-export function transformVisualizationObject(visualizationConfig, visualizationLayers) {
+export function transformVisualizationObject(visualizationConfig, visualizationUiConfig, visualizationLayers) {
   let visObject = {};
   let geofeatures = {};
   let analytics = {};
@@ -29,7 +29,7 @@ export function transformVisualizationObject(visualizationConfig, visualizationL
     longitude,
     basemap,
     zoom,
-    fullScreen
+    fullScreen: visualizationUiConfig.fullScreen
   };
 
   let layers: Layer[] = [];

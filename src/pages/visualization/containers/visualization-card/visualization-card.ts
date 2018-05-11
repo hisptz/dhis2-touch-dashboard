@@ -89,8 +89,8 @@ export class VisualizationCard implements OnInit, OnChanges, AfterViewInit {
   }
 
   onFullScreenAction(event: {id: string, uiConfigId: string}) {
-    // this.store.dispatch(new ToggleFullScreenAction(event.uiConfigId));
-    this.navCtrl.push('VisualizationItemPage', {id: event.id});
+    this.store.dispatch(new ToggleFullScreenAction(event.uiConfigId));
+    this.navCtrl.push('VisualizationItemPage', {id: event.id, uiConfigId: event.uiConfigId});
   }
 
   onVisualizationLayerUpdate(visualizationLayer: VisualizationLayer) {
