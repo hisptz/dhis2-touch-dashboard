@@ -41,6 +41,7 @@ export class VisualizationObjectEffects {
             {
               id: visualizationObject.visualizationConfigId,
               currentType: visualizationObject.type,
+              name: visualizationObject.favorite ? visualizationObject.favorite.name : ''
             }));
 
           // Load favorite information
@@ -93,7 +94,7 @@ export class VisualizationObjectEffects {
                 metadataIdentifiers: getVisualizationMetadataIdentifiers(dataSelections),
                 layerType: getVisualizationLayerType(action.visualization.favorite.type, favoriteLayer),
                 analytics: null,
-                config: _.omit(favoriteLayer, ['id', 'rows', 'columns', 'filters'])
+                config: favoriteLayer
               };
             });
 

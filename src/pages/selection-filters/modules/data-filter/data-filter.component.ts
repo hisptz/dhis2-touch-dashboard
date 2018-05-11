@@ -23,12 +23,12 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   dataGroups: any[] = [];
   selectedGroup: any = {id: 'ALL', name: 'All'};
 
-  @Output() onDataUpdate: EventEmitter<any> = new EventEmitter<any>();
-  @Output()
-  onDataFilterClose: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectedItems: any[] = [];
   @Input() functionMappings: any[] = [];
   @Input() hiddenDataElements: any[] = [];
+  @Output() onDataUpdate: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  onDataFilterClose: EventEmitter<any> = new EventEmitter<any>();
   private _selectedItems: any[];
   selectedItems$: Observable<any>;
   querystring: string = null;
