@@ -1,9 +1,3 @@
-<!--
-  Generated template for the DashboardPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar color="primary">
@@ -16,7 +10,28 @@
   </ion-navbar>
 
 </ion-header>
-
 <ion-content>
 
+  <!--dashboard loading block-->
+  <div class="dashboard-loading-block" *ngIf="loading$ | async">
+    <loading [loadingMessage]="'Discovering dashboards'"></loading>
+  </div>
+  <!--end dashboard loading block-->
+
+  <!--header section-->
+  <div class="selected-dashboard-block" (tap)="openDashboardListFilter()" *ngIf="!(loading$ | async)">
+    <div class="dashboard-name">
+      {{(currentDashboard$ | async)?.name}}
+    </div>
+    <img [src]="'assets/icon/menu.png'" alt="">
+  </div>
+  <!--end of header section-->
+
+  <!--visualization section-->
+  <div class="visualization-card-list" *ngIf="!(loading$ | async)">
+    <div *ngFor="let visualizationId of currentDashboardVisualizations$ | async; trackBy: visualizationId" class="visualization-card-container">
+      <app-visualization-card [id]="visualizationId"></app-visualization-card>
+    </div>
+  </div>
+  <!--end of visualization section-->
 </ion-content>
