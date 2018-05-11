@@ -10,7 +10,6 @@ import { VisualizationLayer } from '../../models/visualization-layer.model';
 export class VisualizationBodySectionComponent {
 
   @Input() id: string;
-  @Input() currentType: string;
   @Input() visualizationLayers: VisualizationLayer[];
   @Input() visualizationConfig: VisualizationConfig;
   @Input() visualizationUiConfig: VisualizationUiConfig;

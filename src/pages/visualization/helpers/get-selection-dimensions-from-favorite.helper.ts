@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 
 export function getSelectionDimensionsFromFavorite(favoriteLayer) {
+  // alert('Optins: ' + JSON.stringify(favoriteLayer.dataElementDimensions))
   const favoriteDataElements = _.map(favoriteLayer.dataElementDimensions,
     dataElementDimension => dataElementDimension.dataElement);
   return [
@@ -11,6 +12,7 @@ export function getSelectionDimensionsFromFavorite(favoriteLayer) {
 }
 
 function getStandardizedDimensions(dimensions: any[], dataElements: any[], dimensionLayout: string) {
+  // alert(JSON.stringify(dataElements))
   return _.map(dimensions, dimensionObject => {
 
     return {

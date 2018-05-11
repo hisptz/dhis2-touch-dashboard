@@ -93,7 +93,6 @@ export class VisualizationObjectEffects {
                 id: favoriteLayer.id,
                 dataSelections,
                 layout: getVisualizationLayout(dataSelections),
-                metadataIdentifiers: getVisualizationMetadataIdentifiers(dataSelections),
                 layerType: getVisualizationLayerType(action.visualization.favorite.type, favoriteLayer),
                 analytics: null,
                 config: favoriteLayer

@@ -7,11 +7,12 @@ import {
   LoadVisualizationAnalyticsAction, LoadVisualizationAnalyticsSuccessAction,
   VisualizationLayerActionTypes
 } from '../actions/visualization-layer.actions';
-import {tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { AnalyticsService } from '../../services/analytics.service';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { UpdateVisualizationObjectAction } from '../actions/visualization-object.actions';
 import { getStandardizedAnalyticsObject } from '../../helpers/get-standardized-analytics.helper';
+import { getSanitizedAnalytics } from '../../helpers/get-sanitized-analytics.helper';
 
 @Injectable()
 export class VisualizationLayerEffects {
@@ -29,7 +30,10 @@ export class VisualizationLayerEffects {
         _.each(analyticsResponse, (analytics, analyticsIndex) => {
           this.store.dispatch(
             new LoadVisualizationAnalyticsSuccessAction(action.visualizationLayers[analyticsIndex].id,
-              {analytics: getStandardizedAnalyticsObject(analytics, true)}));
+              {
+                analytics: getSanitizedAnalytics(getStandardizedAnalyticsObject(analytics, true),
+                  action.visualizationLayers[analyticsIndex].dataSelections)
+              }));
         });
         // Update visualization object
         this.store.dispatch(new UpdateVisualizationObjectAction(action.visualizationId, {
