@@ -9,7 +9,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { LauncherPage } from '../pages/launcher/launcher';
 import { SharedModule } from '../components/shared.module';
 import { NetworkAvailabilityProvider } from '../providers/network-availability/network-availability';
@@ -35,11 +34,13 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpModule, Http } from '@angular/http';
 
-import { EffectsModule } from '@ngrx/effects';
-import { reducers, effects } from '../store';
+
 import { PipesModule } from '../pipes/pipes.module';
 import { AboutProvider } from '../providers/about/about';
 import { OrganisationUnitsProvider } from '../providers/organisation-units/organisation-units';
+import { EffectsModule } from '@ngrx/effects';
+import { reducers } from '../store/reducers';
+import { effects } from '../store/effects';
 export function createTranslateLoader(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }

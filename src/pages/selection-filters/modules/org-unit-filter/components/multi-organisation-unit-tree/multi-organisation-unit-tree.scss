@@ -1,0 +1,22 @@
+multi-organisation-unit-tree {
+  .organisation-unit {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    .organisation-unit-icon {
+      font-size: 1.5rem;
+      img {
+        height: 15px;
+      }
+    }
+    .selected-organisation-unit {
+      color: #ffa500;
+    }
+  }
+  .organisation-unit-without-children {
+    padding-left: 10px;
+  }
+  .organisation-unit-children {
+    padding-left: 10px;
+  }
+}
