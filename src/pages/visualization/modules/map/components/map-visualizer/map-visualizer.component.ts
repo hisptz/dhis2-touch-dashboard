@@ -1,13 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnInit,
-  OnChanges,
-  SimpleChanges,
-  SimpleChange,
-  Input,
-  AfterViewInit
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnChanges, SimpleChanges, SimpleChange, Input, AfterViewInit } from '@angular/core';
 import { VisualizationObject } from '../../models/visualization-object.model';
 import { Store } from '@ngrx/store';
 import { getTileLayer } from '../../constants/tile-layer.constant';
@@ -52,12 +43,7 @@ export class MapVisualizerComponent implements OnInit, OnChanges, AfterViewInit 
 
   constructor(private store: Store<fromStore.MapState>) {}
   ngOnChanges(changes: SimpleChanges) {
-    const {
-      visualizationObject,
-      displayConfigurations,
-      baselayerLegend,
-      currentLegendSets
-    } = changes;
+    const { visualizationObject, displayConfigurations, baselayerLegend, currentLegendSets } = changes;
     this.createMap();
     if (currentLegendSets && currentLegendSets.currentValue) {
       this._currentLegendSets = currentLegendSets.currentValue;
@@ -105,9 +91,7 @@ export class MapVisualizerComponent implements OnInit, OnChanges, AfterViewInit 
   }
 
   toggleLegendContainerView() {
-    this.store.dispatch(
-      new fromStore.ToggleOpenVisualizationLegend(this.visualizationObject.componentId)
-    );
+    this.store.dispatch(new fromStore.ToggleOpenVisualizationLegend(this.visualizationObject.componentId));
   }
 
   createMap() {
@@ -116,9 +100,7 @@ export class MapVisualizerComponent implements OnInit, OnChanges, AfterViewInit 
       return geofeatures[key];
     });
     const allDataAnalytics = Object.keys(analytics).filter(
-      key =>
-        (analytics[key] && analytics[key].rows && analytics[key].rows.length > 0) ||
-        (analytics[key] && analytics[key].count)
+      key => (analytics[key] && analytics[key].rows && analytics[key].rows.length > 0) || (analytics[key] && analytics[key].count)
     );
     if (![].concat.apply([], allGeofeatures).length) {
       this.mapHasGeofeatures = false;
@@ -167,19 +149,16 @@ export class MapVisualizerComponent implements OnInit, OnChanges, AfterViewInit 
     if (fullScreen) {
       this.store.dispatch(new fromStore.FullScreenOpenVisualizationLegend(componentId));
     }
+    this.map.scrollWheelZoom.disable();
   }
 
   initialMapDraw(visualizationObject: VisualizationObject) {
     const { mapConfiguration } = visualizationObject;
-    const { overlayLayers, layersBounds, legendSets } = this.prepareLegendAndLayers(
-      visualizationObject
-    );
+    const { overlayLayers, layersBounds, legendSets } = this.prepareLegendAndLayers(visualizationObject);
     this.drawBaseAndOverLayLayers(mapConfiguration, overlayLayers, layersBounds);
     if (Object.keys(legendSets).length) {
       this._currentLegendSets = legendSets;
-      this.store.dispatch(
-        new fromStore.AddLegendSet({ [this.visualizationObject.componentId]: legendSets })
-      );
+      this.store.dispatch(new fromStore.AddLegendSet({ [this.visualizationObject.componentId]: legendSets }));
     }
   }
 
@@ -329,18 +308,14 @@ export class MapVisualizerComponent implements OnInit, OnChanges, AfterViewInit 
   redrawMapOndataChange(visualizationObject: VisualizationObject) {
     Object.keys(this.leafletLayers).map(key => this.map.removeLayer(this.leafletLayers[key]));
     const { mapConfiguration } = visualizationObject;
-    const { overlayLayers, layersBounds, legendSets } = this.prepareLegendAndLayers(
-      visualizationObject
-    );
+    const { overlayLayers, layersBounds, legendSets } = this.prepareLegendAndLayers(visualizationObject);
     overlayLayers.map((layer, index) => {
       this.createLayer(layer, index);
     });
 
     if (Object.keys(legendSets).length) {
       this._currentLegendSets = legendSets;
-      this.store.dispatch(
-        new fromStore.AddLegendSet({ [visualizationObject.componentId]: legendSets })
-      );
+      this.store.dispatch(new fromStore.AddLegendSet({ [visualizationObject.componentId]: legendSets }));
     }
 
     if (layersBounds.length) {
