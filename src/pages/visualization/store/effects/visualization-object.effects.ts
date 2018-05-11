@@ -23,6 +23,7 @@ import {
 import { getVisualizationLayerType } from '../../helpers/get-visualization-layer-type.helper';
 import { getVisualizationLayout } from '../../helpers/get-visualization-layout.helper';
 import { getVisualizationMetadataIdentifiers } from '../../helpers/get-visualization-metadata-identifier.helper';
+import { getStandardizedVisualizationType } from '../../helpers/get-standardized-visualization-type.helper';
 
 @Injectable()
 export class VisualizationObjectEffects {
@@ -40,7 +41,8 @@ export class VisualizationObjectEffects {
           this.store.dispatch(new AddVisualizationConfigurationAction(
             {
               id: visualizationObject.visualizationConfigId,
-              currentType: visualizationObject.type,
+              type: visualizationObject.type,
+              currentType: getStandardizedVisualizationType(visualizationObject.type),
               name: visualizationObject.favorite ? visualizationObject.favorite.name : ''
             }));
 

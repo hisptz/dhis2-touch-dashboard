@@ -11,6 +11,7 @@ import { Map, LatLngExpression, control, LatLngBoundsExpression } from 'leaflet'
 import { VisualizationLayer } from '../../../../models/visualization-layer.model';
 import { VisualizationConfig } from '../../../../models/visualization-config.model';
 import { VisualizationUiConfig } from '../../../../models/visualization-ui-config.model';
+import { getSplitedVisualizationLayers } from '../../../../helpers/get-splited-visualization-layers.helper';
 
 @Component({
   selector: 'app-map',
@@ -61,7 +62,7 @@ export class MapComponent implements OnInit {
     this.visualizationLegendIsOpen$ = this.store.select(
       fromStore.isVisualizationLegendOpen(this.id)
     );
-    this.transformVisualizationObject(this.visualizationConfig, this.visualizationLayers);
+    this.transformVisualizationObject(this.visualizationConfig,this.visualizationUiConfig, this.visualizationLayers);
     this.visualizationObject$ = this.store.select(
       fromStore.getCurrentVisualizationObject(this.id)
     );
@@ -81,11 +82,12 @@ export class MapComponent implements OnInit {
     }
   }
 
-  transformVisualizationObject(visualizationConfig, visualizationLayers) {
+  transformVisualizationObject(visualizationConfig: VisualizationConfig, visualizationUiConfig: VisualizationUiConfig, visualizationLayers: VisualizationLayer[]) {
     // TODO FIND A WAY TO GET GEO FEATURES HERE
     const { visObject } = fromUtils.transformVisualizationObject(
       visualizationConfig,
-      visualizationLayers
+      visualizationUiConfig,
+      getSplitedVisualizationLayers(visualizationConfig.type, visualizationLayers)
     );
     this.visObject = {
       ...this.visObject,

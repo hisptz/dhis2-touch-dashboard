@@ -79,7 +79,7 @@ app-map-visualizer {
     left: 0;
   }
 
-  .warning-map {
+  .warning-map, .no-scroll-block {
     position: absolute;
     top: 0;
     display: flex;
@@ -92,6 +92,11 @@ app-map-visualizer {
 
   .warning-map h4 {
     background-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .no-scroll-block {
+    height: 100%;
+    z-index: 650;
   }
   .map-title {
     background: transparent;
