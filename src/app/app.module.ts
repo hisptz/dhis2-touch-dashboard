@@ -25,7 +25,6 @@ import { SQLite } from '@ionic-native/sqlite';
 import { HTTP } from '@ionic-native/http';
 import { AppVersion } from '@ionic-native/app-version';
 import { Network } from '@ionic-native/network';
-import { BackgroundMode } from '@ionic-native/background-mode';
 import { IonicStorageModule } from '@ionic/storage';
 import { SMS } from '@ionic-native/sms';
 
@@ -33,7 +32,6 @@ import { SMS } from '@ionic-native/sms';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpModule, Http } from '@angular/http';
-
 
 import { PipesModule } from '../pipes/pipes.module';
 import { AboutProvider } from '../providers/about/about';
@@ -76,7 +74,6 @@ export function createTranslateLoader(http: Http) {
     HTTP,
     AppVersion,
     Network,
-    BackgroundMode,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     NetworkAvailabilityProvider,
     UserProvider,

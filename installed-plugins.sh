@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 ionic cordova plugin add cordova-plugin-device
-ionic cordova plugin add cordova-plugin-background-mode
 ionic cordova plugin add cordova-plugin-advanced-http
 ionic cordova plugin add cordova-plugin-network-information
 ionic cordova plugin add cordova-sqlite-storage
