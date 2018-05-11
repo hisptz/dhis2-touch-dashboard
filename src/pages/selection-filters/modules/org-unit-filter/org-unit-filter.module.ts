@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { containers } from './containers';
 import { components } from './components';
 import { TranslateModule } from '@ngx-translate/core';
+import { directives } from './directives';
+import { pipes } from './pipes';
 
 @NgModule({
   imports: [
@@ -11,7 +13,9 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
   declarations: [
     ...containers,
-    ...components
+    ...components,
+    ...directives,
+    ...pipes
   ],
   exports: [...containers],
   providers: []
