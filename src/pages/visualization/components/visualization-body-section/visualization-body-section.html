@@ -12,8 +12,12 @@
   <!--end of table visualization-->
 
   <!--map visualization-->
-  <div class="chart-visualization-block" *ngIf="currentType === 'MAP'">
-    Map
+  <div class="map-visualization-block" *ngIf="currentType === 'MAP'">
+    <app-map
+      [id]="id"
+      [visualizationLayers]="visualizationLayers"
+      [visualizationUiConfig]="visualizationUiConfig"
+      [visualizationConfig]="visualizationConfig"></app-map>
   </div>
   <!--end of map visualization-->
 

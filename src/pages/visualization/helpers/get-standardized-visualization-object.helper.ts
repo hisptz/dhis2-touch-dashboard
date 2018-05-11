@@ -1,12 +1,11 @@
 import { Visualization } from '../models/visualization.model';
 import * as _ from 'lodash';
-import { getStandardizedVisualizationType } from './get-standardized-visualization-type.helper';
 
 export function getStandardizedVisualizationObject(visualizationItem: any): Visualization {
   return {
     id: visualizationItem.id,
     name: getVisualizationName(visualizationItem),
-    type: getStandardizedVisualizationType(visualizationItem.type),
+    type: visualizationItem.type,
     favorite: getFavoriteDetails(visualizationItem),
     created: visualizationItem.created,
     lastUpdated: visualizationItem.lastUpdated,
@@ -56,10 +55,12 @@ function getFavoriteDetails(visualizationItem: any) {
   return _.isPlainObject(favoriteItem) ? {
     id: favoriteItem.id,
     type: _.camelCase(visualizationItem.type),
+    name: getVisualizationName(visualizationItem),
     useTypeAsBase: true,
     requireAnalytics: true
   } : {
     id: visualizationItem.id,
+    name: getVisualizationName(visualizationItem),
     type: _.camelCase(visualizationItem.type)
   }
 }
