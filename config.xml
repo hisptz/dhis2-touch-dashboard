@@ -5,7 +5,7 @@
     <name>Interactive Dashboard</name>
     <description>Interactive dashboard experience on mobile</description>
     <author email="profschingal@gamil.com" href="">Joseph Chingalo</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.43.247:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

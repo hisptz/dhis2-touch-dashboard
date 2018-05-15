@@ -21,8 +21,6 @@ import {
   UpdateVisualizationConfigurationAction
 } from '../actions/visualization-configuration.actions';
 import { getVisualizationLayerType } from '../../helpers/get-visualization-layer-type.helper';
-import { getVisualizationLayout } from '../../helpers/get-visualization-layout.helper';
-import { getVisualizationMetadataIdentifiers } from '../../helpers/get-visualization-metadata-identifier.helper';
 import { getStandardizedVisualizationType } from '../../helpers/get-standardized-visualization-type.helper';
 
 @Injectable()
@@ -92,10 +90,9 @@ export class VisualizationObjectEffects {
               return {
                 id: favoriteLayer.id,
                 dataSelections,
-                layout: getVisualizationLayout(dataSelections),
                 layerType: getVisualizationLayerType(action.visualization.favorite.type, favoriteLayer),
                 analytics: null,
-                config: favoriteLayer
+                config: {...favoriteLayer, visualizationType: action.visualization.type}
               };
             });
 
