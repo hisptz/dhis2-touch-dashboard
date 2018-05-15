@@ -1,7 +1,12 @@
 import * as _ from 'lodash';
 
+const defaultDimensionNames = {
+  dx: 'Data',
+  pe: 'Period',
+  ou: 'Organisation unit'
+};
+
 export function getSelectionDimensionsFromFavorite(favoriteLayer) {
-  // alert('Optins: ' + JSON.stringify(favoriteLayer.dataElementDimensions))
   const favoriteDataElements = _.map(favoriteLayer.dataElementDimensions,
     dataElementDimension => dataElementDimension.dataElement);
   return [
@@ -12,17 +17,22 @@ export function getSelectionDimensionsFromFavorite(favoriteLayer) {
 }
 
 function getStandardizedDimensions(dimensions: any[], dataElements: any[], dimensionLayout: string) {
-  // alert(JSON.stringify(dataElements))
-  return _.map(dimensions, dimensionObject => {
 
+  return _.map(dimensions, dimensionObject => {
+    const dimensionObjectInfo = _.find(dataElements, ['id', dimensionObject.dimension]);
     return {
       dimension: dimensionObject.dimension,
+      name: getDimensionName(dimensionObject.dimension, dimensionObjectInfo),
       layout: dimensionLayout,
       filter: dimensionObject.filter,
+      optionSet: dimensionObjectInfo ? dimensionObjectInfo.optionSet : null,
       items: _.map(dimensionObject.items, item => {
-        const itemInfo = _.find(dataElements, 'id', item.id);
-        return {id: item.dimensionItem || item.id, name: item.displayName, type: item.dimensionItemType, optionSet: itemInfo ? itemInfo.optionSet : null};
+        return {id: item.dimensionItem || item.id, name: item.displayName, type: item.dimensionItemType};
       })
     };
   });
+}
+
+function getDimensionName(dimension: string, dimensionObject: any) {
+  return dimensionObject ? dimensionObject.name : defaultDimensionNames[dimension];
 }
