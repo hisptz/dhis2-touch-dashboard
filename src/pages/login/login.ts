@@ -184,6 +184,7 @@ export class LoginPage implements OnInit {
       this.currentUser.username &&
       this.currentUser.password
     ) {
+      this.currentUser['isPasswordEncode'] = false;
       this.isNetworkAvailable = this.networkProvider.getNetWorkStatus().isAvailable;
       let currentResourceType = 'communication';
       this.progressTracker = {};
@@ -427,6 +428,7 @@ export class LoginPage implements OnInit {
         this.currentUser.serverUrl,
         this.currentUser.username
       );
+      currentUser.isPasswordEncode = true;
       this.localInstanceProvider
         .setLocalInstanceInstances(
           this.localInstances,
