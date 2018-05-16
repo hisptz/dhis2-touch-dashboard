@@ -34,7 +34,6 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpModule, Http } from '@angular/http';
 
-
 import { PipesModule } from '../pipes/pipes.module';
 import { AboutProvider } from '../providers/about/about';
 import { OrganisationUnitsProvider } from '../providers/organisation-units/organisation-units';
