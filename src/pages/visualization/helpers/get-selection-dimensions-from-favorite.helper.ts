@@ -25,6 +25,7 @@ function getStandardizedDimensions(dimensions: any[], dataElements: any[], dimen
       name: getDimensionName(dimensionObject.dimension, dimensionObjectInfo),
       layout: dimensionLayout,
       filter: dimensionObject.filter,
+      legendSet: dimensionObject.legendSet ? dimensionObject.legendSet.id : '',
       optionSet: dimensionObjectInfo ? dimensionObjectInfo.optionSet : null,
       items: _.map(dimensionObject.items, item => {
         return {id: item.dimensionItem || item.id, name: item.displayName, type: item.dimensionItemType};
