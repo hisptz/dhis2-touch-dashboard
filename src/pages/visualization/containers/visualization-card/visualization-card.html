@@ -60,7 +60,6 @@
            (visualizationProgress$ | async).statusCode === 200">
         <visualization-body-section
           [id]="(visualizationUiConfig$ | async)?.fullScreen ? id + '_full_screen' : id"
-          [currentType]="(visualizationConfig$ | async)?.currentType"
           [visualizationUiConfig]="visualizationUiConfig$ | async"
           [visualizationLayers]="visualizationLayers$ | async"
           [visualizationConfig]="visualizationConfig$ | async"

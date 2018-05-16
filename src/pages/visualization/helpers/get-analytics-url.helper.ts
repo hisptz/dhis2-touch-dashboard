@@ -19,7 +19,9 @@ function flattenDimensions(dataSelections: VisualizationDataSelection[]): string
   const dimensions = _.filter(_.map(dataSelections, (dataSelection: VisualizationDataSelection) => {
     const selectionValues = dataSelection.filter ? dataSelection.filter :
       _.map(dataSelection.items, item => item.id).join(';');
-    return selectionValues !== '' ? 'dimension=' + dataSelection.dimension + ':' + selectionValues : '';
+    return selectionValues !== '' ? 'dimension=' + dataSelection.dimension + ':' + selectionValues :
+      ['dx', 'ou', 'pe'].indexOf(dataSelection.dimension) === -1 ?
+        'dimension=' + dataSelection.dimension + (dataSelection.legendSet ? '-' + dataSelection.legendSet : '') : '';
   }), dimension => dimension !== '');
 
   return dimensions.join('&');
@@ -66,9 +68,15 @@ function getProgramParameters(config: any): string {
 }
 
 function getEventAnalyticsUrlSection(config) {
-  return config ?
-    (config.dataType !== 'AGGREGATED_VALUES' || !config.aggregate) ? config.eventClustering ? 'count/' : 'query/' :
-      'aggregate/' : '';
+  switch (config.visualizationType) {
+    case 'EVENT_CHART':
+      return 'aggregate/';
+    case 'EVENT_REPORT':
+      return config.dataType === 'AGGREGATED_VALUES' ? 'aggregate/' : 'query/';
+    default:
+      return !config.aggregate ? config.eventClustering ? 'count/' : 'query/' : 'aggregate/';
+  }
+
 }
 
 function getEventAnalyticsStartAndEndDateSection(config: any) {

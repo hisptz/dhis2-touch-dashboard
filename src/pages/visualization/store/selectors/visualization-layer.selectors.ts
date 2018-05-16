@@ -8,6 +8,8 @@ import {
 import { Visualization } from '../../models/visualization.model';
 import { VisualizationUiConfig } from '../../models/visualization-ui-config.model';
 import { VisualizationLayer } from '../../models/visualization-layer.model';
+import { getVisualizationMetadataIdentifiers } from '../../helpers/get-visualization-metadata-identifier.helper';
+import { getVisualizationLayout } from '../../helpers/get-visualization-layout.helper';
 
 export const getCurrentVisualizationObjectLayers = (visualizationId: string) => createSelector(
   getVisualizationObjectEntities, getVisualizationLayerEntities, getVisualizationUiConfigurationEntities,
@@ -18,6 +20,12 @@ export const getCurrentVisualizationObjectLayers = (visualizationId: string) => 
     }
 
     const currentVisualizationUiConfiguration: VisualizationUiConfig = visualizationUiConfigurationEntities[currentVisualizationObject.uiConfigId];
-    return currentVisualizationUiConfiguration.showBody ? _.filter(_.map(currentVisualizationObject.layers, (layerId: string) => visualizationLayerEntities[layerId]),
-      (layer: VisualizationLayer) => layer): [];
+    return currentVisualizationUiConfiguration.showBody ? _.map(_.filter(_.map(currentVisualizationObject.layers, (layerId: string) => visualizationLayerEntities[layerId]),
+      (layer: VisualizationLayer) => layer), visualizationLayer => {
+      return {
+        ...visualizationLayer,
+        metadataIdentifiers: getVisualizationMetadataIdentifiers(visualizationLayer.dataSelections),
+        layout: getVisualizationLayout(visualizationLayer.dataSelections)
+      }
+    }): [];
   });
