@@ -2,6 +2,8 @@ import {
   Component, EventEmitter, Input, OnDestroy, Output,
 } from '@angular/core';
 import * as _ from 'lodash';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-org-unit-filter',
@@ -12,11 +14,14 @@ export class OrgUnitFilterComponent implements OnDestroy {
   @Input() selectedOrgUnits: any[];
   @Input() orgUnitTreeHeight: string;
 
+  private _readableSelectedOrgUnits$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  readableSelectedOrgUnits$: Observable<string>;
   @Output() orgUnitUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() orgUnitClose: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() {
     this.orgUnitTreeHeight = '270px';
+    this.readableSelectedOrgUnits$ = this._readableSelectedOrgUnits$.asObservable();
   }
 
   ngOnDestroy() {

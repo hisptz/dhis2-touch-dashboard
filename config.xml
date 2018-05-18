@@ -3,7 +3,7 @@
     <name>Interactive Dashboard</name>
     <description>Interactive dashboard experience on mobile</description>
     <author email="profschingal@gamil.com" href="">Joseph Chingalo</author>
-    <content original-src="index.html" src="http://192.168.1.4:8100" />
+    <content original-src="index.html" src="http://192.168.8.101:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -99,5 +99,6 @@
     <allow-navigation href="http://192.168.1.8:8100" />
     <allow-navigation href="http://192.168.1.7:8100" />
     <allow-navigation href="http://192.168.1.4:8100" />
+    <allow-navigation href="http://192.168.8.101:8100" />
     <engine name="android" spec="6.3.0" />
 </widget>
