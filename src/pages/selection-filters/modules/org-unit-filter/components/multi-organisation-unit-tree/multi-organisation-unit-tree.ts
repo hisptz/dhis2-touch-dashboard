@@ -1,6 +1,9 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { OrganisationUnitsProvider } from '../../../../../../providers/organisation-units/organisation-units';
 import { AppTranslationProvider } from '../../../../../../providers/app-translation/app-translation';
+import * as _ from 'lodash';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Generated class for the MultiOrganisationUnitTreeComponent component.
@@ -26,146 +29,66 @@ export class MultiOrganisationUnitTreeComponent implements OnInit {
   seletectedOrganisationUnitIds: Array<string> = [];
   translationMapper: any;
   isOrganisationUnitsFetched: boolean = true;
-  hasErrorOccurred: boolean = false;
   hasOrgUnitChildrenLoaded: boolean;
 
-  constructor(private organisationUnitProvider: OrganisationUnitsProvider,
-    private appTranslation: AppTranslationProvider) {
+  organisationUnitChildren: any[];
+  private _loadingOrganisationUnitChildren$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  loadingOrganisationUnitChildren$: Observable<boolean>;
+  organisationUnitChildrenLoaded: boolean;
+  hasErrorOccurred: boolean;
+
+  constructor(private organisationUnitProvider: OrganisationUnitsProvider) {
+    this.organisationUnitChildren = [];
+    this.organisationUnitChildrenLoaded = this.hasErrorOccurred = false;
+    this.loadingOrganisationUnitChildren$ = this._loadingOrganisationUnitChildren$.asObservable();
   }
 
   ngOnInit() {
-    this.translationMapper = {};
-    this.appTranslation.getTransalations(this.getValuesToTranslate()).subscribe(
-      (data: any) => {
-        this.translationMapper = data;
-        this.setMetadata();
-      },
-      error => {
-        this.setMetadata();
-      }
-    );
+    if(this.organisationUnit && this.organisationUnit.isExpanded && this.organisationUnit.children.length > 0) {
+      this.loadOrganisationUnitChildren()
+    }
   }
 
-  setMetadata() {
-    if (this.selectedOrgUnits && this.selectedOrgUnits.length > 0) {
-      let ids = [];
-      this.selectedOrgUnits.map((selectedOrgUnit: any) => {
-        if (
-          Object.keys(this.hasOrgUnitChildrenOpened).indexOf(
-            selectedOrgUnit.id
-          ) == -1
-        ) {
-          ids.push(selectedOrgUnit.id);
-        }
-        this.seletectedOrganisationUnitIds.push(selectedOrgUnit.id);
+  loadOrganisationUnitChildren() {
+    this._loadingOrganisationUnitChildren$.next(true)
+    this.organisationUnitChildrenLoaded = false;
+    this.organisationUnitProvider.getOrganisationUnitsByIds(this.organisationUnit.children, this.currentUser).
+      subscribe((organisationUnitChildren: any[]) => {
+        this.organisationUnitChildren = _.filter(_.map(organisationUnitChildren, (orgUnit: any) => {
+          const selectedOrgUnitIds = _.map(this.selectedOrgUnits, selectedOrgUnit => selectedOrgUnit.id);
+          return {
+            id: orgUnit.id,
+            name: orgUnit.name,
+            level: orgUnit.level,
+            isExpanded: _.some(orgUnit.children || [], orgUnitChild => selectedOrgUnitIds.indexOf(orgUnitChild.id) !== -1),
+            selected: _.some(this.selectedOrgUnits, selectedOrgUnit => selectedOrgUnit.id === orgUnit.id),
+            children: _.map(orgUnit.children || [], orgUnitChild => orgUnitChild.id)
+          };
+        }), orgUnit => orgUnit);
+        this._loadingOrganisationUnitChildren$.next(false);
+        this.organisationUnitChildrenLoaded = true;
+      }, error => {
+        this.hasErrorOccurred = true;
+        this._loadingOrganisationUnitChildren$.next(false)
       });
-      if (ids.length > 0) {
-        this.organisationUnitProvider.getOrganisationUnitsByIds(ids, this.currentUser).
-          subscribe((selectedOrganisationUnits: any) => {
-            selectedOrganisationUnits.map((selectedOrganisationUnit: any) => {
-              let parentCopy = selectedOrganisationUnit.path.substring(1, selectedOrganisationUnit.path.length).
-                split('/');
-              if (parentCopy.indexOf(this.organisationUnit.id) > -1) {
-                selectedOrganisationUnit.ancestors.forEach((ancestor: any) => {
-                  if (
-                    ancestor.id == this.organisationUnit.id &&
-                    Object.keys(this.hasOrgUnitChildrenOpened).indexOf(
-                      ancestor.id
-                    ) == -1
-                  ) {
-                    this.toggleTree(ancestor);
-                  } else {
-                    this.isOrganisationUnitsFetched = true;
-                    this.hasOrgUnitChildrenLoaded = true;
-                    this.hasErrorOccurred = false;
-                  }
-                });
-              }
-            });
-          });
-      }
-    }
   }
 
-  toggleTree(organisationUnit) {
-    if (this.hasOrgUnitChildrenOpened[organisationUnit.id]) {
-      this.hasOrgUnitChildrenOpened[organisationUnit.id] = !this.hasOrgUnitChildrenOpened[organisationUnit.id];
-    } else if (
-      Object.keys(this.hasOrgUnitChildrenOpened).indexOf(organisationUnit.id) >
-      -1
-    ) {
-      this.hasOrgUnitChildrenOpened[organisationUnit.id] = !this.hasOrgUnitChildrenOpened[organisationUnit.id];
-      this.isOrganisationUnitsFetched = true;
-      this.hasOrgUnitChildrenLoaded = true;
-      this.hasErrorOccurred = false;
+  toggleTree() {
+    this.organisationUnit.isExpanded = !this.organisationUnit.isExpanded;
+    if (this.organisationUnit.isExpanded) {
+      this.loadOrganisationUnitChildren();
     } else {
-      this.isOrganisationUnitsFetched = false;
-      this.hasOrgUnitChildrenLoaded = false;
-      this.hasOrgUnitChildrenOpened[organisationUnit.id] = true;
-      let childrenOrganisationUnitIds = this.getOrganisationUnitsChildrenIds(
-        organisationUnit
-      );
-      this.organisationUnitProvider.getOrganisationUnitsByIds(
-        childrenOrganisationUnitIds,
-        this.currentUser
-      ).subscribe(
-        (childrenOrganisationUnits: any) => {
-          this.organisationUnit = {...this.organisationUnit, children: childrenOrganisationUnits};
-          this.isOrganisationUnitsFetched = true;
-          this.hasOrgUnitChildrenLoaded = true;
-          this.hasErrorOccurred = false;
-        },
-        error => {
-          console.log(JSON.stringify(error));
-          let message = 'Fail to discover organisation unit children';
-          this.isOrganisationUnitsFetched = true;
-          this.hasOrgUnitChildrenLoaded = true;
-          this.hasErrorOccurred = true;
-        }
-      );
+      this.organisationUnitChildren = []
     }
-  }
-
-  getOrganisationUnitsChildrenIds(organisationUnit) {
-    let childrenIds = [];
-    for (let children of organisationUnit.children) {
-      childrenIds.push(children.id);
-    }
-    return childrenIds;
   }
 
   selectOrganisationUnit(organisationUnit) {
-    if (
-      this.isOrganisationUnitPreviousSelected(
-        this.selectedOrgUnits,
-        organisationUnit
-      )
-    ) {
-      let index = this.seletectedOrganisationUnitIds.indexOf(
-        organisationUnit.id
-      );
-      this.seletectedOrganisationUnitIds.splice(index, 1);
-      let newSelectedOrganisationUnits = [];
-      this.selectedOrgUnits.map((selectedOrgUnit: any) => {
-        if (selectedOrgUnit.id != organisationUnit.id) {
-          newSelectedOrganisationUnits.push(selectedOrgUnit);
-        }
-      });
-      this.selectedOrgUnits = [];
-      this.selectedOrgUnits = newSelectedOrganisationUnits;
-      //deactivate ou
+    if (organisationUnit.selected) {
       this.onDeactivateOu(organisationUnit);
     } else {
-      const seletectOrganisationUnit = {
-        id: organisationUnit.id,
-        name: organisationUnit.name,
-        type: 'ORGANISATION_UNIT'
-      };
-      this.seletectedOrganisationUnitIds.push(organisationUnit.id);
-      this.selectedOrgUnits.push(seletectOrganisationUnit);
-      //activate ou
       this.onActivateOu(organisationUnit);
     }
+    this.organisationUnit.selected = !this.organisationUnit.selected;
   }
 
   onDeactivateOu(organisationUnit) {
@@ -174,22 +97,5 @@ export class MultiOrganisationUnitTreeComponent implements OnInit {
 
   onActivateOu(organisationUnit) {
     this.activate.emit(organisationUnit);
-  }
-
-  isOrganisationUnitPreviousSelected(selectedOrgUnits, organisationUnit) {
-    let result = false;
-    selectedOrgUnits.map((selectedOrgUnit: any) => {
-      if (selectedOrgUnit.id == organisationUnit.id) {
-        result = true;
-      }
-    });
-    return result;
-  }
-
-  getValuesToTranslate() {
-    return [
-      'Discovering organisation units',
-      'Fail to discover organisation unit children'
-    ];
   }
 }

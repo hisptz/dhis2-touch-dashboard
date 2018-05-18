@@ -84,6 +84,7 @@
 
     <!--org unit filter-->
     <app-org-unit-filter
+      *ngIf="selectedFilter === 'ORG_UNIT'"
       [selectedOrgUnits]="selectedOrgUnits"
       (orgUnitClose)="onFilterClose($event, 'ORG_UNIT')"
       (orgUnitUpdate)="onFilterUpdate($event, 'ORG_UNIT')"

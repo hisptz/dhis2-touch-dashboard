@@ -2,7 +2,27 @@ app-org-unit-filter {
   .org-unit-filter-container {
 
     .org-unit-filter-header {
-      padding: 10px;
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+     .selected-org-unit-display {
+       padding: 5px;
+       max-height: 50px;
+       overflow: auto;
+       border-radius: 2px;
+       border: solid 1px #FAFAFA;
+       width: calc(100% - 40px);
+     }
+      .org-unit-filter-options-btn {
+        width: 35px;
+        height: 40px;
+        background-color: transparent;
+        border: solid 1px #FAFAFA;
+        border-radius: 3px;
+        img {
+          height: 20px;
+        }
+      }
     }
     .org-unit-filter-tree {
       overflow: auto;
