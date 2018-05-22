@@ -20,7 +20,8 @@ function flattenDimensions(dataSelections: VisualizationDataSelection[]): string
     const selectionValues = dataSelection.filter ? dataSelection.filter :
       _.map(dataSelection.items, item => item.id).join(';');
     return selectionValues !== '' ? 'dimension=' + dataSelection.dimension + ':' + selectionValues :
-      ['dx', 'ou', 'pe'].indexOf(dataSelection.dimension) === -1 ? 'dimension=' + dataSelection.dimension : '';
+      ['dx', 'ou', 'pe'].indexOf(dataSelection.dimension) === -1 ?
+        'dimension=' + dataSelection.dimension + (dataSelection.legendSet ? '-' + dataSelection.legendSet : '') : '';
   }), dimension => dimension !== '');
 
   return dimensions.join('&');
