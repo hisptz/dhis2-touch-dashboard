@@ -1,0 +1,115 @@
+{
+  "Innovation in every dimension": "Innovation in aragti kasta",
+  "Establishing connection to server": "Dhisidda xiriir si server",
+  "Enter server address": "Ku qor cinwaanka server",
+  "Enter username": "Ku qor username",
+  "Enter password": "Ku qor password",
+  "Login": "login",
+  "or": "ama",
+  "Offline instances": "mararka offline",
+  "Powered by": "Powered by",
+  "Discovering system information": "La qabsashada macluumaadka nidaamka",
+  "Discovering current user authorities": "La qabsashada maamulka user hadda",
+  "Preparing local storage": "Diyaarinta kaydinta degaanka",
+  "Fail to prepare local storage":
+    "Guul daraystaan ​​in ay diyaariyaan kaydinta degaanka",
+  "Fail to discover user authorities":
+    "Ku guuldareysato inay ogaadaan maamulka user",
+  "Fail to discover system information":
+    "Guul daraystaan ​​in ay ogaadaan macluumaadka nidaamka",
+  "Fail to save current user information":
+    "Guul daraystaan ​​in ay badbaadin macluumaad user hadda",
+  "Please check your network connectivity":
+    "Fadlan hubi isku xirnaanta shabakad",
+  "You have enter wrong username or password or server address":
+    "Waxaad leedahay geli username qaldan ama password ama cinwaanka server",
+  "Please check server address, or contact your help desk":
+    "Fadlan hubi cinwaanka server, ama la xiriir caawimaad miiska",
+  "Please enter server address, username and password":
+    "Fadlan qor ciwaanka server, magacaaga iyo isgarad-",
+  "Discovering assigned organisation units":
+    "La qabsashada unugyada ururka loo xilsaaray",
+  "Assigned organisation units have been loaded":
+    "unugyada ururka loo xilsaaray ayaa ku raran",
+  "Saving assigned organisation units":
+    "Badbaadinta unugyada ururka loo xilsaaray",
+  "Assigned organisation units have been saved":
+    "unugyada ururka loo xilsaaray ayaa la badbaadiyey",
+  "Fail to save organisation data":
+    "Guul daraystaan ​​in ay badbaadin xogta ururka",
+  "Fail to discover organisation data":
+    "Guul daraystaan ​​in ay ogaadaan xogta ururka",
+  "Search": "Search",
+  "There is no local instance to select":
+    "Ma jiro tusaale ahaan degaanka in ay doortaan",
+  "Discovering available local instances":
+    "La qabsashada xaaladaha deegaanka ee laga",
+  "Fail to load available local instances":
+    "Guul daraystaan ​​in ay ku shuban mararka deegaanka ee laga",
+  "Log out": "Ka bax",
+  "About": "About",
+  "System info": "System info",
+  "Discovering current user information": "La qabsashada macluumaad user hadda",
+  "Discovering app information": "La qabsashada macluumaad app",
+  "Fail to discover current user information":
+    "Guul daraystaan ​​in ay ogaadaan macluumaadka user hadda",
+  "Fail to discover app information":
+    "Guul daraystaan ​​in ay ogaadaan macluumaadka app",
+  "Settings": "Settings",
+  "App settings": "goobaha app",
+  "Current language": "luqadda hadda",
+  "Fail to load current user information":
+    "Guul daraystaan ​​in ay ku shuban macluumaad user hadda",
+  "Fail to set translation": "Ku dhisan waayaan turjumaad",
+  "Dashboard": "dashboard",
+  "Discovering dashboards": "La qabsashada dashboards",
+  "There no dashboard item found": "Waxaa jirin wax dashboard helay",
+  "Dashboard list": "liiska dashboard",
+  "Search dashboard by name": "Search dashboard by magaca",
+  "Layout": "Layout",
+  "Table / Chart Layout": "Shaxda / Layout Chart",
+  "Filters": "filtarrada",
+  "Column": "column",
+  "Row": "Row",
+  "Categories": "Categories",
+  "Series": "Taxanaha",
+  "Update": "update",
+  "Close": "Close",
+  "Data": "Data",
+  "Select": "Dooro",
+  "All": "All",
+  "Data elements": "xubno Data",
+  "Indicators": "Muujiyeyaasha",
+  "Data sets": "sets Data",
+  "Program indicators": "tilmaamayaasha Program",
+  "Functions": "Functions",
+  "Available": "Available",
+  "Selected": "soo xulay",
+  "Discovering...": "La qabsashada ...",
+  "No items": "No items",
+  "Period": "Period",
+  "Select period type": "nooca muddo Select",
+  "Previous year": "sano Previous",
+  "Next year": "sannadka soo socda",
+  "Org-unit": "Tusmaynta-unit",
+  "Interpretation": "fasiraadda",
+  "Not found": "Lama helin",
+  "This interpretation will be deleted, are you sure?":
+    "Fasiraadda Tani waa la tirtiri doonaa, aad hubto?",
+  "Deleting interpretation": "fasiraadda takhalusid",
+  "Comment": "Comment",
+  "Search interpretation": "fasiraadda Search",
+  "Edit": "edit",
+  "Delete": "delete",
+  "Updating likes status": "Cusbooneysiinta jecel yahay xaaladda",
+  "Unlike": "Si ka duwan",
+  "Like": "Like",
+  "Write new interpretation": "Qor fasiraadda cusub",
+  "Cancel": "Jooji",
+  "Posting": "dhajiyay",
+  "Post": "Post",
+  "This comment will be deleted, are you sure?":
+    "comment Tani waxay la tirtiro doonaa, aad hubto?",
+  "Deleting comment": "takhalusid comment",
+  "Write your comment": "Ku qor comment"
+}

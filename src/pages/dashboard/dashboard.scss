@@ -1,27 +1,32 @@
 page-dashboard {
-  .dashboard {
-    background-color: #F4F4F4;
+  .selected-dashboard-block {
+    position: fixed;
+    z-index: 1400;
+    width: 100%;
+    -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+    -moz-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+    border-radius: 2px;
+    background-color: #ffffff;
+    padding: 14px 12px 14px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .dashboard-name {
+      font-size: 1.4rem;
+    }
+    img {
+      height: 15px;
+    }
   }
 
-  .list-separator{
-    height: 1.7rem;
+  .visualization-card-list {
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 50px;
   }
 
-  .dashboard-card{
-    border: 1px solid #E6E6E7;
-    border-radius: 0.1rem;
-    padding: 5px 10px 5px;
-    margin-top:5px;
-    margin-bottom:5px;
-  }
-
-  .item-md.item-block .item-inner {
-    padding-right: 5px;
-    border-bottom: 0px solid #dedede;
-  }
-
-  .item-ios.item-block .item-inner {
-    padding-right: 5px;
-    border-bottom: 0px solid #dedede;
+  .visualization-card-container {
+    width: 100%;
   }
 }

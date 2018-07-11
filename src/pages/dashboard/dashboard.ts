@@ -1,162 +1,44 @@
-import { Component, OnInit} from '@angular/core';
-import { IonicPage, ModalController, MenuController } from 'ionic-angular';
-import {NetworkAvailabilityProvider} from "../../providers/network-availability/network-availability";
-import {UserProvider} from "../../providers/user/user";
-import {AppProvider} from "../../providers/app/app";
-import {DashboardProvider} from "../../providers/dashboard/dashboard";
-import { BackgroundMode } from '@ionic-native/background-mode';
-
-/**
- * Generated class for the DashboardPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
+import { Component, OnInit } from '@angular/core';
+import { IonicPage, ModalController, NavController, NavParams } from 'ionic-angular';
+import { Store } from '@ngrx/store';
+import { DashboardState } from './store/reducers/';
+import { LoadDashboardsAction } from './store/actions/dashboard.actions';
+import { Observable } from 'rxjs/Observable';
+import { getCurrentDashboard, getDashboardLoadingStatus } from './store/selectors/dashboard.selectors';
+import { Dashboard } from './models';
+import { getCurrentDashboardVisualizations } from './store/selectors/dashboard-visualizations.selectors';
 
 @IonicPage()
 @Component({
   selector: 'page-dashboard',
   templateUrl: 'dashboard.html',
 })
-export class DashboardPage implements OnInit{
+export class DashboardPage implements OnInit {
 
-  currentUser:any;
-  loadingMessage:string;
-  isLoading:boolean;
-  isDashboardItemsLoading:boolean;
+  currentDashboard$: Observable<Dashboard>;
+  currentDashboardVisualizations$: Observable<Array<string>>;
+  loading$: Observable<boolean>;
 
-  currentDashboardName:string;
-  currentDashboardId:string;
-  dashboards:any = [];
-  openedDashboardItemIds:any = {};
+  constructor(public navCtrl: NavController, public navParams: NavParams, private store: Store<DashboardState>,
+    public modalCtrl: ModalController,) {
+    this.currentDashboard$ = store.select(getCurrentDashboard);
+    this.currentDashboardVisualizations$ = store.select(getCurrentDashboardVisualizations);
+    this.loading$ = store.select(getDashboardLoadingStatus);
+  }
 
-  isInFullScreen : boolean;
+  ionViewDidLoad() {
 
-  emptyListMessage : any;
-
-  constructor(public modalCtrl:ModalController,
-              private appProvider:AppProvider, private userProvider:UserProvider,
-              private DashboardService: DashboardProvider,
-              private NetworkAvailability:NetworkAvailabilityProvider,
-              private backgroundMode: BackgroundMode,
-              private menu:MenuController) {
   }
 
   ngOnInit() {
-    this.backgroundMode.disable().then(()=>{
-      console.log("success");
-    },reason => (console.log('here : ' + JSON.stringify(reason))));
-    this.menu.enable(true);
-    this.isLoading = true;
-    this.isInFullScreen = false;
-    this.loadingMessage = "Loading current user information";
-    this.userProvider.getCurrentUser().then(currentUser=> {
-      this.userProvider.getUserData().then((userData :any)=>{
-        //todo user org unit
-        this.currentUser = currentUser;
-        this.loadingListOfAllDashboards(currentUser)
-      },error=>{});
-    }, error=> {
-      this.isLoading = false;
-      this.appProvider.setNormalNotification("Fail to loading current user information");
-    });
-  }
-
-  loadingListOfAllDashboards(currentUser) {
-    this.isLoading = true;
-    let network = this.NetworkAvailability.getNetWorkStatus();
-    this.currentDashboardName = '';
-    this.currentDashboardId = '';
-    if (network.isAvailable) {
-      this.openedDashboardItemIds = {};
-      this.loadingMessage = "Loading dashboards";
-      this.dashboards = [];
-      this.DashboardService.loadAll(currentUser).subscribe((dashboards: any)=>{
-        this.dashboards = dashboards;
-        if (dashboards.length > 0) {
-          this.currentDashboardName = dashboards[0].name;
-          this.currentDashboardId = dashboards[0].id;
-          for (let dashboard of  dashboards) {
-            if(dashboard.dashboardItems && dashboard.dashboardItems.length > 0 ){
-              dashboard.dashboardItems.forEach((dashboardItem : any)=>{
-                dashboardItem['title'] = this.DashboardService.getDashBoardTitle(dashboardItem);
-                dashboardItem['icon'] = this.DashboardService.getDashBoardItemIcon(dashboardItem.type);
-              });
-            }
-          }
-          if(dashboards[0].dashboardItems && dashboards[0].dashboardItems.length > 0){
-            this.toggleDashboardItemCard(dashboards[0].dashboardItems[0].id);
-          }
-          this.isLoading = false;
-        } else {
-          this.isLoading = false;
-          this.currentDashboardName = "No dashboard found";
-          this.emptyListMessage = "No dashboard found from server";
-        }
-      },error=>{
-        this.isLoading = false;
-        console.log(JSON.stringify(error));
-        this.appProvider.setNormalNotification('Fail to load dashboards');
-      });
-    } else {
-      //there is no network available
-      this.isLoading = false;
-      this.appProvider.setNormalNotification(network.message);
-    }
-  }
-
-  toggleDashboardItemCard(dashboardItemId){
-    if(this.openedDashboardItemIds[dashboardItemId]){
-      this.openedDashboardItemIds[dashboardItemId] = false;
-    }else{
-      this.openedDashboardItemIds[dashboardItemId] = true;
-    }
+    this.store.dispatch(new LoadDashboardsAction());
   }
 
   openDashboardListFilter() {
-    if (this.dashboards.length > 0) {
-      this.isLoading = true;
-      this.loadingMessage = "Please wait ...";
-      let modal = this.modalCtrl.create('DashboardFilterPage', {
-        currentDashboardName: this.currentDashboardName,
-        currentUser: this.currentUser
-      });
-      modal.onDidDismiss((dashboard:any)=> {
-        this.isLoading = false;
-        this.loadingMessage = "";
-        if (dashboard && dashboard.name) {
-          if (dashboard.name != this.currentDashboardName) {
-            this.currentDashboardName = dashboard.name;
-            this.currentDashboardId = dashboard.id;
-            if(dashboard.dashboardItems && dashboard.dashboardItems.length > 0){
-              this.toggleDashboardItemCard(dashboard.dashboardItems[0].id);
-            }
-          }
-        }
-      });
-      modal.present();
-    }
-  }
-
-  loadFullScreenDashboard(modalData){
-    this.isLoading = true;
-    this.loadingMessage = "Please wait ...";
-    let data = {
-      dashboardItem : modalData.dashboardItem,
-      dashboardId : modalData.dashboardId
-    };
-    let modal = this.modalCtrl.create('FullScreenDashboardPage', data);
-    modal.onDidDismiss(()=> {
-      this.loadingMessage = "";
-      this.isLoading = false;
+    let modal = this.modalCtrl.create('DashboardListFilterPage', {});
+    modal.onDidDismiss(() => {
     });
     modal.present();
-  }
-
-  reLoadDashBoard(refresher){
-    //this.DashboardService.resetDashboards();
-    //this.loadingListOfAllDashboards(this.currentUser);
-    refresher.complete();
   }
 
 }

@@ -1,0 +1,113 @@
+{
+  "Innovation in every dimension": "Inovasi dalam setiap dimensi",
+  "Establishing connection to server": "Membangun koneksi ke server",
+  "Enter server address": "Masukkan alamat server",
+  "Enter username": "Masukkan nama pengguna",
+  "Enter password": "Masukkan kata kunci",
+  "Login": "Masuk",
+  "or": "atau",
+  "Offline instances": "contoh Offline",
+  "Powered by": "Dipersembahkan oleh",
+  "Discovering system information": "sistem informasi menemukan",
+  "Discovering current user authorities": "Menemukan berwenang pengguna saat",
+  "Preparing local storage": "Mempersiapkan penyimpanan lokal",
+  "Fail to prepare local storage":
+    "Gagal untuk mempersiapkan penyimpanan lokal",
+  "Fail to discover user authorities":
+    "Gagal untuk menemukan otoritas pengguna",
+  "Fail to discover system information":
+    "Gagal untuk menemukan sistem informasi",
+  "Fail to save current user information":
+    "Gagal untuk menyimpan informasi pengguna saat ini",
+  "Please check your network connectivity":
+    "Silakan periksa konektivitas jaringan Anda",
+  "You have enter wrong username or password or server address":
+    "Anda memiliki masukkan username yang salah atau password atau alamat server",
+  "Please check server address, or contact your help desk":
+    "Silakan periksa alamat server, atau hubungi meja bantuan Anda",
+  "Please enter server address, username and password":
+    "Masukkan alamat server, username dan password",
+  "Discovering assigned organisation units":
+    "Menemukan unit organisasi yang ditugaskan",
+  "Assigned organisation units have been loaded":
+    "unit organisasi ditugaskan telah dimuat",
+  "Saving assigned organisation units":
+    "Menyimpan unit organisasi yang ditugaskan",
+  "Assigned organisation units have been saved":
+    "unit organisasi ditugaskan telah disimpan",
+  "Fail to save organisation data": "Gagal untuk menyimpan data organisasi",
+  "Fail to discover organisation data": "Gagal menemukan data organisasi",
+  "Search": "Pencarian",
+  "There is no local instance to select":
+    "Tidak ada contoh lokal untuk memilih",
+  "Discovering available local instances":
+    "Menemukan contoh lokal yang tersedia",
+  "Fail to load available local instances":
+    "Gagal untuk memuat contoh lokal yang tersedia",
+  "Log out": "Keluar",
+  "About": "Tentang",
+  "System info": "Sistem Informasi",
+  "Discovering current user information": "Menemukan informasi pengguna saat",
+  "Discovering app information": "Menemukan informasi aplikasi",
+  "Fail to discover current user information":
+    "Gagal untuk menemukan informasi pengguna saat ini",
+  "Fail to discover app information":
+    "Gagal untuk menemukan informasi aplikasi",
+  "Settings": "pengaturan",
+  "App settings": "Pengaturan aplikasi",
+  "Current language": "bahasa saat ini",
+  "Fail to load current user information":
+    "Gagal memuat informasi pengguna saat ini",
+  "Fail to set translation": "Gagal untuk mengatur terjemahan",
+  "Dashboard": "Dasbor",
+  "Discovering dashboards": "menemukan dashboard",
+  "There no dashboard item found": "Ada ada item dashboard ditemukan",
+  "Dashboard list": "daftar dashboard",
+  "Search dashboard by name": "Cari dashboard dengan nama",
+  "Layout": "tata ruang",
+  "Table / Chart Layout": "Tabel / Bagan Tata Letak",
+  "Filters": "filter",
+  "Column": "Kolom",
+  "Row": "Baris",
+  "Categories": "kategori",
+  "Series": "Seri",
+  "Update": "Memperbarui",
+  "Close": "Dekat",
+  "Data": "Data",
+  "Select": "Memilih",
+  "All": "Semua",
+  "Data elements": "elemen data",
+  "Indicators": "indikator",
+  "Data sets": "Data set",
+  "Program indicators": "indikator Program",
+  "Functions": "fungsi",
+  "Available": "Tersedia",
+  "Selected": "Terpilih",
+  "Discovering...": "Menemukan ...",
+  "No items": "Tidak ada barang",
+  "Period": "Periode",
+  "Select period type": "Pilih jenis periode",
+  "Previous year": "Tahun sebelumnya",
+  "Next year": "Tahun depan",
+  "Org-unit": "Org unit",
+  "Interpretation": "Interpretasi",
+  "Not found": "Tidak ditemukan",
+  "This interpretation will be deleted, are you sure?":
+    "Penafsiran ini akan dihapus, apakah Anda yakin?",
+  "Deleting interpretation": "menghapus interpretasi",
+  "Comment": "Komentar",
+  "Search interpretation": "interpretasi pencarian",
+  "Edit": "mengedit",
+  "Delete": "Menghapus",
+  "Updating likes status": "Memperbarui suka Status",
+  "Unlike": "Tidak seperti",
+  "Like": "Seperti",
+  "Write new interpretation": "Menulis penafsiran baru",
+  "Cancel": "Membatalkan",
+  "Posting": "Posting",
+  "Post": "Pos",
+  "This comment will be deleted, are you sure?":
+    "Komentar ini akan dihapus, apakah Anda yakin?",
+  "Deleting comment": "menghapus komentar",
+  "Write your comment": "Tulis komentar anda"
+}

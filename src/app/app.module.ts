@@ -6,86 +6,88 @@ import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { ResourceProvider } from '../providers/resource/resource';
-import {SharedModule} from "../components/shared.module";
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
+import { LauncherPage } from '../pages/launcher/launcher';
+import { SharedModule } from '../components/shared.module';
+import { NetworkAvailabilityProvider } from '../providers/network-availability/network-availability';
+import { UserProvider } from '../providers/user/user';
+import { SqlLiteProvider } from '../providers/sql-lite/sql-lite';
+import { AppProvider } from '../providers/app/app';
+import { LocalInstanceProvider } from '../providers/local-instance/local-instance';
+import { HttpClientProvider } from '../providers/http-client/http-client';
+import { AppTranslationProvider } from '../providers/app-translation/app-translation';
+import { EncryptionProvider } from '../providers/encryption/encryption';
+import { SettingsProvider } from '../providers/settings/settings';
+
+import { SQLite } from '@ionic-native/sqlite';
 import { HTTP } from '@ionic-native/http';
+import { AppVersion } from '@ionic-native/app-version';
 import { Network } from '@ionic-native/network';
-import { HttpModule } from '@angular/http';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { IonicStorageModule } from '@ionic/storage';
-import { AppVersion } from '@ionic-native/app-version';
-import {HttpClientProvider} from "../providers/http-client/http-client";
-import {UserProvider} from "../providers/user/user";
-import {NetworkAvailabilityProvider} from "../providers/network-availability/network-availability";
-import {AppProvider} from "../providers/app/app";
-import {VisualizerService} from "../providers/visualizer-service";
-import {DashboardModule} from "../components/dashboard.module";
+import { SMS } from '@ionic-native/sms';
+
+//translations
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpModule, Http } from '@angular/http';
+
+import { PipesModule } from '../pipes/pipes.module';
 import { AboutProvider } from '../providers/about/about';
-import { ProfileProvider } from '../providers/profile/profile';
-import { DashboardProvider } from '../providers/dashboard/dashboard';
-import { AnalyticsServiceProvider } from '../providers/analytics-service/analytics-service';
-import { ChartServiceProvider } from '../providers/chart-service/chart-service';
-import { ColorInterpolationServiceProvider } from '../providers/color-interpolation-service/color-interpolation-service';
-import { DashboardNotificationServiceProvider } from '../providers/dashboard-notification-service/dashboard-notification-service';
-import { FavoriteServiceProvider } from '../providers/favorite-service/favorite-service';
-import { GeoFeatureServiceProvider } from '../providers/geo-feature-service/geo-feature-service';
-import { LegendSetServiceProvider } from '../providers/legend-set-service/legend-set-service';
-import { MapServiceProvider } from '../providers/map-service/map-service';
-import { MapVisualizationServiceProvider } from '../providers/map-visualization-service/map-visualization-service';
-import { OrgUnitGroupSetServiceProvider } from '../providers/org-unit-group-set-service/org-unit-group-set-service';
-import { RelativePeriodServiceProvider } from '../providers/relative-period-service/relative-period-service';
-import { TableServiceProvider } from '../providers/table-service/table-service';
-import { VisualizationServiceProvider } from '../providers/visualization-service/visualization-service';
-import { VisualizationObjectServiceProvider } from '../providers/visualization-object-service/visualization-object-service';
-import { VisualizerServiceProvider } from '../providers/visualizer-service/visualizer-service';
-import { UtilitiesServiceProvider } from '../providers/utilities-service/utilities-service';
-import { MapFilesConversionProvider } from '../providers/map-files-conversion/map-files-conversion';
-import {TileLayers} from '../constants/tile-layers';
-import {OrgUnitService} from '../providers/org-unit.service';
-import { MessageServiceProvider } from '../providers/message-service/message-service';
+import { OrganisationUnitsProvider } from '../providers/organisation-units/organisation-units';
+import { EffectsModule } from '@ngrx/effects';
+import { reducers } from '../store/reducers';
+import { effects } from '../store/effects';
+export function createTranslateLoader(http: Http) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
-  declarations: [
-    MyApp
-  ],
+  declarations: [MyApp, LauncherPage],
   imports: [
     BrowserModule,
-    SharedModule,DashboardModule,
-    HttpModule,
+    BrowserAnimationsModule,
+    StoreModule.forRoot(reducers),
+    EffectsModule.forRoot(effects),
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    HttpModule,
+    IonicStorageModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [Http]
+      }
+    }),
+    PipesModule,
+    SharedModule
+    //StoreDevtoolsModule.instrument({maxAge: 100})
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp
-  ],
+  entryComponents: [MyApp, LauncherPage],
   providers: [
     StatusBar,
-    SplashScreen,HTTP,AppVersion,Network,BackgroundMode,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ResourceProvider,HttpClientProvider,UserProvider,NetworkAvailabilityProvider,AppProvider,
-    VisualizerService,
+    SQLite,
+    SMS,
+    SplashScreen,
+    HTTP,
+    AppVersion,
+    Network,
+    BackgroundMode,
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    NetworkAvailabilityProvider,
+    UserProvider,
+    SettingsProvider,
     AboutProvider,
-    ProfileProvider,
-    DashboardProvider,
-    AnalyticsServiceProvider,
-    ChartServiceProvider,
-    ColorInterpolationServiceProvider,
-    DashboardNotificationServiceProvider,
-    FavoriteServiceProvider,
-    GeoFeatureServiceProvider,
-    LegendSetServiceProvider,
-    MapServiceProvider,
-    MapVisualizationServiceProvider,
-    OrgUnitGroupSetServiceProvider,
-    RelativePeriodServiceProvider,
-    TableServiceProvider,
-    VisualizationServiceProvider,
-    VisualizationObjectServiceProvider,
-    VisualizerServiceProvider,
-    UtilitiesServiceProvider,
-    MapFilesConversionProvider,TileLayers,OrgUnitService,
-    MessageServiceProvider,
+    OrganisationUnitsProvider,
+    SqlLiteProvider,
+    AppProvider,
+    EncryptionProvider,
+    LocalInstanceProvider,
+    HttpClientProvider,
+    AppTranslationProvider
   ]
 })
 export class AppModule {}

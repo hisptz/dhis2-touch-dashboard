@@ -1,17 +1,39 @@
-import { Component ,Input} from '@angular/core';
-/*
-  Generated class for the ProgressBar page.
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+/**
+ * Generated class for the ProgressBarComponent component.
+ *
+ * See https://angular.io/api/core/Component for more info on Angular
+ * Components.
+ */
 @Component({
-  selector: 'page-progress-bar',
+  selector: 'progress-bar',
   templateUrl: 'progress-bar.html'
 })
-export class ProgressBarPage {
+export class ProgressBarComponent implements OnInit{
 
-  @Input('progress') progress;
+  @Input() progressBar;
+  @Input() progressBarTitle;
+  @Output() isProcessActive = new EventEmitter();
+
+  cancelIcon : string;
+
   constructor() {
   }
+
+
+  getPercentage(progressBar){
+    return parseInt(progressBar);
+  }
+
+  ngOnInit(){
+    this.cancelIcon = "assets/icon/cancel.png";
+  }
+
+  cancelRunningProcess(){
+    this.isProcessActive.emit({isProcessActive : false});
+  }
+
+
+
 }

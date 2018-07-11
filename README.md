@@ -14,6 +14,10 @@ Make sure you have the following installed on your pc
 $ sudo npm install -g ionic cordova
 $ git clone https://github.com/hisptz/hisptz-touch-dashboard.git
 $ cd hisptz-touch-dashboard
+<<<<<<< HEAD
+=======
+$ git checkout dev
+>>>>>>> 2.0
 ```
 
 To install all dependencies for android while inside project directory

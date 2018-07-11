@@ -1,70 +1,133 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
-import {AboutProvider} from "../../providers/about/about";
-import {AppProvider} from "../../providers/app/app";
+import { IonicPage } from 'ionic-angular';
+import { AboutProvider } from '../../providers/about/about';
+import { AppProvider } from '../../providers/app/app';
+import { UserProvider } from '../../providers/user/user';
+import { AppTranslationProvider } from '../../providers/app-translation/app-translation';
 
 /**
  * Generated class for the AboutPage page.
  *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
  */
 
 @IonicPage()
 @Component({
   selector: 'page-about',
-  templateUrl: 'about.html',
+  templateUrl: 'about.html'
 })
-export class AboutPage implements OnInit{
+export class AboutPage implements OnInit {
+  logoUrl: string;
+  currentUser: any;
+  appInformation: any;
+  systemInfo: any;
+  loadingMessage: string;
+  isLoading: boolean = true;
+  hasAllDataBeenLoaded: boolean = false;
+  aboutContents: Array<any>;
+  isAboutContentOpen: any = {};
+  translationMapper: any;
 
-  logoUrl : string;
+  constructor(
+    private appProvider: AppProvider,
+    private aboutProvider: AboutProvider,
+    private userProvider: UserProvider,
+    private appTranslation: AppTranslationProvider
+  ) {}
 
-  appInformation : any;
-  systemInfo : any;
-
-  loadingMessage : string;
-  isLoading : boolean = true;
-
-  aboutContents : Array<any>;
-  isAboutContentOpen : any = {};
-
-  constructor(public navCtrl: NavController,
-              private appProvider : AppProvider,
-              private aboutProvider : AboutProvider) {
-  }
-
-  ngOnInit(){
-    this.loadingMessage = 'Loading app information';
+  ngOnInit() {
     this.isLoading = true;
     this.logoUrl = 'assets/img/logo.png';
     this.aboutContents = this.aboutProvider.getAboutContentDetails();
-    this.aboutProvider.getAppInformation().then(appInformation=>{
-      this.appInformation = appInformation;
-      this.loadingMessage = 'Loading system information';
-      this.aboutProvider.getSystemInformation().then(systemInfo=>{
-        this.systemInfo = systemInfo;
-        this.isLoading = false;
-        this.loadingMessage = '';
-      }).catch(error=>{
-        this.isLoading = false;
-        this.loadingMessage = '';
-        console.log(JSON.stringify(error));
-        this.appProvider.setNormalNotification('Fail to load system information');
-      });
-    }).catch(error=>{
-      this.isLoading = false;
-      this.loadingMessage = '';
-      console.log(JSON.stringify(error));
-      this.appProvider.setNormalNotification('Fail to load app information');
-    })
+    this.translationMapper = {};
+    this.appTranslation.getTransalations(this.getValuesToTranslate()).subscribe(
+      (data: any) => {
+        this.translationMapper = data;
+        this.loadingCurrentUserInformation();
+      },
+      error => {
+        this.loadingCurrentUserInformation();
+      }
+    );
   }
 
-  toggleAboutContents(content){
-    if(content && content.id){
-      if(this.isAboutContentOpen[content.id]){
+  loadingCurrentUserInformation() {
+    let key = 'Discovering current user information';
+    this.loadingMessage = this.translationMapper[key]
+      ? this.translationMapper[key]
+      : key;
+    this.userProvider.getCurrentUser().subscribe(
+      (currentUser: any) => {
+        this.currentUser = currentUser;
+        this.loadAllData();
+      },
+      error => {
+        this.isLoading = false;
+        this.appProvider.setNormalNotification(
+          'Fail to discover current user information'
+        );
+      }
+    );
+  }
+
+  loadAllData() {
+    this.hasAllDataBeenLoaded = false;
+    let key = 'Discovering app information';
+    this.loadingMessage = this.translationMapper[key]
+      ? this.translationMapper[key]
+      : key;
+    this.aboutProvider.getAppInformation().subscribe(
+      appInformation => {
+        this.appInformation = appInformation;
+        key = 'Discovering system information';
+        this.loadingMessage = this.translationMapper[key]
+          ? this.translationMapper[key]
+          : key;
+        this.aboutProvider.getSystemInformation().subscribe(
+          systemInfo => {
+            this.systemInfo = systemInfo;
+            if (this.aboutContents.length > 0) {
+              if (
+                this.isAboutContentOpen &&
+                !this.isAboutContentOpen[this.aboutContents[0].id]
+              ) {
+                this.toggleAboutContents(this.aboutContents[0]);
+              }
+            }
+            this.isLoading = false;
+          },
+          error => {
+            this.isLoading = false;
+            console.log(JSON.stringify(error));
+            this.appProvider.setNormalNotification(
+              'Fail to discover system information'
+            );
+          }
+        );
+      },
+      error => {
+        this.isLoading = false;
+        console.log(JSON.stringify(error));
+        this.appProvider.setNormalNotification(
+          'Fail to discover app information'
+        );
+      }
+    );
+  }
+
+  ionViewDidEnter() {
+    if (this.hasAllDataBeenLoaded) {
+      this.loadAllData();
+    }
+  }
+
+  toggleAboutContents(content) {
+    if (content && content.id) {
+      if (this.isAboutContentOpen[content.id]) {
         this.isAboutContentOpen[content.id] = false;
-      }else{
-        Object.keys(this.isAboutContentOpen).forEach(id=>{
+      } else {
+        Object.keys(this.isAboutContentOpen).forEach(id => {
           this.isAboutContentOpen[id] = false;
         });
         this.isAboutContentOpen[content.id] = true;
@@ -72,4 +135,11 @@ export class AboutPage implements OnInit{
     }
   }
 
+  getValuesToTranslate() {
+    return [
+      'Discovering current user information',
+      'Discovering system information',
+      'Discovering app information'
+    ];
+  }
 }

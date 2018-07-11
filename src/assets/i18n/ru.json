@@ -1,0 +1,116 @@
+{
+  "Innovation in every dimension": "Инновации в каждом измерении",
+  "Establishing connection to server": "Установление соединения с сервером",
+  "Enter server address": "Введите адрес сервера",
+  "Enter username": "Введите имя пользователя",
+  "Enter password": "Введите пароль",
+  "Login": "Авторизоваться",
+  "or": "или",
+  "Offline instances": "Offline экземпляры",
+  "Powered by": "Питаться от",
+  "Discovering system information": "Обнаружив информационную систему",
+  "Discovering current user authorities":
+    "Обнаружив нынешние власти пользователей",
+  "Preparing local storage": "Подготовка локального хранения",
+  "Fail to prepare local storage": "Не удалось подготовить локальное хранилище",
+  "Fail to discover user authorities":
+    "Не удалось обнаружить пользовательскую власть",
+  "Fail to discover system information":
+    "Не удалось обнаружить информацию о системе",
+  "Fail to save current user information":
+    "Не удалось сохранить текущую информацию о пользователе",
+  "Please check your network connectivity":
+    "Пожалуйста, проверьте подключение к сети",
+  "You have enter wrong username or password or server address":
+    "Вы должны ввести неправильный логин или пароль или адрес сервера",
+  "Please check server address, or contact your help desk":
+    "Пожалуйста, проверьте адрес сервера, или обратитесь к справочной службе",
+  "Please enter server address, username and password":
+    "Пожалуйста, введите адрес сервера, имя пользователя и пароль",
+  "Discovering assigned organisation units":
+    "Обнаружив присвоенные организации подразделения",
+  "Assigned organisation units have been loaded":
+    "Назначенные организации подразделение было загружено",
+  "Saving assigned organisation units":
+    "Сохранение назначенных организационных подразделений",
+  "Assigned organisation units have been saved":
+    "Назначенные организации подразделение было сохранено",
+  "Fail to save organisation data": "Не удалось сохранить данные организации",
+  "Fail to discover organisation data":
+    "Не удалось обнаружить организации данных",
+  "Search": "Поиск",
+  "There is no local instance to select":
+    "Там нет локального экземпляра, чтобы выбрать",
+  "Discovering available local instances":
+    "Обнаружив доступные локальные экземпляры",
+  "Fail to load available local instances":
+    "Не удалось загрузить доступные локальные экземпляры",
+  "Log out": "Выйти",
+  "About": "Около",
+  "System info": "Системная информация",
+  "Discovering current user information":
+    "Обнаружив текущую информацию о пользователе",
+  "Discovering app information": "Обнаружив приложение информации",
+  "Fail to discover current user information":
+    "Не удалось обнаружить текущую информацию о пользователе",
+  "Fail to discover app information":
+    "Не удалось открыть приложение информации",
+  "Settings": "настройки",
+  "App settings": "настройки приложения",
+  "Current language": "Текущий язык",
+  "Fail to load current user information":
+    "Не удалось загрузить текущую информацию о пользователе",
+  "Fail to set translation": "Не удалось установить перевод",
+  "Dashboard": "Панель приборов",
+  "Discovering dashboards": "Открытие панелей",
+  "There no dashboard item found":
+    "Там ни один элемент приборной панели не найдено",
+  "Dashboard list": "список Dashboard",
+  "Search dashboard by name": "Поиск по названию панели",
+  "Layout": "раскладка",
+  "Table / Chart Layout": "Макет таблицы / диаграммы",
+  "Filters": "фильтры",
+  "Column": "колонка",
+  "Row": "Ряд",
+  "Categories": "категории",
+  "Series": "Серии",
+  "Update": "Обновить",
+  "Close": "Закрыть",
+  "Data": "Данные",
+  "Select": "Выбрать",
+  "All": "Все",
+  "Data elements": "элементы данных",
+  "Indicators": "индикаторы",
+  "Data sets": "наборы данных",
+  "Program indicators": "показатели программы",
+  "Functions": "функции",
+  "Available": "Доступный",
+  "Selected": "выбранный",
+  "Discovering...": "Обнаружив ...",
+  "No items": "Нет товаров",
+  "Period": "период",
+  "Select period type": "Выберите тип периода",
+  "Previous year": "Предыдущий год",
+  "Next year": "Следующий год",
+  "Org-unit": "Орг-модуль",
+  "Interpretation": "интерпретация",
+  "Not found": "Не найдено",
+  "This interpretation will be deleted, are you sure?":
+    "Эта интерпретация будет удалена, вы уверены?",
+  "Deleting interpretation": "Удаление интерпретации",
+  "Comment": "Комментарий",
+  "Edit": "редактировать",
+  "Delete": "Удалить",
+  "Search interpretation": "интерпретация Поиск",
+  "Updating likes status": "Обновление нравится статус",
+  "Unlike": "В отличие от",
+  "Like": "подобно",
+  "Write new interpretation": "Написать новую интерпретацию",
+  "Cancel": "Отмена",
+  "Posting": "оприходование",
+  "Post": "После",
+  "This comment will be deleted, are you sure?":
+    "Этот комментарий будет удален, вы уверены?",
+  "Deleting comment": "Удаление комментария",
+  "Write your comment": "Написать комментарий"
+}
