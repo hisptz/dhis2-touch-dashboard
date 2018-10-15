@@ -254,6 +254,7 @@ export class LoginPage implements OnInit, OnDestroy {
             this.smsCommandProvider
               .checkAndGenerateSmsCommands(this.currentUser)
               .subscribe(() => {}, error => {});
+            this.menuCtrl.enable(true);
             this.navCtrl.setRoot('DashboardPage');
           });
         });
