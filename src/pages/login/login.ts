@@ -99,11 +99,11 @@ export class LoginPage implements OnInit, OnDestroy {
     this.showOverallProgressBar = true;
     this.topThreeTranslationCodes = this.appTranslationProvider.getTopThreeSupportedTranslationCodes();
     this.processes = [
-      'organisationUnits',
-      'sections',
-      'dataElements',
-      'smsCommand',
-      'dataSets'
+      'organisationUnits'
+      // 'sections',
+      // 'dataElements',
+      // 'smsCommand',
+      // 'dataSets'
       // 'programs'
       // 'programStageSections',
       // 'programRules',
@@ -254,7 +254,7 @@ export class LoginPage implements OnInit, OnDestroy {
             this.smsCommandProvider
               .checkAndGenerateSmsCommands(this.currentUser)
               .subscribe(() => {}, error => {});
-            this.navCtrl.setRoot('SmsGatewayPage');
+            this.navCtrl.setRoot('DashboardPage');
           });
         });
     }
