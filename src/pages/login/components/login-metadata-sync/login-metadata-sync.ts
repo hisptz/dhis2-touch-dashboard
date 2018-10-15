@@ -237,7 +237,10 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
                                 currentResouceType
                               );
                               const subscription = this.userProvider
-                                .getUserAuthorities(currentUser)
+                                .getUserAuthorities({
+                                  ...currentUser,
+                                  dhisVersion
+                                })
                                 .subscribe(
                                   response => {
                                     this.currentUser.id = response.id;
