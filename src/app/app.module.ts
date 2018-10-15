@@ -1,91 +1,55 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { IonicStorageModule } from '@ionic/storage';
 
 import { MyApp } from './app.component';
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+// core services and native plugins
+import { appProviders, nativePlugins } from '../providers';
+
+//store
+import { reducers, effects, metaReducers } from '../store';
 import { StoreModule } from '@ngrx/store';
-import { LauncherPage } from '../pages/launcher/launcher';
-import { SharedModule } from '../components/shared.module';
-import { NetworkAvailabilityProvider } from '../providers/network-availability/network-availability';
-import { UserProvider } from '../providers/user/user';
-import { SqlLiteProvider } from '../providers/sql-lite/sql-lite';
-import { AppProvider } from '../providers/app/app';
-import { LocalInstanceProvider } from '../providers/local-instance/local-instance';
-import { HttpClientProvider } from '../providers/http-client/http-client';
-import { AppTranslationProvider } from '../providers/app-translation/app-translation';
-import { EncryptionProvider } from '../providers/encryption/encryption';
-import { SettingsProvider } from '../providers/settings/settings';
+import { EffectsModule } from '@ngrx/effects';
 
-import { SQLite } from '@ionic-native/sqlite';
-import { HTTP } from '@ionic-native/http';
-import { AppVersion } from '@ionic-native/app-version';
-import { Network } from '@ionic-native/network';
-import { IonicStorageModule } from '@ionic/storage';
-import { SMS } from '@ionic-native/sms';
-
-//translations
+// Multi-language
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpModule, Http } from '@angular/http';
 
 import { PipesModule } from '../pipes/pipes.module';
-import { AboutProvider } from '../providers/about/about';
-import { OrganisationUnitsProvider } from '../providers/organisation-units/organisation-units';
-import { EffectsModule } from '@ngrx/effects';
-import { reducers } from '../store/reducers';
-import { effects } from '../store/effects';
-export function createTranslateLoader(http: Http) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+import { sharedComponentsModule } from '../components/sharedComponents.module';
 
 @NgModule({
-  declarations: [MyApp, LauncherPage],
+  declarations: [MyApp],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot(reducers),
-    EffectsModule.forRoot(effects),
-    IonicModule.forRoot(MyApp),
-    HttpModule,
     IonicStorageModule.forRoot(),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [Http]
-      }
-    }),
+    StoreModule.forRoot(reducers, { metaReducers }),
+    EffectsModule.forRoot(effects),
+    IonicModule.forRoot(MyApp, { scrollAssist: false, autoFocusAssist: false }),
+    HttpClientModule,
+    TranslateModule.forRoot(),
     PipesModule,
-    SharedModule
-    //StoreDevtoolsModule.instrument({maxAge: 100})
+    sharedComponentsModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [MyApp, LauncherPage],
+  entryComponents: [MyApp],
   providers: [
-    StatusBar,
-    SQLite,
-    SMS,
-    SplashScreen,
-    HTTP,
-    AppVersion,
-    Network,
+    HttpClient,
+    {
+      provide: TranslateLoader,
+      useFactory: (http: HttpClient) =>
+        new TranslateHttpLoader(http, '/assets/i18n/', '.json'),
+      deps: [HttpClient]
+    },
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    NetworkAvailabilityProvider,
-    UserProvider,
-    SettingsProvider,
-    AboutProvider,
-    OrganisationUnitsProvider,
-    SqlLiteProvider,
-    AppProvider,
-    EncryptionProvider,
-    LocalInstanceProvider,
-    HttpClientProvider,
-    AppTranslationProvider
+    ...appProviders,
+    ...nativePlugins
   ]
 })
 export class AppModule {}

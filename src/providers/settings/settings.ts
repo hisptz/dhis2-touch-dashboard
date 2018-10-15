@@ -1,3 +1,26 @@
+/*
+ *
+ * Copyright 2015 HISP Tanzania
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ *
+ * @since 2015
+ * @author Joseph Chingalo <profschingalo@gmail.com>
+ *
+ */
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
@@ -36,6 +59,13 @@ export class SettingsProvider {
       //   id: 'synchronization',
       //   name: 'Synchronization',
       //   icon: 'assets/icon/synchronization.png',
+      //   isLoading: false,
+      //   loadingMessage: ''
+      // },
+      // {
+      //   id: 'barcode',
+      //   name: 'Barcode behaviour',
+      //   icon: 'assets/icon/barcode-reader.png',
       //   isLoading: false,
       //   loadingMessage: ''
       // }
@@ -139,12 +169,20 @@ export class SettingsProvider {
         label: 'formName',
         maxDataElementOnDefaultForm: 10,
         formLayout: 'tableLayout',
-        showAlertOnFormAssignement: true
+        showAlertOnFormAssignement: true,
+        shouldDisplayAsRadio: true
       },
       synchronization: {
         time: 2 * 60 * 1000,
         timeType: 'minutes',
         isAutoSync: true
+      },
+      barcode: {
+        allowBarcodeReaderOnText: false,
+        allowBarcodeReaderOnNumerical: false,
+        activateMultiline: false,
+        keyPairSeparator: ':',
+        multilineSeparator: ';'
       }
     };
     return defaultSettings;
