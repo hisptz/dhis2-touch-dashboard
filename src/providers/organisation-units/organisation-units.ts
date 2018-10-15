@@ -1,9 +1,32 @@
+/*
+ *
+ * Copyright 2015 HISP Tanzania
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ *
+ * @since 2015
+ * @author Joseph Chingalo <profschingalo@gmail.com>
+ *
+ */
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { SqlLiteProvider } from '../sql-lite/sql-lite';
 import { HttpClientProvider } from '../http-client/http-client';
 import { Observable } from 'rxjs/Observable';
-import { CurrentUser } from '../../models/currentUser';
+import { CurrentUser } from '../../models/current-user';
 import * as _ from 'lodash';
 
 /*
@@ -58,63 +81,41 @@ export class OrganisationUnitsProvider {
     currentUser: CurrentUser
   ): Observable<any> {
     let orgUnits = [];
-    let counts = 0;
     const { userOrgUnitIds } = currentUser;
     return new Observable(observer => {
       if (userOrgUnitIds && userOrgUnitIds.length == 0) {
         observer.next(orgUnits);
         observer.complete();
       } else {
-        for (let orgUnitId of userOrgUnitIds) {
-          let fields =
-            'fields=id,name,path,ancestors[id,name,children[id]],openingDate,closedDate,level,children[id,name,children[id],parent';
-          let filter = 'filter=path:ilike:';
-          let url = '/api/25/' + this.resource + '.json?';
-          url += fields + '&' + filter + orgUnitId;
-          this.HttpClient.get(
-            url,
-            false,
-            currentUser,
-            this.resource,
-            800
-          ).subscribe(
-            (response: any) => {
-              try {
-                counts = counts + 1;
-                orgUnits = this.appendOrgUnitsFromServerToOrgUnitArray(
-                  orgUnits,
-                  response
-                );
-                if (counts == userOrgUnitIds.length) {
-                  observer.next(orgUnits);
-                  observer.complete();
-                }
-              } catch (e) {
-                observer.error(e);
-              }
-            },
-            error => {
-              observer.error(error);
+        const fields =
+          'fields=id,name,path,ancestors[id,name,children[id]],openingDate,closedDate,level,children[id,name,children[id],parent';
+        const filter =
+          'filter=path:ilike:' +
+          userOrgUnitIds.join('&filter=path:ilike:') +
+          '&rootJunction=OR';
+        const url = '/api/' + this.resource + '.json?' + fields + '&' + filter;
+        this.HttpClient.get(
+          url,
+          false,
+          currentUser,
+          this.resource,
+          800
+        ).subscribe(
+          (response: any) => {
+            try {
+              orgUnits = response[this.resource];
+              observer.next(orgUnits);
+              observer.complete();
+            } catch (e) {
+              observer.error(e);
             }
-          );
-        }
+          },
+          error => {
+            observer.error(error);
+          }
+        );
       }
     });
-  }
-
-  /**
-   * appendOrgUnitsFromServerToOrgUnitArray
-   * @param orgUnitArray
-   * @param orgUnitResponse
-   * @returns {any}
-   */
-  appendOrgUnitsFromServerToOrgUnitArray(orgUnitArray, orgUnitResponse) {
-    if (orgUnitResponse[this.resource]) {
-      for (let orgUnit of orgUnitResponse[this.resource]) {
-        orgUnitArray.push(orgUnit);
-      }
-    }
-    return orgUnitArray;
   }
 
   /**

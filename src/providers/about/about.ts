@@ -21,27 +21,27 @@ export class AboutProvider {
    * @returns {{id: string; name: string; icon: string}[]}
    */
   getAboutContentDetails() {
-    let syncContents = [
+    const syncContents = [
       //{id : 'appInformation',name : 'App information',icon: 'assets/icon/app-information.png'},
       // {
-      //   id: "dataValues",
-      //   name: "Aggregate status",
-      //   icon: "assets/icon/data-values.png"
+      //   id: 'dataValues',
+      //   name: 'Aggregate status',
+      //   icon: 'assets/icon/data-values.png'
       // },
       // {
-      //   id: "eventStatus",
-      //   name: "Event status",
-      //   icon: "assets/icon/event-status.png"
+      //   id: 'eventStatus',
+      //   name: 'Event status',
+      //   icon: 'assets/icon/event-status.png'
       // },
       // {
-      //   id: "eventForTrackerStatus",
-      //   name: "Event for tracker status",
-      //   icon: "assets/icon/event-status.png"
+      //   id: 'eventForTrackerStatus',
+      //   name: 'Event for tracker status',
+      //   icon: 'assets/icon/event-status.png'
       // },
       // {
-      //   id: "enrollment",
-      //   name: "Enrollments",
-      //   icon: "assets/icon/profile-tracker.png"
+      //   id: 'enrollment',
+      //   name: 'Enrollments',
+      //   icon: 'assets/icon/profile-tracker.png'
       // },
       {
         id: 'systemInfo',
@@ -104,7 +104,7 @@ export class AboutProvider {
       if (newValue instanceof Object) {
         newValue = JSON.stringify(newValue);
       }
-      let newKey = (key.charAt(0).toUpperCase() + key.slice(1))
+      const newKey = (key.charAt(0).toUpperCase() + key.slice(1))
         .replace(/([A-Z])/g, ' $1')
         .trim();
       array.push({ key: newKey, value: newValue });
