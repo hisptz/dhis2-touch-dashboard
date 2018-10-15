@@ -22,16 +22,12 @@
 *
 *
 -->
-<div *ngIf="isLoading">
-  <loading [loadingSize]="'large'" [loadingMessage]="loadingMessage"></loading>
-</div>
-<div *ngIf="!isLoading">
-  <div *ngFor="let organisationUnit of organisationUnits;let currentIndex = index;trackBy: trackByFn">
-    <multi-organisation-unit-tree [hasOrgUnitChildrenOpened]="hasOrgUnitChildrenOpened" [organisationUnit]="organisationUnit"
-      (activate)="onActivateOu($event)" (deactivate)="onDeactivateOu($event)" [currentUser]="currentUser" [selectedOrgUnits]="selectedOrgUnits"
-      [toggledOuIds]="toggledOuIds"></multi-organisation-unit-tree>
-  </div>
-  <div *ngIf="organisationUnits.length == 0 && emptyMessage !=''">
-    {{ emptyMessage }}
-  </div>
+<div>
+  <ion-row>
+    <ion-col>
+      <ion-item no-lines>
+        <ion-input (ionBlur)="updateValue()" [(ngModel)]="inputFieldValue" type="tel"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
 </div>

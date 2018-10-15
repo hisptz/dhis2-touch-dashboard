@@ -21,31 +21,7 @@
  * @author Joseph Chingalo <profschingalo@gmail.com>
  *
  */
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-
-/**
- * Generated class for the ProgressBarComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
-@Component({
-  selector: 'progress-bar',
-  templateUrl: 'progress-bar.html'
-})
-export class ProgressBarComponent {
-  @Input() progressPercentage: string;
-  @Input() processMessage: string;
-  @Input() showCancelButton: boolean;
-  @Input() showLoader: boolean;
-
-  @Output() cancelProgress = new EventEmitter();
-
-  constructor() {}
-
-  onCancelProgress() {
-    if (this.showCancelButton) {
-      this.cancelProgress.emit();
-    }
-  }
+export interface Translation {
+  code: string;
+  name: string;
 }

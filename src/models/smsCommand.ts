@@ -19,33 +19,23 @@
  *
  * @since 2015
  * @author Joseph Chingalo <profschingalo@gmail.com>
- *
  */
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+export interface SmsCommand {
+  dataSetId: string;
+  commandName: string;
+  separator: string;
+  parserType: string;
+  smsCode: Array<SmsCode>;
+}
 
-/**
- * Generated class for the ProgressBarComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
-@Component({
-  selector: 'progress-bar',
-  templateUrl: 'progress-bar.html'
-})
-export class ProgressBarComponent {
-  @Input() progressPercentage: string;
-  @Input() processMessage: string;
-  @Input() showCancelButton: boolean;
-  @Input() showLoader: boolean;
+export interface SmsCode {
+  smsCode?: string;
+  dataElements?: any;
+  categoryOptionCombos?: string;
+}
 
-  @Output() cancelProgress = new EventEmitter();
-
-  constructor() {}
-
-  onCancelProgress() {
-    if (this.showCancelButton) {
-      this.cancelProgress.emit();
-    }
-  }
+export interface SmsConfiguration {
+  dataSetIds: Array<any>;
+  isStarted: boolean;
+  syncedSMSIds: Array<any>;
 }
