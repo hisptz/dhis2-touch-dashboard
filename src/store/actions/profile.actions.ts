@@ -21,7 +21,23 @@
  * @author Joseph Chingalo <profschingalo@gmail.com>
  *
  */
-export * from './reducers';
-export * from './actions';
-export * from './effects';
-export * from './selectors';
+import { Action } from '@ngrx/store';
+import { Profile } from '../../models';
+
+export enum ProfileActionTypes {
+  LoadProfileInformation = '[Profile] Loading profile informations',
+  LoadProfileInformationSuccess = '[Profile] Load profile information success'
+}
+
+export class LoadProfileInformation implements Action {
+  readonly type = ProfileActionTypes.LoadProfileInformation;
+}
+
+export class LoadProfileInformationSuccess implements Action {
+  readonly type = ProfileActionTypes.LoadProfileInformationSuccess;
+  constructor(public payload: Profile) {}
+}
+
+export type ProfileActions =
+  | LoadProfileInformation
+  | LoadProfileInformationSuccess;

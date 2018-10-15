@@ -19,9 +19,25 @@
  *
  * @since 2015
  * @author Joseph Chingalo <profschingalo@gmail.com>
- *
  */
-export * from './reducers';
-export * from './actions';
-export * from './effects';
-export * from './selectors';
+export interface SmsCommand {
+  id?: string;
+  dataSetId: string;
+  commandName: string;
+  separator: string;
+  parserType: string;
+  smsCode: Array<SmsCode>;
+}
+
+export interface SmsCode {
+  smsCode?: string;
+  dataElements?: any;
+  categoryOptionCombos?: string;
+}
+
+export interface SmsConfiguration {
+  dataSetIds: Array<string>;
+  syncedSMSIds: Array<string>;
+  notSyncedSMSIds: Array<string>;
+  skippedSMSIds: Array<string>;
+}

@@ -1,5 +1,4 @@
 /*
- *
  * Copyright 2015 HISP Tanzania
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +20,10 @@
  * @author Joseph Chingalo <profschingalo@gmail.com>
  *
  */
-export * from './reducers';
-export * from './actions';
-export * from './effects';
-export * from './selectors';
+export interface QueueManager {
+  dequeuingLimit: number;
+  totalProcess?: number;
+  enqueuedProcess: string[];
+  denqueuedProcess: string[];
+  data?: any;
+}

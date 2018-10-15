@@ -21,27 +21,34 @@
  * @author Joseph Chingalo <profschingalo@gmail.com>
  *
  */
-import { ActionReducerMap, MetaReducer } from '@ngrx/store';
-import { currentUserState, currentUserReducer } from './current-user.reducer';
-import { SmsCommandState, smsCommandReducer } from './sms-command.reducer';
-import { DataSetState, dataSetReducer } from './data-set.reducer';
+import { createSelector } from '@ngrx/store';
+import * as _ from 'lodash';
+import { getRootState, State } from '../reducers';
 import {
-  SmsGatewayLogsState,
-  smsGatewayLogReducer
-} from './sms-gateway-logs.reducer';
+  smsCommandAdapter,
+  SmsCommandState
+} from '../reducers/sms-command.reducer';
+import { SmsCommand } from '../../models';
 
-export interface State {
-  currentUser: currentUserState;
-  smsCommand: SmsCommandState;
-  smsGatewayLog: SmsGatewayLogsState;
-  dataSet: DataSetState;
-}
+export const getSmsCommandEntityState = createSelector(
+  getRootState,
+  (state: State) => state.smsCommand
+);
 
-export const reducers: ActionReducerMap<State> = {
-  currentUser: currentUserReducer,
-  smsCommand: smsCommandReducer,
-  smsGatewayLog: smsGatewayLogReducer,
-  dataSet: dataSetReducer
-};
-export const getRootState = (state: State) => state;
-export const metaReducers: MetaReducer<State>[] = [];
+export const getSmsCommandLoadedState = createSelector(
+  getSmsCommandEntityState,
+  (state: SmsCommandState) => state.loaded
+);
+
+export const {
+  selectIds: getSmsCommandIds,
+  selectEntities: getSmsCommandEntities,
+  selectAll: getAllSmsCommands
+} = smsCommandAdapter.getSelectors(getSmsCommandEntityState);
+
+export const getSmsCommandMapper = createSelector(
+  getAllSmsCommands,
+  (smsCommands: SmsCommand[]) => {
+    return _.keyBy(smsCommands, 'commandName');
+  }
+);

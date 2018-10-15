@@ -21,7 +21,32 @@
  * @author Joseph Chingalo <profschingalo@gmail.com>
  *
  */
-export * from './reducers';
-export * from './actions';
-export * from './effects';
-export * from './selectors';
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { DataSetActions, DataSetActionTypes } from '../actions';
+
+export interface DataSetState extends EntityState<any> {
+  loaded: boolean;
+}
+
+export const DataSetAdapter: EntityAdapter<any> = createEntityAdapter<any>();
+
+const initialState: DataSetState = DataSetAdapter.getInitialState({
+  loaded: false
+});
+
+export function dataSetReducer(
+  state = initialState,
+  action: DataSetActions
+): DataSetState {
+  switch (action.type) {
+    case DataSetActionTypes.LoadDataSetSuccess: {
+      return DataSetAdapter.addMany(action.payload.dataSets, {
+        ...state,
+        loaded: true
+      });
+    }
+    default: {
+      return state;
+    }
+  }
+}

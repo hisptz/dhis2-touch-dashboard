@@ -19,9 +19,33 @@
  *
  * @since 2015
  * @author Joseph Chingalo <profschingalo@gmail.com>
- *
  */
-export * from './reducers';
-export * from './actions';
-export * from './effects';
-export * from './selectors';
+export interface SmsGateWayLogs {
+  id: string;
+  time: string;
+  type: string;
+  dataSetId?: string;
+  periodIso?: string;
+  logMessage: string;
+  organisationUnitId?: string;
+  organisationUnitName?: string;
+  message?: ReceivedSms;
+}
+
+export interface SmsConfiguration {
+  dataSetIds: Array<string>;
+  syncedSMSIds: Array<string>;
+  notSyncedSMSIds: Array<string>;
+  skippedSMSIds: Array<string>;
+}
+
+export interface ReceivedSms {
+  id: string;
+  body: string;
+  address: string;
+}
+
+export interface SmsGateWayLogsError {
+  time: string;
+  logMessage: string;
+}

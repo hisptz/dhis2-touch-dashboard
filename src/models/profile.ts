@@ -21,7 +21,7 @@
  * @author Joseph Chingalo <profschingalo@gmail.com>
  *
  */
-export * from './reducers';
-export * from './actions';
-export * from './effects';
-export * from './selectors';
+export interface Profile {
+  id: string;
+  data: any;
+}

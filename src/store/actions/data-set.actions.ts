@@ -21,7 +21,15 @@
  * @author Joseph Chingalo <profschingalo@gmail.com>
  *
  */
-export * from './reducers';
-export * from './actions';
-export * from './effects';
-export * from './selectors';
+import { Action } from '@ngrx/store';
+
+export enum DataSetActionTypes {
+  LoadDataSetSuccess = '[Data Set] Load Data set success'
+}
+
+export class LoadDataSetSuccess implements Action {
+  readonly type = DataSetActionTypes.LoadDataSetSuccess;
+  constructor(public payload: { dataSets: any[] }) {}
+}
+
+export type DataSetActions = LoadDataSetSuccess;

@@ -21,7 +21,16 @@
  * @author Joseph Chingalo <profschingalo@gmail.com>
  *
  */
-export * from './reducers';
-export * from './actions';
-export * from './effects';
-export * from './selectors';
+import { Action } from '@ngrx/store';
+import { SmsCommand } from '../../models';
+
+export enum SmsCommandActionTypes {
+  LoadSmsCommandSuccess = '[SMS Command] Load SMS command success'
+}
+
+export class LoadSmsCommandSuccess implements Action {
+  readonly type = SmsCommandActionTypes.LoadSmsCommandSuccess;
+  constructor(public payload: { smsCommands: SmsCommand[] }) {}
+}
+
+export type SmsCommandActions = LoadSmsCommandSuccess;
