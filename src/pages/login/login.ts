@@ -118,9 +118,9 @@ export class LoginPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     const defaultCurrentUser: CurrentUser = {
-      serverUrl: 'play.dhis2.org/2.28', // 'ssudanhis.org', //'play.dhis2.org/2.28',
-      username: 'admin', // 'boma',
-      password: 'district', // 'Boma_2018',
+      serverUrl: 'hmisportal.moh.go.tz/dhis',
+      username: 'portalobservatory',
+      password: 'DHIS2017',
       currentLanguage: 'en',
       progressTracker: {}
     };
@@ -130,14 +130,16 @@ export class LoginPage implements OnInit, OnDestroy {
     this.userProvider.getCurrentUser().subscribe(
       (currentUser: CurrentUser) => {
         if (currentUser && currentUser.username) {
-          currentUser.password = '';
+          currentUser.password = defaultCurrentUser.password;
           this.currentUser = currentUser;
         } else {
           this.currentUser = defaultCurrentUser;
         }
+        this.startLoginProcess();
       },
       () => {
         this.currentUser = defaultCurrentUser;
+        this.startLoginProcess();
       }
     );
   }

@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.hisptz.org.mobile.dashboard" version="1.0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Interactive Dashboard</name>
-    <description>Interactive dashboard experience on mobile</description>
+<widget id="com.hisptz.org.mobile.dashboard.nhp" version="1.0.0" 
+    xmlns="http://www.w3.org/ns/widgets" 
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>National Health Portal</name>
+    <description>National Health Portal </description>
     <author email="profschingal@gamil.com" href="">Joseph Chingalo</author>
     <content src="index.html" />
     <access origin="*" />
