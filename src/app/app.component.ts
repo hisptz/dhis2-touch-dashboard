@@ -2,17 +2,19 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { LauncherPage } from '../pages/launcher/launcher';
 import { UserProvider } from '../providers/user/user';
+import { CurrentUser } from '../models/current-user';
+
+import { Store } from '@ngrx/store';
+import { State, ClearCurrentUser } from '../store';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  @ViewChild(Nav) nav: Nav;
-
+  @ViewChild(Nav)
+  nav: Nav;
   rootPage: any;
-
   pages: Array<{ title: string; component: any; icon: string }>;
   logoUrl: string;
   logOutIcon: string;
@@ -20,10 +22,10 @@ export class MyApp {
   constructor(
     private platform: Platform,
     private statusBar: StatusBar,
+    private splashScreen: SplashScreen,
     private userProvider: UserProvider,
-    private splashScreen: SplashScreen
+    private store: Store<State>
   ) {
-    this.initializeApp();
     this.logoUrl = 'assets/img/logo.png';
     this.logOutIcon = 'assets/img/logo.png';
     // used for an example of ngFor and navigation
@@ -32,13 +34,14 @@ export class MyApp {
       { title: 'About', component: 'AboutPage', icon: 'information-circle' },
       { title: 'Settings', component: 'SettingPage', icon: 'construct' }
     ];
+    this.initializeApp();
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.rootPage = LauncherPage;
+      this.rootPage = 'LaunchPage';
     });
   }
 
@@ -46,16 +49,14 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
 
-  async logOut() {
-    try {
-      this.userProvider.getCurrentUser().subscribe(user => {
-        user.isLogin = false;
-        this.userProvider.setCurrentUser(user).subscribe(() => {
-          this.nav.setRoot('LoginPage');
-        });
-      });
-    } catch (e) {
-      console.log(JSON.stringify(e));
-    }
+  logOut() {
+    this.nav.setRoot('LoginPage');
+    this.store.dispatch(new ClearCurrentUser());
+    this.userProvider.getCurrentUser().subscribe((currentUser: CurrentUser) => {
+      if (currentUser && currentUser.username) {
+        currentUser.isLogin = false;
+        this.userProvider.setCurrentUser(currentUser).subscribe(() => {});
+      }
+    });
   }
 }

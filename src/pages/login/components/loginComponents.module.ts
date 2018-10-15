@@ -22,17 +22,24 @@
  *
  */
 import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { LoginPage } from './login';
+import { IonicModule } from 'ionic-angular';
 import { TranslateModule } from '@ngx-translate/core';
-import { loginComponentsModule } from './components/loginComponents.module';
+import { sharedComponentsModule } from '../../../components/sharedComponents.module';
+import { LoginSpinnerComponent } from './login-spinner/login-spinner';
+import { LoginFormComponent } from './login-form/login-form';
+import { LoginMetadataSyncComponent } from './login-metadata-sync/login-metadata-sync';
 
 @NgModule({
-  declarations: [LoginPage],
-  imports: [
-    IonicPageModule.forChild(LoginPage),
-    TranslateModule.forChild({}),
-    loginComponentsModule
+  declarations: [
+    LoginFormComponent,
+    LoginSpinnerComponent,
+    LoginMetadataSyncComponent
+  ],
+  imports: [IonicModule, TranslateModule.forChild({}), sharedComponentsModule],
+  exports: [
+    LoginFormComponent,
+    LoginSpinnerComponent,
+    LoginMetadataSyncComponent
   ]
 })
-export class LoginPageModule {}
+export class loginComponentsModule {}
