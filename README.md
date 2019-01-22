@@ -1,4 +1,7 @@
 ##Prerequisites
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/hisptz/hisptz-touch-dashboard.svg)](https://greenkeeper.io/)
+
 Make sure you have the following installed on your pc
 
 1.  npm and node
