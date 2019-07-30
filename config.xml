@@ -1,10 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.hisptz.org.mobile.dashboard.nhp" version="1.1.0" 
-    xmlns="http://www.w3.org/ns/widgets" 
-    xmlns:android="http://schemas.android.com/apk/res/android" 
-    xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Interactive Dashboard</name>
-    <description>Interactive dashboard experience on mobile</description>
+<widget id="com.hisptz.org.mobile.dashboard.nhp" version="1.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Health Portal</name>
+    <description>National Health Portal </description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
     <access origin="*" />
     <allow-intent href="http://*/*" />
