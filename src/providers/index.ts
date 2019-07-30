@@ -32,9 +32,8 @@ import { DatePicker } from '@ionic-native/date-picker';
 import { Geolocation } from '@ionic-native/geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { SMS } from '@ionic-native/sms';
+// import { SMS } from '@ionic-native/sms';
 import { BackgroundMode } from '@ionic-native/background-mode';
-import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 import { AppTranslationProvider } from '../providers/app-translation/app-translation';
 import { AppProvider } from './app/app';
@@ -60,6 +59,25 @@ import { SmsCommandProvider } from './sms-command/sms-command';
 import { StandardReportProvider } from './standard-report/standard-report';
 import { DataElementsProvider } from './data-elements/data-elements';
 import { AboutProvider } from './about/about';
+import { DataSetCompletenessProvider } from './data-set-completeness/data-set-completeness';
+import { DataSetReportProvider } from './data-set-report/data-set-report';
+import { DataValuesProvider } from './data-values/data-values';
+import { EnrollmentsProvider } from './enrollments/enrollments';
+import { EventCaptureFormProvider } from './event-capture-form/event-capture-form';
+import { HelpContentsProvider } from './help-contents/help-contents';
+import { PeriodSelectionProvider } from './period-selection/period-selection';
+import { SmsGatewayProvider } from './sms-gateway/sms-gateway';
+import { SyncProvider } from './sync/sync';
+import { SynchronizationProvider } from './synchronization/synchronization';
+import { TrackedEntityAttributeValuesProvider } from './tracked-entity-attribute-values/tracked-entity-attribute-values';
+import { TrackedEntityInstancesProvider } from './tracked-entity-instances/tracked-entity-instances';
+import { TrackerCaptureProvider } from './tracker-capture/tracker-capture';
+import { DataEntryFormProvider } from './data-entry-form/data-entry-form';
+import { ProfileProvider } from '../pages/profile/providers/profile/profile';
+import { DataStoreManagerProvider } from './data-store-manager/data-store-manager';
+import { TrackerCaptureSyncProvider } from './tracker-capture-sync/tracker-capture-sync';
+import { AppColorProvider } from './app-color/app-color';
+import { ValidationRulesProvider } from './validation-rules/validation-rules';
 
 export const appProviders = [
   AppTranslationProvider,
@@ -85,7 +103,26 @@ export const appProviders = [
   LocalStorageProvider,
   SqlLiteProvider,
   DataElementsProvider,
-  AboutProvider
+  AboutProvider,
+  DataSetCompletenessProvider,
+  DataSetReportProvider,
+  DataValuesProvider,
+  EnrollmentsProvider,
+  EventCaptureFormProvider,
+  HelpContentsProvider,
+  PeriodSelectionProvider,
+  SmsGatewayProvider,
+  SyncProvider,
+  SynchronizationProvider,
+  TrackedEntityAttributeValuesProvider,
+  TrackedEntityInstancesProvider,
+  TrackerCaptureProvider,
+  DataEntryFormProvider,
+  ProfileProvider,
+  DataStoreManagerProvider,
+  TrackerCaptureSyncProvider,
+  AppColorProvider,
+  ValidationRulesProvider
 ];
 
 export const nativePlugins = [
@@ -96,10 +133,9 @@ export const nativePlugins = [
   SQLite,
   Diagnostic,
   BarcodeScanner,
-  SMS,
+  //SMS,
   DatePicker,
   Geolocation,
   SplashScreen,
-  BackgroundMode,
-  AndroidPermissions
+  BackgroundMode
 ];

@@ -34,21 +34,14 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: 'profile-info.html'
 })
 export class ProfileInfoComponent implements OnInit {
-  @Input()
-  data;
-  @Input()
-  currentUser;
-  @Input()
-  profileInfoForm;
-  @Input()
-  dataEntrySettings;
-  @Input()
-  barcodeSettings;
-  @Input()
-  dataValuesSavingStatusClass;
+  @Input() data;
+  @Input() currentUser;
+  @Input() profileInfoForm;
+  @Input() dataEntrySettings;
+  @Input() barcodeSettings;
+  @Input() dataValuesSavingStatusClass;
 
-  @Output()
-  onProfileInfoUpdate = new EventEmitter();
+  @Output() onProfileInfoUpdate = new EventEmitter();
 
   numericalInputField;
   textInputField;

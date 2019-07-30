@@ -25,12 +25,17 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 
 import { Store } from '@ngrx/store';
-import { State, AddCurrentUser } from '../../store';
+import {
+  State,
+  AddCurrentUser,
+  SetCurrentUserColorSettings
+} from '../../store';
 
 import { UserProvider } from '../../providers/user/user';
 import { NetworkAvailabilityProvider } from '../../providers/network-availability/network-availability';
 import { AppTranslationProvider } from '../../providers/app-translation/app-translation';
 import { CurrentUser } from '../../models/current-user';
+import { SqlLiteProvider } from '../../providers/sql-lite/sql-lite';
 
 /**
  * Generated class for the LaunchPage page.
@@ -52,6 +57,7 @@ export class LaunchPage implements OnInit {
     private UserProvider: UserProvider,
     private NetworkAvailabilityProvider: NetworkAvailabilityProvider,
     private appTranslationProvider: AppTranslationProvider,
+    private sqlLiteProvider: SqlLiteProvider,
     private store: Store<State>
   ) {
     this.logoUrl = 'assets/img/logo.png';
@@ -65,6 +71,15 @@ export class LaunchPage implements OnInit {
         currentLanguage = currentUser.currentLanguage;
       }
       this.appTranslationProvider.setAppTranslation(currentLanguage);
+      if (currentUser && currentUser.colorSettings) {
+        const { colorSettings } = currentUser;
+        this.store.dispatch(new SetCurrentUserColorSettings({ colorSettings }));
+      }
+      if (currentUser && currentUser.currentDatabase) {
+        this.sqlLiteProvider
+          .generateTables(currentUser.currentDatabase)
+          .subscribe(() => {}, error => {});
+      }
       if (currentUser && currentUser.isLogin) {
         this.store.dispatch(new AddCurrentUser({ currentUser }));
         this.navCtrl.setRoot('DashboardPage');

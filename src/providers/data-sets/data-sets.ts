@@ -27,6 +27,7 @@ import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 import { DataSet } from '../../models/data-set';
 import { CurrentUser } from '../../models/current-user';
+import { DEFAULT_APP_METADATA } from '../../constants';
 
 /*
   Generated class for the DataSetsProvider provider.
@@ -98,7 +99,7 @@ export class DataSetsProvider {
             (dataSetElementMapper: any) => {
               let dataSets: Array<DataSet> = [];
               dataSetsResponse.map((dataSet: any) => {
-                const dataElemets = dataSetElementMapper[dataSet.id]
+                let dataElemets = dataSetElementMapper[dataSet.id]
                   ? dataSetElementMapper[dataSet.id]
                   : [];
                 dataSets = _.concat(dataSets, {
@@ -133,27 +134,27 @@ export class DataSetsProvider {
         currentUser.currentDatabase
       ).subscribe(
         (dataSetElements: any) => {
-          const dataElementIds = _.concat(
-            [],
-            _.flattenDeep(
-              _.map(dataSetElements, (dataSetElement: any) => {
-                return dataSetElement.dataElementIds;
-              })
+          dataSetElements = _.map(dataSetElements, dataSetElement => {
+            return { ...dataSetElement, dataSetId: dataSetElement.id };
+          });
+          const dataElementids = _.flattenDeep(
+            _.map(
+              dataSetElements,
+              (dataSetElement: any) => dataSetElement.dataElementIds
             )
           );
-          const dataSetElementMapper = {};
-          this.getAllDataElementsMapper(currentUser, dataElementIds).subscribe(
+          let dataSetElementMapper = {};
+          this.getAllDataElementsMapper(currentUser, dataElementids).subscribe(
             (dataElementMapper: any) => {
               dataSetElements.map((dataSetElement: any) => {
-                if (!dataSetElementMapper[dataSetElement.id]) {
-                  dataSetElementMapper[dataSetElement.id] = [];
+                if (!dataSetElementMapper[dataSetElement.dataSetId]) {
+                  dataSetElementMapper[dataSetElement.dataSetId] = [];
                 }
-                dataSetElementMapper[dataSetElement.id] = _.map(
-                  dataSetElement.dataElementIds,
-                  (dataElementId: string) => {
-                    return dataElementMapper[dataElementId];
-                  }
-                );
+                for (const dataElementId of dataSetElement.dataElementIds) {
+                  dataSetElementMapper[dataSetElement.dataSetId].push(
+                    dataElementMapper[dataElementId]
+                  );
+                }
               });
               observer.next(dataSetElementMapper);
               observer.complete();
@@ -187,14 +188,13 @@ export class DataSetsProvider {
         currentUser.currentDatabase
       ).subscribe(
         (dataElements: any) => {
-          const dataElementsmapper = {};
-          dataElements.map((dataElement: any) => {
-            dataElementsmapper[dataElement.id] = {
+          const dataElementObjects = _.map(dataElements, dataElement => {
+            return {
               id: dataElement.id,
               categoryCombo: dataElement.categoryCombo
             };
           });
-          observer.next(dataElementsmapper);
+          observer.next(_.keyBy(dataElementObjects, 'id'));
           observer.complete();
         },
         error => {
@@ -465,24 +465,28 @@ export class DataSetsProvider {
   downloadDataSetsFromServer(currentUser: CurrentUser): Observable<any> {
     let dataSetSResponse = [];
     const { userOrgUnitIds } = currentUser;
+    const dataSetMetadata = DEFAULT_APP_METADATA.dataSets;
+    const { defaultIds } = dataSetMetadata;
     return new Observable(observer => {
       if (userOrgUnitIds && userOrgUnitIds.length == 0) {
         observer.next(dataSetSResponse);
         observer.complete();
       } else {
-        const fields =
-          'fields=id,name,timelyDays,formType,dataEntryForm[htmlCode],compulsoryDataElementOperands[name,dimensionItemType,dimensionItem],version,periodType,openFuturePeriods,expiryDays,dataSetElements[dataElement[id]],dataElements[id],organisationUnits[id],sections[id],indicators[id],categoryCombo[id,name,categoryOptionCombos[id,name,categoryOptions[id]],categories[id,name,categoryOptions[id,name,organisationUnits[id]]]]';
+        const fields = `fields=id,name,timelyDays,formType,dataEntryForm[htmlCode],compulsoryDataElementOperands[id,name,dimensionItemType,dimensionItem],version,periodType,openFuturePeriods,expiryDays,dataSetElements[dataElement[id]],dataElements[id],organisationUnits[id],sections[id],indicators[id],categoryCombo[id,name,categoryOptionCombos[id,name,categoryOptions[id]],categories[id,name,categoryOptions[id,name,organisationUnits[id]]]]`;
         const filter =
-          'filter=organisationUnits.path:ilike:' +
-          userOrgUnitIds.join('&filter=path:ilike:') +
-          '&rootJunction=OR';
-        const url = '/api/' + this.resource + '.json?' + fields + '&' + filter;
+          defaultIds && defaultIds.length > 0
+            ? `filter=id:in:[${defaultIds.join(',')}]`
+            : `filter=organisationUnits.path:ilike:${userOrgUnitIds.join(
+                '&filter=organisationUnits.path:ilike:'
+              )}&rootJunction=OR`;
+        const url = `/api/${this.resource}.json?${fields}&${filter}`;
+        const pageSize = defaultIds && defaultIds.length > 0 ? 10 : 15;
         this.HttpClient.get(
           url,
           false,
           currentUser,
           this.resource,
-          25
+          pageSize
         ).subscribe(
           (response: any) => {
             try {
@@ -491,7 +495,7 @@ export class DataSetsProvider {
                 dataSets,
                 currentUser
               );
-              observer.next(dataSetSResponse);
+              observer.next(_.uniqBy(dataSetSResponse, 'id'));
               observer.complete();
             } catch (e) {
               observer.error(e);
@@ -885,20 +889,13 @@ export class DataSetsProvider {
         dataSet.compulsoryDataElementOperands &&
         dataSet.compulsoryDataElementOperands.length > 0
       ) {
+        const { id } = dataSet;
         dataSetOperands = _.concat(
           dataSetOperands,
           _.map(
             dataSet.compulsoryDataElementOperands,
             (compulsoryDataElementOperand: any) => {
-              return {
-                id:
-                  dataSet.id + '-' + compulsoryDataElementOperand.dimensionItem,
-                dataSetId: dataSet.id,
-                name: compulsoryDataElementOperand.name,
-                dimensionItemType:
-                  compulsoryDataElementOperand.dimensionItemType,
-                dimensionItem: compulsoryDataElementOperand.dimensionItem
-              };
+              return { ...compulsoryDataElementOperand, dataSetId: id };
             }
           )
         );
@@ -923,6 +920,29 @@ export class DataSetsProvider {
           }
         );
       }
+    });
+  }
+
+  getCompulsoryDataElementOperandsByDataSetId(
+    dataSetId: string,
+    currentUser: CurrentUser
+  ): Observable<any> {
+    const resource = 'dataSetOperands';
+    return new Observable(observer => {
+      this.SqlLite.getDataFromTableByAttributes(
+        resource,
+        'dataSetId',
+        [dataSetId],
+        currentUser.currentDatabase
+      ).subscribe(
+        (response: any) => {
+          observer.next(response);
+          observer.complete();
+        },
+        error => {
+          observer.error(error);
+        }
+      );
     });
   }
 

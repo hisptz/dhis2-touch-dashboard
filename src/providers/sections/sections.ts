@@ -1,8 +1,32 @@
+/*
+ *
+ * Copyright 2015 HISP Tanzania
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ *
+ * @since 2015
+ * @author Joseph Chingalo <profschingalo@gmail.com>
+ *
+ */
 import { Injectable } from '@angular/core';
 import { SqlLiteProvider } from '../sql-lite/sql-lite';
 import { HttpClientProvider } from '../http-client/http-client';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
+import { DEFAULT_APP_METADATA } from '../../constants';
 
 /*
   Generated class for the SectionsProvider provider.
@@ -27,12 +51,24 @@ export class SectionsProvider {
    * @returns {Observable<any>}
    */
   downloadSectionsFromServer(currentUser): Observable<any> {
-    let url =
-      '/api/' +
-      this.resource +
-      '.json?paging=false&fields=id,name,sortOrder,indicators[id],dataElements[id]';
+    const fields =
+      'fields=id,name,code,description,sortOrder,indicators[id],dataElements[id]';
+    const dataSetMetadata = DEFAULT_APP_METADATA.dataSets;
+    const { defaultIds } = dataSetMetadata;
+    const filter =
+      defaultIds && defaultIds.length > 0
+        ? `filter=dataSet.id:in:[${defaultIds.join(',')}]`
+        : ``;
+    const url = `/api/${this.resource}.json?paging=false&${fields}&${filter}`;
+    const pageSize = defaultIds && defaultIds.length > 0 ? 10 : 15;
     return new Observable(observer => {
-      this.HttpClient.get(url, true, currentUser).subscribe(
+      this.HttpClient.get(
+        url,
+        true,
+        currentUser,
+        this.resource,
+        pageSize
+      ).subscribe(
         (response: any) => {
           const sections = response[this.resource];
           observer.next(sections);

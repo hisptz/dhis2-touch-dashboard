@@ -34,21 +34,15 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: 'profile-password.html'
 })
 export class ProfilePasswordComponent implements OnInit {
-  @Input()
-  currentUser;
-  @Input()
-  dataEntrySettings;
-  @Input()
-  barcodeSettings;
-  @Input()
-  isPasswordFormValid: boolean;
-  @Input()
-  isUserPasswordUpdateProcessActive: boolean;
+  @Input() currentUser;
+  @Input() dataEntrySettings;
+  @Input() barcodeSettings;
+  @Input() isPasswordFormValid: boolean;
+  @Input() isUserPasswordUpdateProcessActive: boolean;
+  @Input() colorSettings: any;
 
-  @Output()
-  onChangePasswordFormField = new EventEmitter();
-  @Output()
-  onUpdateUserPassword = new EventEmitter();
+  @Output() onChangePasswordFormField = new EventEmitter();
+  @Output() onUpdateUserPassword = new EventEmitter();
 
   dataObject;
   formFields;

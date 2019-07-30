@@ -1,5 +1,3 @@
-import { from } from 'rxjs/observable/from';
-
 /*
  *
  * Copyright 2015 HISP Tanzania
@@ -24,7 +22,3 @@ import { from } from 'rxjs/observable/from';
  *
  */
 export * from './current-user.actons';
-export * from './data-set.actions';
-export * from './sms-command.actions';
-export * from './sms-gateway-logs.actions';
-export * from './profile.actions';

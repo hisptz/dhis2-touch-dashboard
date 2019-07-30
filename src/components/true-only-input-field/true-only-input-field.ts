@@ -22,6 +22,9 @@
  *
  */
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { State, getCurrentUserColorSettings } from '../../store';
+import { Observable } from 'rxjs';
 
 /**
  * Generated class for the TrueOnlyInputFieldComponent component.
@@ -36,10 +39,16 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class TrueOnlyInputFieldComponent implements OnInit {
   @Input() dataElementId;
   @Input() categoryOptionComboId;
+  @Input() lockingFieldStatus;
   @Input() data;
   @Output() onChange = new EventEmitter();
+
   inputFieldValue: any;
-  constructor() {}
+  colorSettings$: Observable<any>;
+
+  constructor(private store: Store<State>) {
+    this.colorSettings$ = this.store.select(getCurrentUserColorSettings);
+  }
 
   ngOnInit() {
     let fieldId = this.dataElementId + '-' + this.categoryOptionComboId;

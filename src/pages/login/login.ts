@@ -26,24 +26,29 @@ import {
   IonicPage,
   NavController,
   ModalOptions,
-  ModalController,
-  MenuController
+  ModalController
 } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { CurrentUser } from '../../models/current-user';
 
 import { Store } from '@ngrx/store';
-import { State, AddCurrentUser } from '../../store';
+import {
+  State,
+  AddCurrentUser,
+  SetCurrentUserColorSettings,
+  getCurrentUserColorSettings
+} from '../../store';
 
 import * as _ from 'lodash';
 import { AppTranslationProvider } from '../../providers/app-translation/app-translation';
 import { AppProvider } from '../../providers/app/app';
 import { SystemSettingProvider } from '../../providers/system-setting/system-setting';
 import { SettingsProvider } from '../../providers/settings/settings';
-import { SmsCommandProvider } from '../../providers/sms-command/sms-command';
 import { LocalInstanceProvider } from '../../providers/local-instance/local-instance';
 import { EncryptionProvider } from '../../providers/encryption/encryption';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { Observable } from 'rxjs';
+import { getAppMetadata } from '../../helpers';
 
 /**
  * Generated class for the LoginPage page.
@@ -74,6 +79,7 @@ export class LoginPage implements OnInit, OnDestroy {
   applicationTitle: string;
   keyApplicationNotification: string;
   keyApplicationIntro: string;
+  colorSettings$: Observable<any>;
 
   constructor(
     private navCtrl: NavController,
@@ -82,15 +88,13 @@ export class LoginPage implements OnInit, OnDestroy {
     private appProvider: AppProvider,
     private systemSettings: SystemSettingProvider,
     private settingsProvider: SettingsProvider,
-    private smsCommandProvider: SmsCommandProvider,
     private localInstanceProvider: LocalInstanceProvider,
     private encryptionProvider: EncryptionProvider,
     private modalCtrl: ModalController,
     private backgroundMode: BackgroundMode,
-    private store: Store<State>,
-    private menuCtrl: MenuController
+    private store: Store<State>
   ) {
-    this.menuCtrl.enable(false);
+    this.colorSettings$ = this.store.select(getCurrentUserColorSettings);
     this.logoUrl = 'assets/img/logo.png';
     this.offlineIcon = 'assets/icon/offline.png';
     this.isLoginFormValid = false;
@@ -98,22 +102,7 @@ export class LoginPage implements OnInit, OnDestroy {
     this.isOnLogin = true;
     this.showOverallProgressBar = true;
     this.topThreeTranslationCodes = this.appTranslationProvider.getTopThreeSupportedTranslationCodes();
-    this.processes = [
-      'organisationUnits'
-      // 'sections',
-      // 'dataElements',
-      // 'smsCommand',
-      // 'dataSets'
-      // 'programs'
-      // 'programStageSections',
-      // 'programRules',
-      // 'indicators',
-      // 'programRuleActions',
-      // 'programRuleVariables',
-
-      // 'reports',
-      // 'constants'
-    ];
+    this.processes = getAppMetadata();
   }
 
   ngOnInit() {
@@ -135,11 +124,11 @@ export class LoginPage implements OnInit, OnDestroy {
         } else {
           this.currentUser = defaultCurrentUser;
         }
-        this.startLoginProcess();
+        this.onStartLoginProcess();
       },
       () => {
         this.currentUser = defaultCurrentUser;
-        this.startLoginProcess();
+        this.onStartLoginProcess();
       }
     );
   }
@@ -202,16 +191,39 @@ export class LoginPage implements OnInit, OnDestroy {
     }
   }
 
-  onUpdateCurrentUser(currentUser) {
+  onUpdateCurrentUser(currentUser: CurrentUser) {
+    const { colorSettings } = currentUser;
+    this.store.dispatch(new SetCurrentUserColorSettings({ colorSettings }));
     this.currentUser = _.assign({}, this.currentUser, currentUser);
+    this.userProvider.setCurrentUser(this.currentUser).subscribe(() => {});
   }
 
   onCancelLoginProcess() {
     this.isLoginProcessActive = false;
+    this.backgroundMode
+      .disable()
+      .then(() => {})
+      .catch(e => {});
   }
 
   onFailLogin(errorReponse) {
-    this.appProvider.setNormalNotification(errorReponse);
+    const { failedProcesses, error, failedProcessesErrors } = errorReponse;
+    if (error) {
+      this.appProvider.setNormalNotification(error, 10000);
+    } else if (failedProcesses && failedProcesses.length > 0) {
+      let errorMessage = '';
+      failedProcesses.map(process => {
+        const error = failedProcessesErrors[failedProcesses.indexOf(process)];
+        errorMessage +=
+          (process.charAt(0).toUpperCase() + process.slice(1))
+            .replace(/([A-Z])/g, ' $1')
+            .trim() +
+          ' : ' +
+          this.appProvider.getSanitizedMessage(error) +
+          '; ';
+      });
+      this.appProvider.setNormalNotification(errorMessage, 10000);
+    }
     this.onCancelLoginProcess();
   }
 
@@ -245,6 +257,10 @@ export class LoginPage implements OnInit, OnDestroy {
           loggedInInInstance
         )
         .subscribe(() => {
+          const { colorSettings } = currentUser;
+          this.store.dispatch(
+            new SetCurrentUserColorSettings({ colorSettings })
+          );
           this.store.dispatch(
             new AddCurrentUser({ currentUser: this.currentUser })
           );
@@ -253,10 +269,6 @@ export class LoginPage implements OnInit, OnDestroy {
               .disable()
               .then(() => {})
               .catch(e => {});
-            this.smsCommandProvider
-              .checkAndGenerateSmsCommands(this.currentUser)
-              .subscribe(() => {}, error => {});
-            this.menuCtrl.enable(true);
             this.navCtrl.setRoot('DashboardPage');
           });
         });
@@ -306,9 +318,18 @@ export class LoginPage implements OnInit, OnDestroy {
     }
   }
 
-  startLoginProcess() {
+  onStartLoginProcess() {
+    const { username, password, serverUrl } = this.currentUser;
+    this.currentUser = {
+      ...this.currentUser,
+      username: username.trim(),
+      password: password.trim(),
+      serverUrl: serverUrl.trim(),
+      isPasswordEncode: false
+    };
     this.overAllLoginMessage = this.currentUser.serverUrl;
     this.isLoginProcessActive = true;
+    this.backgroundMode.enable();
     this.resetLoginSpinnerValues();
   }
 
@@ -328,7 +349,6 @@ export class LoginPage implements OnInit, OnDestroy {
     this.isLoginFormValid = null;
     this.isLoginProcessActive = null;
     this.offlineIcon = null;
-    this.currentUser = null;
     this.topThreeTranslationCodes = null;
     this.localInstances = null;
     this.processes = null;

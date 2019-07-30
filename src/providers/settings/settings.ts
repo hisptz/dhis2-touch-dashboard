@@ -48,27 +48,27 @@ export class SettingsProvider {
         isLoading: false,
         loadingMessage: ''
       }
-      // {
-      //   id: 'entryForm',
-      //   name: 'Entry form',
-      //   icon: 'assets/icon/form.png',
-      //   isLoading: false,
-      //   loadingMessage: ''
-      // },
-      // {
-      //   id: 'synchronization',
-      //   name: 'Synchronization',
-      //   icon: 'assets/icon/synchronization.png',
-      //   isLoading: false,
-      //   loadingMessage: ''
-      // },
-      // {
-      //   id: 'barcode',
-      //   name: 'Barcode behaviour',
-      //   icon: 'assets/icon/barcode-reader.png',
-      //   isLoading: false,
-      //   loadingMessage: ''
-      // }
+      /* {
+        id: 'entryForm',
+        name: 'Entry form',
+        icon: 'assets/icon/form.png',
+        isLoading: false,
+        loadingMessage: ''
+      },
+      {
+        id: 'synchronization',
+        name: 'Synchronization',
+        icon: 'assets/icon/synchronization.png',
+        isLoading: false,
+        loadingMessage: ''
+      },
+      {
+        id: 'barcode',
+        name: 'Barcode behaviour',
+        icon: 'assets/icon/barcode-reader.png',
+        isLoading: false,
+        loadingMessage: ''
+      }*/
     ];
     return settingContents;
   }
@@ -168,7 +168,7 @@ export class SettingsProvider {
       entryForm: {
         label: 'formName',
         maxDataElementOnDefaultForm: 10,
-        formLayout: 'tableLayout',
+        formLayout: 'customLayout',
         showAlertOnFormAssignement: true,
         shouldDisplayAsRadio: true
       },

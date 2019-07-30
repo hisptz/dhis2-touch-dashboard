@@ -21,7 +21,6 @@
  * @author Joseph Chingalo <profschingalo@gmail.com>
  */
 export interface SmsCommand {
-  id?: string;
   dataSetId: string;
   commandName: string;
   separator: string;
@@ -36,8 +35,7 @@ export interface SmsCode {
 }
 
 export interface SmsConfiguration {
-  dataSetIds: Array<string>;
-  syncedSMSIds: Array<string>;
-  notSyncedSMSIds: Array<string>;
-  skippedSMSIds: Array<string>;
+  dataSetIds: Array<any>;
+  isStarted: boolean;
+  syncedSMSIds: Array<any>;
 }
