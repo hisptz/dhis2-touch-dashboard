@@ -51,6 +51,9 @@ import { SectionsProvider } from '../../../../providers/sections/sections';
 import { SmsCommandProvider } from '../../../../providers/sms-command/sms-command';
 import { StandardReportProvider } from '../../../../providers/standard-report/standard-report';
 import { DataElementsProvider } from '../../../../providers/data-elements/data-elements';
+import { DataStoreManagerProvider } from '../../../../providers/data-store-manager/data-store-manager';
+import { AppColorProvider } from '../../../../providers/app-color/app-color';
+import { ValidationRulesProvider } from '../../../../providers/validation-rules/validation-rules';
 
 /**
  * Generated class for the LoginMetadataSyncComponent component.
@@ -94,6 +97,9 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
   progressTrackerMessage: any;
   trackedProcessWithLoader: any;
   completedTrackedProcess: string[];
+  progressTrackerBackup: any;
+  failedProcesses: any;
+  failedProcessesErrors: any;
 
   constructor(
     private networkAvailabilityProvider: NetworkAvailabilityProvider,
@@ -110,7 +116,10 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
     private programStageSectionsProvider: ProgramStageSectionsProvider,
     private sectionsProvider: SectionsProvider,
     private smsCommandProvider: SmsCommandProvider,
-    private standardReportProvider: StandardReportProvider
+    private standardReportProvider: StandardReportProvider,
+    private dataStoreManagerProvider: DataStoreManagerProvider,
+    private appColorProvider: AppColorProvider,
+    private validationRulesProvider: ValidationRulesProvider
   ) {
     this.showCancelButton = true;
     this.subscriptions = new Subscription();
@@ -118,6 +127,8 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
     this.progressTrackerMessage = {};
     this.trackedProcessWithLoader = {};
     this.completedTrackedProcess = [];
+    this.failedProcesses = [];
+    this.failedProcessesErrors = [];
   }
 
   ngOnInit() {
@@ -154,6 +165,10 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
     currentUser.serverUrl = this.appProvider.getFormattedBaseUrl(
       currentUser.serverUrl
     );
+    const { progressTracker } = currentUser;
+    if (progressTracker && !this.isOnLogin) {
+      this.progressTrackerBackup = progressTracker;
+    }
     const networkStatus = this.networkAvailabilityProvider.getNetWorkStatus();
     const { isAvailable } = networkStatus;
     if (!isAvailable && this.isOnLogin) {
@@ -179,7 +194,6 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             const { currentUser } = response;
             const { progressTracker } = this.currentUser;
             this.currentUser = _.assign({}, currentUser);
-            //@todo update process tracker for sync module
             this.currentUser['progressTracker'] = progressTracker
               ? progressTracker
               : {};
@@ -225,11 +239,13 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
                         const subscription = this.systemSettingProvider
                           .getSystemSettingsFromServer({
                             ...currentUser,
-                            dhisVersion
+                            dhisVersion,
+                            serverUrl
                           })
                           .subscribe(
                             systemSettings => {
                               this.systemSettingLoaded.emit(systemSettings);
+                              const { currentStyle } = systemSettings;
                               //loading user authorities
                               this.updateProgressTrackerObject(
                                 'Discovering user authorities',
@@ -239,7 +255,8 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
                               const subscription = this.userProvider
                                 .getUserAuthorities({
                                   ...currentUser,
-                                  dhisVersion
+                                  dhisVersion,
+                                  serverUrl
                                 })
                                 .subscribe(
                                   response => {
@@ -249,6 +266,16 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
                                       response.authorities;
                                     this.currentUser.dataViewOrganisationUnits =
                                       response.dataViewOrganisationUnits;
+                                    const { settings } = response;
+                                    const { keyStyle } = settings;
+                                    const colorSettings = this.appColorProvider.getCurrentUserColorObject(
+                                      currentStyle,
+                                      keyStyle
+                                    );
+                                    this.currentUser = {
+                                      ...this.currentUser,
+                                      colorSettings
+                                    };
                                     //loading user data
                                     this.updateProgressTrackerObject(
                                       'Discovering user data',
@@ -259,7 +286,8 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
                                       .getUserDataOnAuthenticatedServer(
                                         {
                                           ...currentUser,
-                                          dhisVersion
+                                          dhisVersion,
+                                          serverUrl
                                         },
                                         serverUrl,
                                         true
@@ -387,7 +415,6 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
     );
   }
 
-  // @todo checking for upading tracker object
   getProgressTracker(currentUser: CurrentUser, processes: string[]) {
     const emptyProgressTracker = this.getEmptyProcessTracker(processes);
     let progressTrackerObject =
@@ -395,24 +422,29 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
       currentUser.currentDatabase &&
       currentUser.progressTracker &&
       currentUser.progressTracker[currentUser.currentDatabase]
-        ? currentUser.progressTracker[currentUser.currentDatabase]
+        ? !this.isOnLogin
+          ? emptyProgressTracker
+          : currentUser.progressTracker[currentUser.currentDatabase]
         : emptyProgressTracker;
-    Object.keys(progressTrackerObject).map((key: string) => {
-      progressTrackerObject[key].expectedProcesses =
-        emptyProgressTracker[key].expectedProcesses;
-      progressTrackerObject[key].totalPassedProcesses = 0;
-      this.trackedProcessWithLoader[key] = false;
-      if (key === 'communication') {
-        this.progressTrackerMessage[key] = 'Establishing connection to server';
-        this.trackedProcessWithLoader[key] = true;
-      } else if (key === 'entryForm') {
-        this.progressTrackerMessage[key] = 'Aggregate metadata';
-      } else if (key === 'event') {
-        this.progressTrackerMessage[key] = 'Event and tracker metadata';
-      } else if (key === 'report') {
-        this.progressTrackerMessage[key] = 'Reports metadata';
-      }
-    });
+    try {
+      Object.keys(progressTrackerObject).map((key: string) => {
+        progressTrackerObject[key].expectedProcesses =
+          emptyProgressTracker[key].expectedProcesses;
+        progressTrackerObject[key].totalPassedProcesses = 0;
+        this.trackedProcessWithLoader[key] = false;
+        if (key === 'communication') {
+          this.progressTrackerMessage[key] =
+            'Establishing connection to server';
+          this.trackedProcessWithLoader[key] = true;
+        } else if (key === 'entryForm') {
+          this.progressTrackerMessage[key] = 'Aggregate metadata';
+        } else if (key === 'event') {
+          this.progressTrackerMessage[key] = 'Event and tracker metadata';
+        } else if (key === 'report') {
+          this.progressTrackerMessage[key] = 'Reports metadata';
+        }
+      });
+    } catch (e) {}
     return progressTrackerObject;
   }
 
@@ -489,6 +521,38 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
     trackedResourceTypes: string[],
     progressTracker
   ) {
+    const {
+      totalExpectedProcesses,
+      totalProcesses
+    } = this.getTotalExpectedAndCompletedProcess(
+      trackedResourceTypes,
+      progressTracker
+    );
+    this.progressTrackerPacentage['overall'] = this.getPercetage(
+      totalProcesses,
+      totalExpectedProcesses
+    );
+    const { currentDatabase } = this.currentUser;
+    if (currentDatabase) {
+      this.currentUser.progressTracker[currentDatabase] = progressTracker;
+      this.updateCurrentUser.emit(this.currentUser);
+    }
+    if (totalProcesses === totalExpectedProcesses) {
+      if (this.progressTrackerBackup) {
+        this.currentUser = {
+          ...this.currentUser,
+          progressTracker: this.programsProvider
+        };
+      }
+      this.successOnLoginAndSyncMetadata.emit({
+        currentUser: this.currentUser
+      });
+    } else {
+      this.checkingIfAllProcessHavePassed();
+    }
+  }
+
+  getTotalExpectedAndCompletedProcess(trackedResourceTypes, progressTracker) {
     let totalProcesses = 0;
     let totalExpectedProcesses = 0;
     trackedResourceTypes.map((trackedResourceType: string) => {
@@ -502,20 +566,7 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
         expectedProcesses
       );
     });
-    this.progressTrackerPacentage['overall'] = this.getPercetage(
-      totalProcesses,
-      totalExpectedProcesses
-    );
-    const { currentDatabase } = this.currentUser;
-    if (currentDatabase) {
-      this.currentUser.progressTracker[currentDatabase] = progressTracker;
-      this.updateCurrentUser.emit(this.currentUser);
-    }
-    if (totalProcesses === totalExpectedProcesses) {
-      this.successOnLoginAndSyncMetadata.emit({
-        currentUser: this.currentUser
-      });
-    }
+    return { totalExpectedProcesses, totalProcesses };
   }
 
   getCompletedTrackedProcess(progressTracker) {
@@ -550,12 +601,56 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
     return String(percentage);
   }
 
-  onFailToLogin(error) {
-    this.clearAllSubscriptions();
-    this.failOnLogin.emit(error);
+  onFailToLogin(error, process?: string) {
+    if (process) {
+      if (_.indexOf(this.failedProcesses, process) == -1) {
+        this.failedProcesses.push(process);
+        this.failedProcessesErrors.push(error);
+      }
+      this.removeFromQueue(process, 'dowmloading', true);
+    } else {
+      if (this.progressTrackerBackup) {
+        this.currentUser = {
+          ...this.currentUser,
+          progressTracker: this.progressTrackerBackup
+        };
+      }
+      this.clearAllSubscriptions();
+      this.failOnLogin.emit({ error });
+    }
+  }
+
+  checkingIfAllProcessHavePassed() {
+    const { currentDatabase } = this.currentUser;
+    if (currentDatabase) {
+      let progressTracker = this.currentUser.progressTracker[currentDatabase];
+      const {
+        totalExpectedProcesses,
+        totalProcesses
+      } = this.getTotalExpectedAndCompletedProcess(
+        this.trackedResourceTypes,
+        progressTracker
+      );
+      if (
+        totalExpectedProcesses ===
+        totalProcesses + this.failedProcesses.length
+      ) {
+        this.failOnLogin.emit({
+          failedProcesses: this.failedProcesses,
+          failedProcessesErrors: this.failedProcessesErrors
+        });
+        this.clearAllSubscriptions();
+      }
+    }
   }
 
   onCancelProgess() {
+    if (this.progressTrackerBackup) {
+      this.currentUser = {
+        ...this.currentUser,
+        progressTracker: this.progressTrackerBackup
+      };
+    }
     this.clearAllSubscriptions();
     this.cancelProgress.emit();
   }
@@ -570,7 +665,7 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
     this.downloadingQueueManager = {
       totalProcess: this.processes.length,
       enqueuedProcess: [],
-      dequeuingLimit: 5,
+      dequeuingLimit: 4,
       denqueuedProcess: []
     };
   }
@@ -594,7 +689,12 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
     }
   }
 
-  removeFromQueue(process: string, type: string, data?: any) {
+  removeFromQueue(
+    process: string,
+    type: string,
+    shouldPassProces: boolean,
+    data?: any
+  ) {
     if (type && type === 'saving') {
       _.remove(
         this.savingingQueueManager.denqueuedProcess,
@@ -602,6 +702,13 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
           return process === denqueuedProcess;
         }
       );
+      if (
+        this.savingingQueueManager &&
+        this.savingingQueueManager.data &&
+        this.savingingQueueManager.data[process]
+      ) {
+        this.savingingQueueManager.data[process] = [];
+      }
       const { currentDatabase } = this.currentUser;
       this.completedTrackedProcess = this.getCompletedTrackedProcess(
         this.currentUser.progressTracker[currentDatabase]
@@ -629,12 +736,14 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
           process + '-' + processType,
           progressMessage
         );
-        processType = 'saving';
-        progressMessage = this.getProgressMessage(process, processType);
-        this.updateProgressTrackerObject(
-          process + '-' + processType,
-          progressMessage
-        );
+        if (!shouldPassProces) {
+          processType = 'saving';
+          progressMessage = this.getProgressMessage(process, processType);
+          this.updateProgressTrackerObject(
+            process + '-' + processType,
+            progressMessage
+          );
+        }
       }
       this.checkingAndStartDownloadProcess();
     }
@@ -651,6 +760,8 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
         progressMessage = 'Discovering entry form sections';
       } else if (process === 'dataElements') {
         progressMessage = 'Discovering entry form fields';
+      } else if (process === 'categoryCombos') {
+        progressMessage = 'Discovering entry form fields categories';
       } else if (process === 'smsCommand') {
         progressMessage = 'Discovering SMS commands';
       } else if (process === 'programs') {
@@ -669,6 +780,10 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
         progressMessage = 'Discovering standard reports';
       } else if (process === 'constants') {
         progressMessage = 'Discovering constants';
+      } else if (process === 'dataStore') {
+        progressMessage = 'Discovering data store';
+      } else if (process === 'validationRules') {
+        progressMessage = 'Discovering validation rules';
       } else {
         progressMessage = 'Discovering ' + process;
       }
@@ -681,6 +796,8 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
         progressMessage = 'Saving entry form sections';
       } else if (process === 'dataElements') {
         progressMessage = 'Saving entry form fields';
+      } else if (process === 'categoryCombos') {
+        progressMessage = 'Saving entry form fields categories';
       } else if (process === 'smsCommand') {
         progressMessage = 'Saving SMS commands';
       } else if (process === 'programs') {
@@ -699,6 +816,10 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
         progressMessage = 'Saving standard reports';
       } else if (process === 'constants') {
         progressMessage = 'Saving constants';
+      } else if (process === 'dataStore') {
+        progressMessage = 'Saving data store';
+      } else if (process === 'validationRules') {
+        progressMessage = 'Saving validation rules';
       } else {
         progressMessage = 'Saving ' + process;
       }
@@ -711,6 +832,8 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
         progressMessage = 'Entry form sections have been discovered';
       } else if (process === 'dataElements') {
         progressMessage = 'Entry form fields have been discovered';
+      } else if (process === 'categoryCombos') {
+        progressMessage = 'Entry form fields categories have been discovered';
       } else if (process === 'smsCommand') {
         progressMessage = 'SMS commands have been discovered';
       } else if (process === 'programs') {
@@ -729,6 +852,10 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
         progressMessage = 'Reports have been discovered';
       } else if (process === 'constants') {
         progressMessage = 'Constants have been discovered';
+      } else if (process === 'dataStore') {
+        progressMessage = 'Data store has been discovered';
+      } else if (process === 'validationRules') {
+        progressMessage = 'Validation rules has been discovered';
       } else {
         progressMessage = process + ' have been discovered';
       }
@@ -793,11 +920,11 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadingOrganisationUnitsFromServer(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -807,11 +934,11 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadDataSetsFromServer(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -821,11 +948,11 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadSectionsFromServer(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -835,11 +962,25 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadDataElementsFromServer(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else if (process === 'categoryCombos') {
+        this.subscriptions.add(
+          this.dataElementsProvider
+            .downloadDataElementCatogoryCombos(this.currentUser)
+            .subscribe(
+              response => {
+                this.removeFromQueue(process, 'dowmloading', false, response);
+              },
+              error => {
+                console.log(process + ' : ' + JSON.stringify(error));
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -849,11 +990,11 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .getSmsCommandFromServer(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -863,11 +1004,11 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadProgramsFromServer(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -877,11 +1018,11 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadProgramsStageSectionsFromServer(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -891,11 +1032,11 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadingProgramRules(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -905,11 +1046,11 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadingProgramRuleActions(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -919,11 +1060,11 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadingProgramRuleVariables(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -933,11 +1074,11 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadingIndicatorsFromServer(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -947,11 +1088,11 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadReportsFromServer(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
               }
             )
         );
@@ -961,17 +1102,45 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
             .downloadConstantsFromServer(this.currentUser)
             .subscribe(
               response => {
-                this.removeFromQueue(process, 'dowmloading', response);
+                this.removeFromQueue(process, 'dowmloading', false, response);
               },
               error => {
                 console.log(process + ' : ' + JSON.stringify(error));
-                this.onFailToLogin(error);
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else if (process === 'dataStore') {
+        this.subscriptions.add(
+          this.dataStoreManagerProvider
+            .getDataStoreFromServer(this.currentUser)
+            .subscribe(
+              response => {
+                this.removeFromQueue(process, 'dowmloading', false, response);
+              },
+              error => {
+                console.log(process + ' : ' + JSON.stringify(error));
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else if (process === 'validationRules') {
+        this.subscriptions.add(
+          this.validationRulesProvider
+            .discoveringValidationRulesFromServer(this.currentUser)
+            .subscribe(
+              response => {
+                this.removeFromQueue(process, 'dowmloading', false, response);
+              },
+              error => {
+                console.log(process + ' : ' + JSON.stringify(error));
+                this.onFailToLogin(error, process);
               }
             )
         );
       }
     } else {
-      this.removeFromQueue(process, 'dowmloading');
+      this.removeFromQueue(process, 'dowmloading', false);
     }
   }
 
@@ -980,174 +1149,519 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
     const progressMessage = this.getProgressMessage(process, type);
     this.updateProgressTrackerObject(process + '-' + type, progressMessage);
     if (process === 'organisationUnits') {
-      this.subscriptions.add(
-        this.organisationUnitsProvider
-          .savingOrganisationUnitsFromServer(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.organisationUnitsProvider
+            .savingOrganisationUnitsFromServer(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.organisationUnitsProvider
+                .savingOrganisationUnitsFromServer(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'dataSets') {
-      this.subscriptions.add(
-        this.dataSetsProvider
-          .saveDataSetsFromServer(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            errror => {
-              this.onFailToLogin(errror);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.dataSetsProvider
+            .saveDataSetsFromServer(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              errror => {
+                this.onFailToLogin(errror);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.dataSetsProvider
+                .saveDataSetsFromServer(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  errror => {
+                    this.onFailToLogin(errror);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'sections') {
-      this.subscriptions.add(
-        this.sectionsProvider
-          .saveSectionsFromServer(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.sectionsProvider
+            .saveSectionsFromServer(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.sectionsProvider
+                .saveSectionsFromServer(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'dataElements') {
-      this.subscriptions.add(
-        this.dataElementsProvider
-          .saveDataElementsFromServer(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.dataElementsProvider
+            .saveDataElementsFromServer(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.dataElementsProvider
+                .saveDataElementsFromServer(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
+    } else if (process === 'categoryCombos') {
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.dataElementsProvider
+            .saveDataElementCatogoryCombos(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.dataElementsProvider
+                .saveDataElementCatogoryCombos(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'smsCommand') {
-      this.subscriptions.add(
-        this.smsCommandProvider
-          .savingSmsCommand(data, this.currentUser.currentDatabase)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.smsCommandProvider
+            .savingSmsCommand(data, this.currentUser.currentDatabase)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.smsCommandProvider
+                .savingSmsCommand(data, this.currentUser.currentDatabase)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'programs') {
-      this.subscriptions.add(
-        this.programsProvider
-          .saveProgramsFromServer(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.programsProvider
+            .saveProgramsFromServer(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.programsProvider
+                .saveProgramsFromServer(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'programStageSections') {
-      this.subscriptions.add(
-        this.programStageSectionsProvider
-          .saveProgramsStageSectionsFromServer(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.programStageSectionsProvider
+            .saveProgramsStageSectionsFromServer(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.programStageSectionsProvider
+                .saveProgramsStageSectionsFromServer(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'programRules') {
-      this.subscriptions.add(
-        this.programRulesProvider
-          .savingProgramRules(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.programRulesProvider
+            .savingProgramRules(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.programRulesProvider
+                .savingProgramRules(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'programRuleActions') {
-      this.subscriptions.add(
-        this.programRulesProvider
-          .savingProgramRuleActions(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.programRulesProvider
+            .savingProgramRuleActions(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.programRulesProvider
+                .savingProgramRuleActions(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'programRuleVariables') {
-      this.subscriptions.add(
-        this.programRulesProvider
-          .savingProgramRuleVariables(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.programRulesProvider
+            .savingProgramRuleVariables(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.programRulesProvider
+                .savingProgramRuleVariables(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'indicators') {
-      this.subscriptions.add(
-        this.indicatorsProvider
-          .savingIndicatorsFromServer(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.indicatorsProvider
+            .savingIndicatorsFromServer(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.indicatorsProvider
+                .savingIndicatorsFromServer(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'reports') {
-      this.subscriptions.add(
-        this.standardReportProvider
-          .saveReportsFromServer(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.standardReportProvider
+            .saveReportsFromServer(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.standardReportProvider
+                .saveReportsFromServer(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     } else if (process === 'constants') {
-      this.subscriptions.add(
-        this.standardReportProvider
-          .saveConstantsFromServer(data, this.currentUser)
-          .subscribe(
-            () => {
-              this.removeFromQueue(process, 'saving');
-            },
-            error => {
-              this.onFailToLogin(error);
-            }
-          )
-      );
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.standardReportProvider
+            .saveConstantsFromServer(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.subscriptions.add(
+                this.standardReportProvider
+                  .saveConstantsFromServer(data, this.currentUser)
+                  .subscribe(
+                    () => {
+                      this.removeFromQueue(process, 'saving', false);
+                    },
+                    error => {
+                      this.onFailToLogin(error, process);
+                    }
+                  )
+              );
+            })
+        );
+      }
+    } else if (process === 'dataStore') {
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.dataStoreManagerProvider
+            .saveDataStoreDataFromServer(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.dataStoreManagerProvider
+                .saveDataStoreDataFromServer(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
+    } else if (process === 'validationRules') {
+      if (this.isOnLogin) {
+        this.subscriptions.add(
+          this.validationRulesProvider
+            .savingValidationRules(data, this.currentUser)
+            .subscribe(
+              () => {
+                this.removeFromQueue(process, 'saving', false);
+              },
+              error => {
+                this.onFailToLogin(error, process);
+              }
+            )
+        );
+      } else {
+        this.subscriptions.add(
+          this.sqlLiteProvider
+            .dropAndRecreateTable(process, this.currentUser.currentDatabase)
+            .subscribe(() => {
+              this.validationRulesProvider
+                .savingValidationRules(data, this.currentUser)
+                .subscribe(
+                  () => {
+                    this.removeFromQueue(process, 'saving', false);
+                  },
+                  error => {
+                    this.onFailToLogin(error, process);
+                  }
+                );
+            })
+        );
+      }
     }
   }
 
@@ -1163,7 +1677,10 @@ export class LoginMetadataSyncComponent implements OnDestroy, OnInit {
   ngOnDestroy() {
     this.clearAllSubscriptions();
     this.processes = null;
+    this.progressTrackerBackup = null;
     this.isOnLogin = null;
+    this.failedProcesses = null;
+    this.failedProcessesErrors = null;
     this.overAllMessage = null;
     this.savingingQueueManager = null;
     this.showOverallProgressBar = null;

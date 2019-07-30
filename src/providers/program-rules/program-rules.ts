@@ -26,6 +26,7 @@ import { HttpClientProvider } from '../http-client/http-client';
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 import { CurrentUser } from '../../models/current-user';
+import { DEFAULT_APP_METADATA } from '../../constants';
 
 const ASSIGN = 'ASSIGN';
 const HIDE_FIELD = 'HIDEFIELD';
@@ -59,13 +60,13 @@ export class ProgramRulesProvider {
     return new Observable(observer => {
       let programRulesEvaluations = {
         hiddenFields: {},
+        assignedFields: {},
         hiddenSections: {},
         hiddenProgramStages: {},
         errorOrWarningMessage: {}
       };
       let hasDataToAssign = false;
-      const { programRules } = programSkipLogicMetadata;
-      const { programRulesVariables } = programSkipLogicMetadata;
+      const { programRules, programRulesVariables } = programSkipLogicMetadata;
       const dataValuesObject = this.getDeducedDataValuesForEvaluation(
         dataObject
       );
@@ -89,10 +90,8 @@ export class ProgramRulesProvider {
                   programStageSection,
                   programStage,
                   content,
-                  location,
                   data
                 } = action;
-                console.log(location);
                 let evalCondition = condition;
                 let evalDataCondition = data ? data : '';
                 let evalData = '';
@@ -106,8 +105,8 @@ export class ProgramRulesProvider {
                         : programRulesVariable &&
                           programRulesVariable.trackedEntityAttribute &&
                           programRulesVariable.trackedEntityAttribute.id
-                          ? programRulesVariable.trackedEntityAttribute.id
-                          : '';
+                        ? programRulesVariable.trackedEntityAttribute.id
+                        : '';
                     let value = "''";
                     if (
                       dataValuesObject &&
@@ -144,14 +143,11 @@ export class ProgramRulesProvider {
                         .join(`${value}`);
                     }
                   });
-                  //evaluate content data
                   try {
                     evalData = eval(`(${evalDataCondition})`);
                   } catch (error) {
                   } finally {
-                    console.log('evalData : ' + evalData);
                   }
-
                   if (evalCondition !== condition) {
                     try {
                       const evaluated = eval(`(${evalCondition})`);
@@ -234,7 +230,19 @@ export class ProgramRulesProvider {
                             };
                           }
                         } else if (programRuleActionType === ASSIGN) {
-                          console.log('Handling for : ' + ASSIGN);
+                          if (dataElement && dataElement.id) {
+                            programRulesEvaluations.assignedFields[
+                              dataElement.id
+                            ] = `${evalData}`;
+                          }
+                          if (
+                            trackedEntityAttribute &&
+                            trackedEntityAttribute.id
+                          ) {
+                            programRulesEvaluations.assignedFields[
+                              trackedEntityAttribute.id
+                            ] = `${evalData}`;
+                          }
                         } else if (
                           programRuleActionType === SET_MANDATORY_FIELD
                         ) {
@@ -250,9 +258,7 @@ export class ProgramRulesProvider {
                         }
                       }
                     } catch (error) {
-                      console.log('error : ' + JSON.stringify(error));
-                      console.log('evalCondition : ' + evalCondition);
-                      console.log('condition : ' + condition);
+                      console.log(JSON.stringify({ error }));
                     }
                   }
                 }
@@ -283,10 +289,16 @@ export class ProgramRulesProvider {
   }
 
   downloadingProgramRules(currentUser: CurrentUser): Observable<any> {
+    const programMetadata = DEFAULT_APP_METADATA.programs;
+    const { defaultIds } = programMetadata;
     const resource = 'programRules';
     const fields =
       'id,name,displayName,description,condition,program[id],programRuleActions[id]';
-    const url = '/api/' + resource + '.json?paging=false&fields=' + fields;
+    const filter =
+      defaultIds && defaultIds.length > 0
+        ? `filter=program.id:in:[${defaultIds.join(',')}]`
+        : ``;
+    const url = `/api/${resource}.json?paging=false&fields=${fields}&${filter}`;
     return new Observable(observer => {
       this.httpClientProvider.get(url, true, currentUser).subscribe(
         (response: any) => {
@@ -301,10 +313,16 @@ export class ProgramRulesProvider {
   }
 
   downloadingProgramRuleActions(currentUser: CurrentUser): Observable<any> {
+    const programMetadata = DEFAULT_APP_METADATA.programs;
+    const { defaultIds } = programMetadata;
     const resource = 'programRuleActions';
     const fields =
       'id,data,content,programRuleActionType,location,programRule[id],dataElement[id],trackedEntityAttribute[id],programStageSection[id],programStage[id]';
-    const url = '/api/' + resource + '.json?paging=false&fields=' + fields;
+    const filter =
+      defaultIds && defaultIds.length > 0
+        ? `filter=programRule.program.id:in:[${defaultIds.join(',')}]`
+        : ``;
+    const url = `/api/${resource}.json?paging=false&fields=${fields}&${filter}`;
     return new Observable(observer => {
       this.httpClientProvider.get(url, true, currentUser).subscribe(
         (response: any) => {
@@ -319,10 +337,16 @@ export class ProgramRulesProvider {
   }
 
   downloadingProgramRuleVariables(currentUser: CurrentUser): Observable<any> {
+    const programMetadata = DEFAULT_APP_METADATA.programs;
+    const { defaultIds } = programMetadata;
     const resource = 'programRuleVariables';
     const fields =
       'id,name,displayName,programRuleVariableSourceType,program[id],dataElement[id],trackedEntityAttribute[id],programStageSection[id],programStage[id]';
-    const url = '/api/' + resource + '.json?paging=false&fields=' + fields;
+    const filter =
+      defaultIds && defaultIds.length > 0
+        ? `filter=program.id:in:[${defaultIds.join(',')}]`
+        : ``;
+    const url = `/api/${resource}.json?paging=false&fields=${fields}&${filter}`;
     return new Observable(observer => {
       this.httpClientProvider.get(url, true, currentUser).subscribe(
         (response: any) => {
@@ -406,33 +430,32 @@ export class ProgramRulesProvider {
     });
   }
 
-  getgProgramRulesByIds(
-    programRulesIds: Array<String>,
+  getgProgramRulesByProgramId(
+    programId: string,
     currentUser: CurrentUser
   ): Observable<any> {
     const resource = 'programRules';
+    const { currentDatabase } = currentUser;
     return new Observable(observer => {
-      if (programRulesIds.length == 0) {
-        observer.next([]);
-        observer.complete();
-      } else {
-        this.sqlLite
-          .getDataFromTableByAttributes(
-            resource,
-            'id',
-            programRulesIds,
-            currentUser.currentDatabase
-          )
-          .subscribe(
-            programRules => {
-              observer.next(programRules);
-              observer.complete();
-            },
-            error => {
-              observer.error(error);
-            }
+      this.sqlLite.getAllDataFromTable(resource, currentDatabase).subscribe(
+        (programRules: any) => {
+          const sanitizedProgramRules = _.flatMapDeep(
+            _.filter(programRules, programRule => {
+              return (
+                programRule &&
+                programRule.program &&
+                programRule.program.id &&
+                programRule.program.id === programId
+              );
+            })
           );
-      }
+          observer.next(sanitizedProgramRules);
+          observer.complete();
+        },
+        error => {
+          observer.error(error);
+        }
+      );
     });
   }
 
@@ -466,31 +489,32 @@ export class ProgramRulesProvider {
     });
   }
 
-  getProgramRuleVariableByIds(
-    programRuleVariableIds: Array<string>,
+  getProgramRuleVariableByProgramId(
+    programId: string,
     currentUser: CurrentUser
   ): Observable<any> {
     const resource = 'programRuleVariables';
+    const { currentDatabase } = currentUser;
     return new Observable(observer => {
-      if (programRuleVariableIds.length == 0) {
-      } else {
-        this.sqlLite
-          .getDataFromTableByAttributes(
-            resource,
-            'id',
-            programRuleVariableIds,
-            currentUser.currentDatabase
-          )
-          .subscribe(
-            programRuleVariables => {
-              observer.next(programRuleVariables);
-              observer.complete();
-            },
-            error => {
-              observer.error(error);
-            }
+      this.sqlLite.getAllDataFromTable(resource, currentDatabase).subscribe(
+        (programRuleVariables: any) => {
+          const sanitizedProgramRuleVariables = _.flatMapDeep(
+            _.filter(programRuleVariables, programRuleVariable => {
+              return (
+                programRuleVariable &&
+                programRuleVariable.program &&
+                programRuleVariable.program.id &&
+                programRuleVariable.program.id === programId
+              );
+            })
           );
-      }
+          observer.next(sanitizedProgramRuleVariables);
+          observer.complete();
+        },
+        error => {
+          observer.error(error);
+        }
+      );
     });
   }
 }

@@ -31,6 +31,7 @@ import { EncryptionProvider } from '../encryption/encryption';
 import { NetworkAvailabilityProvider } from '../network-availability/network-availability';
 import { Storage } from '@ionic/storage';
 import * as _ from 'lodash';
+import * as async from 'async';
 /*
   Generated class for the HttpClientProvider provider.
 
@@ -39,15 +40,12 @@ import * as _ from 'lodash';
 */
 @Injectable()
 export class HttpClientProvider {
-  public timeOutTime: number;
   constructor(
     private http: HTTP,
     private encryption: EncryptionProvider,
     public storage: Storage,
     private networkProvider: NetworkAvailabilityProvider
-  ) {
-    this.timeOutTime = 4 * 60 * 1000;
-  }
+  ) {}
 
   /**
    *
@@ -132,11 +130,9 @@ export class HttpClientProvider {
           apiUrl =
             sanitizedUser.serverUrl +
             this.getUrlBasedOnDhisVersion(url, sanitizedUser);
-          this.http.useBasicAuth(
-            sanitizedUser.username,
-            sanitizedUser.password
-          );
-          this.http.setRequestTimeout(this.timeOutTime);
+          const { username, password } = sanitizedUser;
+          this.http.clearCookies();
+          const headers = this.http.getBasicAuthHeader(username, password);
           if (resourceName && pageSize) {
             let promises = [];
             const testUrl =
@@ -146,62 +142,74 @@ export class HttpClientProvider {
               '.json?fields=none&pageSize=' +
               pageSize;
             this.http
-              .get(testUrl, {}, {})
-              .then(
-                (initialResponse: any) => {
-                  initialResponse = JSON.parse(initialResponse.data);
-                  if (initialResponse.pager.pageCount) {
-                    initialResponse[resourceName] = [];
-                    for (let i = 1; i <= initialResponse.pager.pageCount; i++) {
-                      const paginatedUrl =
-                        apiUrl + '&pageSize=' + pageSize + '&page=' + i;
-                      promises.push(
-                        this.http
-                          .get(paginatedUrl, {}, {})
-                          .then((response: any) => {
-                            response = JSON.parse(response.data);
-                            initialResponse[resourceName] = initialResponse[
-                              resourceName
-                            ].concat(response[resourceName]);
-                          })
-                      );
-                    }
-                    Observable.forkJoin(promises).subscribe(
-                      () => {
+              .get(testUrl, {}, headers)
+              .then((initialResponse: any) => {
+                initialResponse = JSON.parse(initialResponse.data);
+                if (initialResponse.pager.pageCount) {
+                  initialResponse[resourceName] = [];
+                  const paginatedUrls = [];
+                  for (let i = 1; i <= initialResponse.pager.pageCount; i++) {
+                    const paginatedUrl =
+                      apiUrl + '&pageSize=' + pageSize + '&page=' + i;
+                    paginatedUrls.push(paginatedUrl);
+                  }
+                  const that = this;
+                  let completedStages = 0;
+                  async.mapLimit(
+                    paginatedUrls,
+                    paginatedUrls.length,
+                    async function(paginatedUrl) {
+                      try {
+                        let response = await that.http.get(
+                          paginatedUrl,
+                          {},
+                          headers
+                        );
+                        response = JSON.parse(response.data);
+                        initialResponse[resourceName] = initialResponse[
+                          resourceName
+                        ].concat(response[resourceName]);
+                        completedStages++;
+                        if (completedStages === paginatedUrls.length) {
+                          observer.next(initialResponse);
+                          observer.complete();
+                        }
+                      } catch (error) {
+                        observer.error(error);
+                      }
+                    },
+                    (error, results) => {
+                      if (error) {
+                        observer.error(error);
+                      } else {
                         observer.next(initialResponse);
+                        observer.complete();
+                      }
+                    }
+                  );
+                } else {
+                  this.http
+                    .get(url, {}, headers)
+                    .then(
+                      (response: any) => {
+                        observer.next(response);
                         observer.complete();
                       },
                       error => {
                         observer.error(error);
                       }
-                    );
-                  } else {
-                    this.http
-                      .get(url, {}, {})
-                      .then(
-                        (response: any) => {
-                          observer.next(response);
-                          observer.complete();
-                        },
-                        error => {
-                          observer.error(error);
-                        }
-                      )
-                      .catch(error => {
-                        observer.error(error);
-                      });
-                  }
-                },
-                error => {
-                  observer.error(error);
+                    )
+                    .catch(error => {
+                      observer.error(error);
+                    });
                 }
-              )
+              })
               .catch(error => {
                 observer.error(error);
               });
           } else {
             this.http
-              .get(apiUrl, {}, {})
+              .get(apiUrl, {}, headers)
               .then((response: any) => {
                 if (dataOnly) {
                   observer.next(JSON.parse(response.data));
@@ -234,25 +242,18 @@ export class HttpClientProvider {
     return new Observable(observer => {
       this.getSanitizedUser(user).subscribe(
         (sanitizedUser: CurrentUser) => {
-          this.http.useBasicAuth(
-            sanitizedUser.username,
-            sanitizedUser.password
-          );
+          const { username, password } = sanitizedUser;
+          this.http.clearCookies();
+          const headers = this.http.getBasicAuthHeader(username, password);
           this.http.setDataSerializer('json');
-          this.http.setRequestTimeout(this.timeOutTime);
           apiUrl =
             user.serverUrl + this.getUrlBasedOnDhisVersion(url, sanitizedUser);
           this.http
-            .post(apiUrl, data, {})
-            .then(
-              (response: any) => {
-                observer.next(response);
-                observer.complete();
-              },
-              error => {
-                observer.error(error);
-              }
-            )
+            .post(apiUrl, data, headers)
+            .then((response: any) => {
+              observer.next(response);
+              observer.complete();
+            })
             .catch(error => {
               observer.error(error);
             });
@@ -269,25 +270,18 @@ export class HttpClientProvider {
     return new Observable(observer => {
       this.getSanitizedUser(user).subscribe(
         (sanitizedUser: CurrentUser) => {
-          this.http.useBasicAuth(
-            sanitizedUser.username,
-            sanitizedUser.password
-          );
+          const { username, password } = sanitizedUser;
+          this.http.clearCookies();
+          const headers = this.http.getBasicAuthHeader(username, password);
           this.http.setDataSerializer('json');
-          this.http.setRequestTimeout(this.timeOutTime);
           apiUrl =
             user.serverUrl + this.getUrlBasedOnDhisVersion(url, sanitizedUser);
           this.http
-            .put(apiUrl, data, {})
-            .then(
-              (response: any) => {
-                observer.next(response);
-                observer.complete();
-              },
-              error => {
-                observer.error(error);
-              }
-            )
+            .put(apiUrl, data, headers)
+            .then((response: any) => {
+              observer.next(response);
+              observer.complete();
+            })
             .catch(error => {
               observer.error(error);
             });
@@ -310,25 +304,18 @@ export class HttpClientProvider {
     return new Observable(observer => {
       this.getSanitizedUser(user).subscribe(
         (sanitizedUser: CurrentUser) => {
-          this.http.useBasicAuth(
-            sanitizedUser.username,
-            sanitizedUser.password
-          );
+          const { username, password } = sanitizedUser;
+          this.http.clearCookies();
+          const headers = this.http.getBasicAuthHeader(username, password);
           this.http.setDataSerializer('json');
-          this.http.setRequestTimeout(this.timeOutTime);
           apiUrl =
             user.serverUrl + this.getUrlBasedOnDhisVersion(url, sanitizedUser);
           this.http
-            .delete(apiUrl, {}, {})
-            .then(
-              (response: any) => {
-                observer.next(response);
-                observer.complete();
-              },
-              error => {
-                observer.error(error);
-              }
-            )
+            .delete(apiUrl, {}, headers)
+            .then((response: any) => {
+              observer.next(response);
+              observer.complete();
+            })
             .catch(error => {
               observer.error(error);
             });

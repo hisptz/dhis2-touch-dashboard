@@ -48,6 +48,58 @@ export class SqlLiteProvider {
     return DATABASE_STRUCTURE;
   }
 
+  dropAndRecreateTable(
+    tableName: string,
+    databaseName: string
+  ): Observable<any> {
+    const tableNames = [];
+    tableNames.push(tableName);
+    const tableObject = this.getDataBaseStructure()[tableName];
+    const { dependentTable } = tableObject;
+    if (dependentTable && dependentTable.length > 0) {
+      dependentTable.map(tableName => {
+        tableNames.push(`${tableName}`);
+      });
+    }
+    return new Observable(observer => {
+      let success = 0;
+      for (const table of tableNames) {
+        this.dropTable(table, databaseName).subscribe(
+          () => {
+            success++;
+            if (success === tableNames.length) {
+              this.generateTables(databaseName).subscribe(
+                () => {
+                  observer.next();
+                  observer.complete();
+                },
+                () => {
+                  observer.next();
+                  observer.complete();
+                }
+              );
+            }
+          },
+          error => {
+            success++;
+            if (success === tableNames.length) {
+              this.generateTables(databaseName).subscribe(
+                () => {
+                  observer.next();
+                  observer.complete();
+                },
+                () => {
+                  observer.next();
+                  observer.complete();
+                }
+              );
+            }
+          }
+        );
+      }
+    });
+  }
+
   /**
    *
    * @param databaseName
@@ -55,10 +107,10 @@ export class SqlLiteProvider {
    */
   generateTables(databaseName): Observable<any> {
     return new Observable(observer => {
-      let tableNames = Object.keys(this.getDataBaseStructure());
+      const tableNames = Object.keys(this.getDataBaseStructure());
       let success = 0;
       let fail = 0;
-      tableNames.forEach((tableName: any) => {
+      tableNames.map((tableName: any) => {
         this.createTable(tableName, databaseName).subscribe(
           () => {
             success++;
@@ -67,7 +119,7 @@ export class SqlLiteProvider {
               observer.complete();
             }
           },
-          error => {
+          () => {
             success++;
             if (success + fail == tableNames.length) {
               observer.error({ success: success, fail: fail });
@@ -88,8 +140,8 @@ export class SqlLiteProvider {
     databaseName = databaseName + '.db';
     return new Observable(observer => {
       let query = 'CREATE TABLE IF NOT EXISTS ' + tableName + ' (';
-      let columns = this.getDataBaseStructure()[tableName].columns;
-      columns.forEach((column: any, index: any) => {
+      const columns = this.getDataBaseStructure()[tableName].columns;
+      columns.map((column: any, index: any) => {
         if (column.value == 'id') {
           query += column.value + ' ' + column.type + ' primary key';
         } else {
@@ -151,43 +203,48 @@ export class SqlLiteProvider {
       end
     );
     return new Observable(observer => {
-      this.insertDataUsingQueryAndParameters(
-        databaseName,
-        batchInsertQueryAndParameter.queries
-      ).subscribe(
-        () => {
-          start = batchInsertQueryAndParameter.startPoint - 1;
-          end = insertBatchSize + start;
-          if (bulkData[batchInsertQueryAndParameter.startPoint]) {
-            this.insertBulkDataOnTable(
-              tableName,
-              bulkData,
-              databaseName,
-              start,
-              end
-            ).subscribe(
-              () => {
-                observer.next();
-                observer.complete();
-              },
-              error => {
-                observer.error(error);
-                //@todo resolving batch size issues
-                console.log('Error on insert on table ' + tableName);
-                console.log(JSON.stringify(error));
-              }
-            );
-          } else {
-            observer.next();
-            observer.complete();
+      if (bulkData.length === 0) {
+        observer.next();
+        observer.complete();
+      } else {
+        this.insertDataUsingQueryAndParameters(
+          databaseName,
+          batchInsertQueryAndParameter.queries
+        ).subscribe(
+          () => {
+            start = batchInsertQueryAndParameter.startPoint - 1;
+            end = insertBatchSize + start;
+            if (bulkData[batchInsertQueryAndParameter.startPoint]) {
+              this.insertBulkDataOnTable(
+                tableName,
+                bulkData,
+                databaseName,
+                start,
+                end
+              ).subscribe(
+                () => {
+                  observer.next();
+                  observer.complete();
+                },
+                error => {
+                  observer.error(error);
+                  //@todo resolving batch size issues
+                  console.log('Error on insert on table ' + tableName);
+                  console.log(JSON.stringify(error));
+                }
+              );
+            } else {
+              observer.next();
+              observer.complete();
+            }
+          },
+          error => {
+            console.log('Error on insert on table ' + tableName);
+            console.log(JSON.stringify(error));
+            observer.error(error);
           }
-        },
-        error => {
-          console.log('Error on insert on table ' + tableName);
-          console.log(JSON.stringify(error));
-          observer.error(error);
-        }
-      );
+        );
+      }
     });
   }
 
@@ -507,10 +564,12 @@ export class SqlLiteProvider {
       let currentRow = result.rows.item(i);
       columns.forEach(column => {
         let columnName = column.value;
-        if (column.type != 'LONGTEXT') {
-          row[columnName] = currentRow[columnName];
-        } else {
-          row[columnName] = JSON.parse(currentRow[columnName]);
+        if (currentRow[columnName]) {
+          if (column.type != 'LONGTEXT') {
+            row[columnName] = currentRow[columnName];
+          } else {
+            row[columnName] = JSON.parse(currentRow[columnName]);
+          }
         }
       });
       data.push(row);

@@ -28,6 +28,8 @@ import { HttpClientProvider } from '../http-client/http-client';
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 import { CurrentUser } from '../../models/current-user';
+import { DEFAULT_APP_METADATA } from '../../constants';
+declare var dhis2;
 
 /*
  Generated class for the ProgramsProvider provider.
@@ -48,6 +50,7 @@ export class ProgramsProvider {
   }
 
   setLastSelectedProgram(program) {
+    dhis2['currentProgramId'] = program.id || '';
     this.lastSelectedProgram = program;
   }
 
@@ -62,28 +65,43 @@ export class ProgramsProvider {
    */
   downloadProgramsFromServer(currentUser: CurrentUser): Observable<any> {
     const { userOrgUnitIds } = currentUser;
-    const fields =
-      'fields=id,name,displayName,displayIncidentDate,programType,withoutRegistration,dataEntryForm[htmlCode],trackedEntityType[id,displayName],trackedEntity[id,displayName],ignoreOverdueEvents,skipOffline,captureCoordinates,enrollmentDateLabel,onlyEnrollOnce,selectIncidentDatesInFuture,incidentDateLabel,useFirstStageDuringRegistration,completeEventsExpiryDays,displayFrontPageList,categoryCombo[id,name,categories[id,name,categoryOptions[name,id,organisationUnits[id]]]],programStages[id,name,executionDateLabel,hideDueDate,dataEntryForm[htmlCode],allowGenerateNextVisit,blockEntryForm,repeatable,formType,sortOrder,standardInterval,minDaysFromStart,generatedByEnrollmentDate,autoGenerateEvent,captureCoordinates,dueDateLabel,programStageDataElements[id,displayInReports,compulsory,allowProvidedElsewhere,allowFutureDate,dataElement[id]],programStageSections[id]],organisationUnits[id],programIndicators[id,name,description,expression],translations,attributeValues[value,attribute[name]],validationCriterias,programRuleVariables,programTrackedEntityAttributes[id,mandatory,externalAccess,allowFutureDate,displayInList,sortOrder,trackedEntityAttribute[id,name,code,name,formName,description,confidential,searchScope,translations,inherit,legendSets,optionSet[name,options[name,id,code]]unique,orgunitScope,programScope,displayInListNoProgramaggregationType,displayInListNoProgram,pattern,sortOrderInListNoProgram,generated,displayOnVisitSchedule,valueType,sortOrderInVisitSchedule]],programRules';
-    const filter =
-      'filter=organisationUnits.path:ilike:' +
-      userOrgUnitIds.join('&filter=path:ilike:') +
-      '&rootJunction=OR';
-    let url = '/api/' + this.resource + '.json?paging=false&' + fields;
-    +'&' + filter;
+    let programResponse = [];
+    const programMetadata = DEFAULT_APP_METADATA.programs;
+    const { defaultIds } = programMetadata;
     return new Observable(observer => {
-      this.HttpClient.get(url, true, currentUser).subscribe(
-        (response: any) => {
-          const programs = this.getFitlteredListOfPrograms(
-            response[this.resource],
-            currentUser
-          );
-          observer.next(programs);
-          observer.complete();
-        },
-        error => {
-          observer.error(error);
-        }
-      );
+      if (userOrgUnitIds && userOrgUnitIds.length === 0) {
+        observer.next(programResponse);
+        observer.complete();
+      } else {
+        const fields = `fields=id,name,displayName,displayIncidentDate,programType,withoutRegistration,dataEntryForm[htmlCode],trackedEntityType[id,displayName],trackedEntity[id,displayName],ignoreOverdueEvents,skipOffline,captureCoordinates,enrollmentDateLabel,onlyEnrollOnce,selectIncidentDatesInFuture,incidentDateLabel,useFirstStageDuringRegistration,completeEventsExpiryDays,displayFrontPageList,categoryCombo[id,name,categories[id,name,categoryOptions[name,id,organisationUnits[id]]]],programStages[id,name,executionDateLabel,hideDueDate,dataEntryForm[htmlCode],allowGenerateNextVisit,blockEntryForm,repeatable,formType,sortOrder,standardInterval,minDaysFromStart,generatedByEnrollmentDate,autoGenerateEvent,captureCoordinates,dueDateLabel,programStageDataElements[id,displayInReports,compulsory,allowProvidedElsewhere,allowFutureDate,dataElement[id]],programStageSections[id]],organisationUnits[id],programIndicators[id,name,description,filter,expression],translations,attributeValues[value,attribute[name]],validationCriterias,programRuleVariables,programTrackedEntityAttributes[id,mandatory,externalAccess,allowFutureDate,displayInList,sortOrder,trackedEntityAttribute[id,name,code,name,formName,description,confidential,searchScope,translations,inherit,legendSets,optionSet[name,options[name,id,code]]unique,orgunitScope,programScope,displayInListNoProgramaggregationType,displayInListNoProgram,pattern,sortOrderInListNoProgram,generated,displayOnVisitSchedule,valueType,sortOrderInVisitSchedule]]`;
+        const filter =
+          defaultIds && defaultIds.length > 0
+            ? `filter=id:in:[${defaultIds.join(',')}]`
+            : `filter=organisationUnits.path:ilike:${userOrgUnitIds.join(
+                '&filter=organisationUnits.path:ilike:'
+              )}&rootJunction=OR`;
+        const url = `/api/${this.resource}.json?${fields}&${filter}`;
+        const pageSize = defaultIds && defaultIds.length > 0 ? 10 : 15;
+        this.HttpClient.get(
+          url,
+          true,
+          currentUser,
+          this.resource,
+          pageSize
+        ).subscribe(
+          (response: any) => {
+            programResponse = this.getFitlteredListOfPrograms(
+              response[this.resource],
+              currentUser
+            );
+            observer.next(_.unionBy(programResponse, 'id'));
+            observer.complete();
+          },
+          error => {
+            observer.error(error);
+          }
+        );
+      }
     });
   }
 
@@ -136,7 +154,7 @@ export class ProgramsProvider {
         observer.next();
         observer.complete();
       } else {
-        const totalProcess = 9;
+        const totalProcess = 7;
         let completedStage = 0;
         this.sqlLite
           .insertBulkDataOnTable(
@@ -156,36 +174,6 @@ export class ProgramsProvider {
               observer.error(error);
             }
           );
-        this.savingProgramProgramRuleVariables(
-          sanitizedPrograms,
-          currentUser
-        ).subscribe(
-          () => {
-            completedStage++;
-            if (completedStage == totalProcess) {
-              observer.next();
-              observer.complete();
-            }
-          },
-          error => {
-            observer.error(error);
-          }
-        );
-        this.savingProgramProgramRules(
-          sanitizedPrograms,
-          currentUser
-        ).subscribe(
-          () => {
-            completedStage++;
-            if (completedStage == totalProcess) {
-              observer.next();
-              observer.complete();
-            }
-          },
-          error => {
-            observer.error(error);
-          }
-        );
         this.savingProgramOrganisationUnits(
           sanitizedPrograms,
           currentUser
@@ -366,98 +354,6 @@ export class ProgramsProvider {
    * @param currentUser
    * @returns {Observable<any>}
    */
-  savingProgramProgramRuleVariables(programs, currentUser): Observable<any> {
-    let programProgramRuleVariables = [];
-    const resource = 'programProgramRuleVariables';
-    programs.map((program: any) => {
-      if (
-        program.programRuleVariables &&
-        program.programRuleVariables.length > 0
-      ) {
-        programProgramRuleVariables = _.concat(programProgramRuleVariables, {
-          id: program.id,
-          programRuleVariableIds: _.map(
-            program.programRuleVariables,
-            (programRuleVariable: any) => {
-              return programRuleVariable.id;
-            }
-          )
-        });
-      }
-    });
-    return new Observable(observer => {
-      if (programProgramRuleVariables.length == 0) {
-        observer.next();
-        observer.complete();
-      } else {
-        this.sqlLite
-          .insertBulkDataOnTable(
-            resource,
-            programProgramRuleVariables,
-            currentUser.currentDatabase
-          )
-          .subscribe(
-            () => {
-              observer.next();
-              observer.complete();
-            },
-            error => {
-              observer.error(error);
-            }
-          );
-      }
-    });
-  }
-
-  /**
-   *
-   * @param programs
-   * @param currentUser
-   * @returns {Observable<any>}
-   */
-  savingProgramProgramRules(programs, currentUser): Observable<any> {
-    let programProgramRules = [];
-    const resource = 'programProgramRules';
-    programs.map((program: any) => {
-      if (program.programRules && program.programRules.length > 0) {
-        programProgramRules = _.concat(programProgramRules, {
-          id: program.id,
-          programRuleIds: _.map(program.programRules, (programRule: any) => {
-            return programRule.id;
-          })
-        });
-      }
-    });
-    return new Observable(observer => {
-      if (programProgramRules.length == 0) {
-        observer.next();
-        observer.complete();
-      } else {
-        this.sqlLite
-          .insertBulkDataOnTable(
-            resource,
-            programProgramRules,
-            currentUser.currentDatabase
-          )
-          .subscribe(
-            () => {
-              observer.next();
-              observer.complete();
-            },
-            error => {
-              observer.error(error);
-            }
-          );
-      }
-    });
-  }
-
-  /**
-   *
-   * @param programs
-   * @param currentUser
-   * @returns {Observable<any>}
-   */
   savingProgramOrganisationUnits(programs, currentUser): Observable<any> {
     let programOrganisationUnits = [];
     const resource = 'programOrganisationUnits';
@@ -516,7 +412,8 @@ export class ProgramsProvider {
               id: program.id + '-' + programIndicator.id,
               programId: program.id,
               name: programIndicator.name,
-              expression: programIndicator.expression
+              expression: programIndicator.expression,
+              filter: programIndicator.filter
             };
           })
         );
@@ -785,17 +682,19 @@ export class ProgramsProvider {
                       program.programType &&
                       program.programType == programType
                     ) {
-                      if (program.displayIncidentDate) {
-                        program.displayIncidentDate = JSON.parse(
-                          program.displayIncidentDate
+                      try {
+                        if (program.displayIncidentDate) {
+                          program.displayIncidentDate = JSON.parse(
+                            program.displayIncidentDate
+                          );
+                        }
+                        program.withoutRegistration = JSON.parse(
+                          program.withoutRegistration
                         );
-                      }
-                      program.withoutRegistration = JSON.parse(
-                        program.withoutRegistration
-                      );
-                      program.captureCoordinates = JSON.parse(
-                        program.captureCoordinates
-                      );
+                        program.captureCoordinates = JSON.parse(
+                          program.captureCoordinates
+                        );
+                      } catch (error) {}
                       programs.push(program);
                       if (
                         this.lastSelectedProgram &&
@@ -961,7 +860,7 @@ export class ProgramsProvider {
    * @returns {Observable<any>}
    */
   getProgramById(programId, currentUser): Observable<any> {
-    let attribute = 'id';
+    const attribute = 'id';
     let attributeValue = [];
     attributeValue.push(programId);
     return new Observable(observer => {
@@ -976,17 +875,19 @@ export class ProgramsProvider {
           (programs: any) => {
             if (programs.length > 0) {
               let program = programs[0];
-              if (program.displayIncidentDate) {
-                program.displayIncidentDate = JSON.parse(
-                  program.displayIncidentDate
+              try {
+                if (program.displayIncidentDate) {
+                  program.displayIncidentDate = JSON.parse(
+                    program.displayIncidentDate
+                  );
+                }
+                program.withoutRegistration = JSON.parse(
+                  program.withoutRegistration
                 );
-              }
-              program.withoutRegistration = JSON.parse(
-                program.withoutRegistration
-              );
-              program.captureCoordinates = JSON.parse(
-                program.captureCoordinates
-              );
+                program.captureCoordinates = JSON.parse(
+                  program.captureCoordinates
+                );
+              } catch (error) {}
               observer.next(program);
             } else {
               observer.next({});
@@ -1082,40 +983,6 @@ export class ProgramsProvider {
    * @param dataBaseName
    * @returns {Observable<any>}
    */
-  getProgramRuleIds(programId, dataBaseName): Observable<any> {
-    const resource = 'programProgramRules';
-    const attributeValue = [programId];
-    const attributeKey = 'id';
-    let programRuleIds = [];
-    return new Observable(observer => {
-      this.sqlLite
-        .getDataFromTableByAttributes(
-          resource,
-          attributeKey,
-          attributeValue,
-          dataBaseName
-        )
-        .subscribe(
-          (programRuleIdsResponse: any) => {
-            if (programRuleIdsResponse && programRuleIdsResponse.length > 0) {
-              programRuleIds = programRuleIdsResponse[0].programRuleIds;
-            }
-            observer.next(programRuleIds);
-            observer.complete();
-          },
-          error => {
-            observer.error(error);
-          }
-        );
-    });
-  }
-
-  /**
-   *
-   * @param programId
-   * @param dataBaseName
-   * @returns {Observable<any>}
-   */
   getProgramRulesVariablesIds(programId, dataBaseName): Observable<any> {
     const resource = 'programProgramRuleVariables';
     const attributeValue = [programId];
@@ -1167,8 +1034,10 @@ export class ProgramsProvider {
           dataBaseName
         )
         .subscribe(
-          (orgUnitsInProgram: any) => {
-            observer.next(orgUnitsInProgram);
+          (programIndicators: any) => {
+            observer.next(
+              this.getSanitizedProgramIndicators(programIndicators)
+            );
             observer.complete();
           },
           error => {
@@ -1176,6 +1045,17 @@ export class ProgramsProvider {
           }
         );
     });
+  }
+
+  getSanitizedProgramIndicators(programIndicators) {
+    return _.flatMapDeep(
+      _.map(programIndicators, programIndicator => {
+        const { id } = programIndicator;
+        delete programIndicator.programId;
+        const programIndicatorId = id.split('-').pop();
+        return { ...programIndicator, id: programIndicatorId };
+      })
+    );
   }
 
   /**

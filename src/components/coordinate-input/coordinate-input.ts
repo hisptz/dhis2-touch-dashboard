@@ -23,6 +23,9 @@
  */
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ModalController } from 'ionic-angular';
+import { Store } from '@ngrx/store';
+import { State, getCurrentUserColorSettings } from '../../store';
+import { Observable } from 'rxjs';
 
 /**
  * Generated class for the CoordinateInputComponent component.
@@ -38,13 +41,18 @@ export class CoordinateInputComponent implements OnInit {
   @Input() dataElementId;
   @Input() categoryOptionComboId;
   @Input() data;
+  @Input() lockingFieldStatus;
   @Output() onChange = new EventEmitter();
+
   position: { lat: string; lng: string } = { lat: '', lng: '' };
-  constructor(private modalCtrl: ModalController) {}
+  colorSettings$: Observable<any>;
+
+  constructor(private store: Store<State>, private modalCtrl: ModalController) {
+    this.colorSettings$ = this.store.select(getCurrentUserColorSettings);
+  }
 
   ngOnInit() {
     const fieldId = this.dataElementId + '-' + this.categoryOptionComboId;
-    console.log(JSON.stringify(this.data));
     if (this.data && this.data[fieldId]) {
       const dataValue = eval(this.data[fieldId].value);
       if (dataValue && dataValue.length === 2) {
@@ -63,20 +71,24 @@ export class CoordinateInputComponent implements OnInit {
   }
 
   openMap() {
-    const data = {
-      position: this.position
-    };
-    const modal = this.modalCtrl.create('CoordinateModalPage', { data: data });
-    modal.onDidDismiss((response: any) => {
-      if (response && response.lat && response.lng) {
-        this.position.lat = response.lat.toFixed(6);
-        this.position.lng = response.lng.toFixed(6);
-        const dataValue =
-          '[' + this.position.lat + ',' + this.position.lng + ']';
-        this.updateValue(dataValue);
-      }
-    });
-    modal.present();
+    if (!this.lockingFieldStatus) {
+      const data = {
+        position: this.position
+      };
+      const modal = this.modalCtrl.create('CoordinateModalPage', {
+        data: data
+      });
+      modal.onDidDismiss((response: any) => {
+        if (response && response.lat && response.lng) {
+          this.position.lat = response.lat.toFixed(6);
+          this.position.lng = response.lng.toFixed(6);
+          const dataValue =
+            '[' + this.position.lat + ',' + this.position.lng + ']';
+          this.updateValue(dataValue);
+        }
+      });
+      modal.present();
+    }
   }
 
   updateValue(dataValue: string) {

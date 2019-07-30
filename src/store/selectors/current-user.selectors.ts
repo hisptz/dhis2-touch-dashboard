@@ -24,7 +24,7 @@
 import { createSelector } from '@ngrx/store';
 import * as _ from 'lodash';
 import { getRootState, State } from '../reducers';
-import { currentUserAdapter } from '../reducers/current-user.reducer';
+import { currentUserAdapter } from '../reducers/current-user.reducers';
 import { CurrentUser, AppItem } from '../../models';
 export const getUsersEntityState = createSelector(
   getRootState,
@@ -66,6 +66,11 @@ export const getAccountTitle = createSelector(
   }
 );
 
+export const getCurrentUserColorSettings = createSelector(
+  getUsersEntityState,
+  state => state.colorSettings
+);
+
 export const getCurrentUserDataSets = createSelector(
   getCurrentUser,
   (currentUser: CurrentUser) => currentUser.dataSets
@@ -78,7 +83,8 @@ export const getCurrentUserPrograms = createSelector(
 
 export const getCurrentUserAuthorities = createSelector(
   getCurrentUser,
-  (currentUser: CurrentUser) => currentUser.authorities
+  (currentUser: CurrentUser) =>
+    currentUser && currentUser.authorities ? currentUser.authorities : []
 );
 
 export const getAthorizedApps = (apps: AppItem[]) =>

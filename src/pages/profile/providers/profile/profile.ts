@@ -1,26 +1,3 @@
-/*
- *
- * Copyright 2015 HISP Tanzania
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
- *
- * @since 2015
- * @author Joseph Chingalo <profschingalo@gmail.com>
- *
- */
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { CurrentUser } from '../../../../models/current-user';
@@ -29,7 +6,6 @@ import { DataSetsProvider } from '../../../../providers/data-sets/data-sets';
 import { ProgramsProvider } from '../../../../providers/programs/programs';
 import { HttpClientProvider } from '../../../../providers/http-client/http-client';
 import * as _ from 'lodash';
-
 /*
   Generated class for the ProfileProvider provider.
 
@@ -46,7 +22,7 @@ export class ProfileProvider {
   ) {}
 
   getProfileContentDetails() {
-    let profileContents = [
+    const profileContents = [
       {
         id: 'userProfile',
         name: 'User Profile',
@@ -63,12 +39,12 @@ export class ProfileProvider {
         icon: 'assets/icon/orgUnit.png'
       },
       { id: 'roles', name: 'Assigned roles', icon: 'assets/icon/roles.png' }
-      // {
-      //   id: 'program',
-      //   name: 'Assigned programs',
-      //   icon: 'assets/icon/program.png'
-      // },
-      // { id: 'form', name: 'Assigned entry forms', icon: 'assets/icon/form.png' }
+      /*{
+        id: 'program',
+        name: 'Assigned programs',
+        icon: 'assets/icon/program.png'
+      },
+      { id: 'form', name: 'Assigned entry forms', icon: 'assets/icon/form.png' }*/
     ];
     return profileContents;
   }
@@ -310,19 +286,15 @@ export class ProfileProvider {
    */
   getAssignedProgram(userData, programs, authorities) {
     let assignedPrograms = [];
-    if (authorities && _.indexOf(authorities, 'ALL') > -1) {
+    if (authorities.indexOf('ALL') > -1) {
       assignedPrograms = _.map(programs, program => program.name);
     } else {
       programs.map((program: any) => {
-        if (
-          userData.programs &&
-          _.indexOf(userData.programs, program.id) > -1
-        ) {
+        if (userData.programs && userData.programs.indexOf(program.id) > -1) {
           assignedPrograms.push(program.name);
         }
       });
     }
-
     return assignedPrograms.sort();
   }
 
@@ -333,14 +305,11 @@ export class ProfileProvider {
    */
   getAssignedForm(userData, dataSets, authorities) {
     let assignedDataSets = [];
-    if (authorities && _.indexOf(authorities, 'ALL') > -1) {
+    if (authorities.indexOf('ALL') > -1) {
       assignedDataSets = _.map(dataSets, dataSet => dataSet.name);
     } else {
       dataSets.map((dataSet: any) => {
-        if (
-          userData.dataSets &&
-          _.indexOf(userData.dataSets, dataSet.id) > -1
-        ) {
+        if (userData.dataSets && userData.dataSets.indexOf(dataSet.id) > -1) {
           assignedDataSets.push(dataSet.name);
         }
       });
@@ -364,7 +333,7 @@ export class ProfileProvider {
       let newKey = (key.charAt(0).toUpperCase() + key.slice(1))
         .replace(/([A-Z])/g, ' $1')
         .trim();
-      array = [...array, { key: newKey, value: newValue, id: id }];
+      array.push({ key: newKey, value: newValue, id: id });
     }
     return array;
   }

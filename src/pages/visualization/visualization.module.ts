@@ -11,7 +11,11 @@ import { pipes } from './pipes';
 import { SelectionFiltersModule } from '../selection-filters/selection-filters.module';
 
 @NgModule({
-  declarations: [...containers, ...components, ...pipes],
+  declarations: [
+    ...containers,
+    ...components,
+    ...pipes
+  ],
   imports: [
     CommonModule,
     ...modules,
@@ -19,7 +23,10 @@ import { SelectionFiltersModule } from '../selection-filters/selection-filters.m
     StoreModule.forFeature('visualization', reducers),
     EffectsModule.forFeature(effects)
   ],
-  exports: [...containers],
+  exports: [
+    ...containers
+  ],
   providers: [...services]
 })
-export class VisualizationPageModule {}
+export class VisualizationPageModule {
+}

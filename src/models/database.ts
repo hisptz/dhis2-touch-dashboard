@@ -55,6 +55,40 @@ export const DATABASE_STRUCTURE = {
     displayName: 'Local instance',
     dependentTable: []
   },
+  validationRules: {
+    columns: [
+      { value: 'id', type: 'TEXT' },
+      { value: 'displayName', type: 'TEXT' },
+      { value: 'periodType', type: 'TEXT' },
+      { value: 'importance', type: 'TEXT' },
+      { value: 'skipFormValidation', type: 'TEXT' },
+      { value: 'operator', type: 'TEXT' },
+      { value: 'description', type: 'LONGTEXT' },
+      { value: 'leftSide', type: 'LONGTEXT' },
+      { value: 'rightSide', type: 'LONGTEXT' }
+    ],
+    isMetadata: true,
+    shouldIncludeOnLogin: true,
+    resourceType: 'entryForm',
+    batchSize: 100,
+    displayName: 'Validation Rules',
+    dependentTable: []
+  },
+  dataStore: {
+    columns: [
+      { value: 'id', type: 'TEXT' },
+      { value: 'nameSpace', type: 'TEXT' },
+      { value: 'key', type: 'TEXT' },
+      { value: 'status', type: 'TEXT' },
+      { value: 'data', type: 'LONGTEXT' }
+    ],
+    isMetadata: true,
+    shouldIncludeOnLogin: true,
+    resourceType: 'report',
+    batchSize: 10,
+    displayName: 'Data Store',
+    dependentTable: []
+  },
   dataSets: {
     columns: [
       { value: 'id', type: 'TEXT' },
@@ -66,7 +100,6 @@ export const DATABASE_STRUCTURE = {
       { value: 'expiryDays', type: 'TEXT' },
       { value: 'categoryCombo', type: 'LONGTEXT' }
     ],
-    fields: '',
     isMetadata: true,
     shouldIncludeOnLogin: true,
     resourceType: 'entryForm',
@@ -160,6 +193,8 @@ export const DATABASE_STRUCTURE = {
     columns: [
       { value: 'id', type: 'TEXT' },
       { value: 'sortOrder', type: 'TEXT' },
+      { value: 'code', type: 'TEXT' },
+      { value: 'description', type: 'TEXT' },
       { value: 'name', type: 'TEXT' }
     ],
     fields: '',
@@ -212,6 +247,19 @@ export const DATABASE_STRUCTURE = {
     resourceType: 'entryForm',
     batchSize: 500,
     displayName: 'Data Elements',
+    dependentTable: []
+  },
+  categoryCombos: {
+    columns: [
+      { value: 'id', type: 'TEXT' },
+      { value: 'name', type: 'TEXT' },
+      { value: 'categoryOptionCombos', type: 'LONGTEXT' }
+    ],
+    isMetadata: true,
+    shouldIncludeOnLogin: true,
+    resourceType: 'entryForm',
+    batchSize: 50,
+    displayName: 'Category combos',
     dependentTable: []
   },
   smsCommand: {
@@ -386,8 +434,6 @@ export const DATABASE_STRUCTURE = {
     batchSize: 50,
     displayName: 'Programs',
     dependentTable: [
-      'programProgramRuleVariables',
-      'programProgramRules',
       'programProgramTrackedEntityAttributes',
       'trackedEntityAttribute',
       'programIndicators',
@@ -397,6 +443,23 @@ export const DATABASE_STRUCTURE = {
       'programStageEntryForm'
     ]
   },
+  programProgramTrackedEntityAttributes: {
+    columns: [
+      { value: 'id', type: 'TEXT' },
+      { value: 'programId', type: 'TEXT' },
+      { value: 'sortOrder', type: 'TEXT' },
+      { value: 'mandatory', type: 'TEXT' },
+      { value: 'displayInList', type: 'TEXT' },
+      { value: 'externalAccess', type: 'TEXT' }
+    ],
+    isMetadata: false,
+    shouldIncludeOnLogin: false,
+    resourceType: '',
+    batchSize: 50,
+    displayName: '',
+    dependentTable: []
+  },
+
   trackerRegistrationForm: {
     columns: [
       { value: 'id', type: 'TEXT' },
@@ -419,30 +482,6 @@ export const DATABASE_STRUCTURE = {
     resourceType: '',
     batchSize: 50,
     displayName: 'Program stage entry form design',
-    dependentTable: []
-  },
-  programProgramRuleVariables: {
-    columns: [
-      { value: 'id', type: 'TEXT' },
-      { value: 'programRuleVariableIds', type: 'LONGTEXT' }
-    ],
-    isMetadata: false,
-    shouldIncludeOnLogin: false,
-    resourceType: '',
-    batchSize: 500,
-    displayName: '',
-    dependentTable: []
-  },
-  programProgramRules: {
-    columns: [
-      { value: 'id', type: 'TEXT' },
-      { value: 'programRuleIds', type: 'LONGTEXT' }
-    ],
-    isMetadata: false,
-    shouldIncludeOnLogin: false,
-    resourceType: '',
-    batchSize: 500,
-    displayName: '',
     dependentTable: []
   },
   programTrackedEntityAttributes: {
@@ -536,6 +575,8 @@ export const DATABASE_STRUCTURE = {
       { value: 'id', type: 'TEXT' },
       { value: 'programId', type: 'TEXT' },
       { value: 'name', type: 'TEXT' },
+      { value: 'filter', type: 'TEXT' },
+      { value: 'description', type: 'LONGTEXT' },
       { value: 'expression', type: 'LONGTEXT' }
     ],
     isMetadata: false,
@@ -657,26 +698,6 @@ export const DATABASE_STRUCTURE = {
     shouldIncludeOnLogin: true,
     resourceType: 'event',
     displayName: 'Program Rules Variables',
-    dependentTable: []
-  },
-  smsLogs: {
-    columns: [
-      { value: 'id', type: 'TEXT' },
-      { value: '_id', type: 'TEXT' },
-      { value: 'time', type: 'TEXT' },
-      { value: 'type', type: 'TEXT' },
-      { value: 'dataSetId', type: 'TEXT' },
-      { value: 'periodIso', type: 'TEXT' },
-      { value: 'organisationUnitName', type: 'TEXT' },
-      { value: 'organisationUnitId', type: 'TEXT' },
-      { value: 'logMessage', type: 'LONGTEXT' },
-      { value: 'message', type: 'LONGTEXT' }
-    ],
-    fields: '',
-    isMetadata: false,
-    resourceType: '',
-    batchSize: 100,
-    displayName: 'SMS Logs',
     dependentTable: []
   }
 };

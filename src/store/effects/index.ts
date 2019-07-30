@@ -22,11 +22,5 @@
  *
  */
 import { currentUserEffects } from './current-user.effects';
-import { SmsCommandEffects } from './sms-command.effects';
-import { DataSetEffects } from './data-set.effect';
 
-export const effects: any[] = [
-  currentUserEffects,
-  SmsCommandEffects,
-  DataSetEffects
-];
+export const effects: any[] = [currentUserEffects];
